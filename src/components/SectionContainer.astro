@@ -1,0 +1,12 @@
+---
+const { cols, rows, opacity, scale, id } = Astro.props;
+---
+
+<section
+  id={id}
+  data-section={id}
+  class={`col-span-${cols} row-span-${rows} bg-black/${opacity} backdrop-blur-sm rounded-lg shadow-[0px_0px_32px_-3px_#080808] transition-transform duration-300 hover:scale-[${scale}]`}
+  transition:name=`${id}Detail`
+>
+  <slot />
+</section>

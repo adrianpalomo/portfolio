@@ -1,0 +1,94 @@
+---
+import ProjectsSlot from "@/components/ProjectsSlot.astro";
+
+const PROJECTS = [ 
+  {
+    title: "Project 1",
+    description: "Description of project 1",
+    image: "/src/assets/images/Project1.png",
+    id: "project1",
+  },
+  {
+    title: "Project 2",
+    description: "Description of project 2",
+    image: "/src/assets/images/Project2.png",
+    id: "project2",
+  },
+  {
+    title: "Project 3",
+    description: "Description of project 3",
+    image: "/src/assets/images/Project3.png",
+    id: "project3",
+  },
+  {
+    title: "Project 4",
+    description: "Description of project 4",
+    image: "/src/assets/images/Project4.png",
+    id: "project4",
+  },
+  {
+    title: "Project 5",
+    description: "Description of project 5",
+    image: "/src/assets/images/Project5.png",
+    id: "project5",
+  },
+];
+---
+
+<script>
+  import EmblaCarousel from "embla-carousel";
+  import Autoplay from "embla-carousel-autoplay";
+
+  const OPTIONS = { align: "start", loop: true };
+
+  const emblaNode = document.querySelector(".embla");
+  const viewportNode = emblaNode.querySelector(".embla__viewport");
+
+  const emblaApi = EmblaCarousel(viewportNode, OPTIONS, [Autoplay()]);
+</script>
+
+<section class="w-full h-full flex items-center justify-center">
+  <div class="embla w-full h-10/12">
+    <div class="embla__viewport h-full overflow-hidden">
+      <div
+        class="h-full flex touch-pan-y touch-pinch-zoom ml-[calc(var(--slide-spacing)*-1)]"
+      >
+        {
+          PROJECTS.map((project) => (
+            <a href={`${project.id}Detail`}>
+              <div class="embla__slide">
+                <div class="embla__slide__number border">
+                  <ProjectsSlot {...project} />
+                </div>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .embla {
+    --slide-height: 19rem;
+    --slide-spacing: 1rem;
+    --slide-size: 45%;
+  }
+
+  .embla__slide {
+    transform: translate3d(0, 0, 0);
+    flex: 0 0 var(--slide-size);
+    min-width: 0;
+    padding-left: var(--slide-spacing);
+  }
+
+  .embla__slide__number {
+    height: 100%;
+    border-radius: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+  }
+</style>

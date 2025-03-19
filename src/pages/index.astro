@@ -1,0 +1,80 @@
+---
+import Certifications from "@/components/Certifications.astro";
+import Contact from "@/components/Contact.astro";
+import Legal from "@/components/Legal.astro";
+import Projects from "@/components/Projects.astro";
+import About from "@/components/About.astro";
+import Blog from "@/components/Blog.astro";
+import Experience from "@/components/Experience.astro";
+import Saludation from "@/components/Saludation.astro";
+import SectionContainer from "@/components/SectionContainer.astro";
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout>
+  <section class="grid h-full w-full gap-8 grid-cols-10 grid-rows-5">
+    <!-- Saludation -->
+    <SectionContainer
+      id="saludation"
+      cols="3"
+      rows="2"
+      opacity="45"
+      scale="1.04"
+    >
+      <Saludation />
+    </SectionContainer>
+
+    <!-- Projects -->
+    <SectionContainer id="projects" cols="7" rows="3" opacity="60" scale="1.02">
+      <Projects />
+    </SectionContainer>
+
+    <!-- Experience -->
+    <SectionContainer
+      id="experience"
+      cols="3"
+      rows="3"
+      opacity="60"
+      scale="1.02"
+    >
+      <Experience />
+    </SectionContainer>
+
+    <!-- About -->
+    <SectionContainer id="about" cols="3" rows="2" opacity="60" scale="1.02">
+      <About />
+    </SectionContainer>
+
+    <!-- Certifications -->
+    <SectionContainer
+      id="certifications"
+      cols="4"
+      rows="1"
+      opacity="60"
+      scale="1.02"
+    >
+      <a href="/CertificationsDetail">
+        <Certifications />
+      </a>
+    </SectionContainer>
+
+    <!-- Contact -->
+    <SectionContainer id="contact" cols="2" rows="1" opacity="60" scale="1.02">
+      <Contact />
+    </SectionContainer>
+
+    <!-- Blog -->
+    <SectionContainer id="blog" cols="1" rows="1" opacity="60" scale="1.02">
+      <a href="/">
+        <Blog />
+      </a>
+    </SectionContainer>
+
+    <!-- Legal -->
+    <SectionContainer id="legal" cols="1" rows="1" opacity="60" scale="1.02">
+      <a href="/LegalDetail">
+        <Legal />
+      </a>
+    </SectionContainer>
+  </section>
+</Layout>

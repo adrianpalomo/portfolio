@@ -1,0 +1,189 @@
+---
+import Layout from "@/layouts/Layout.astro";
+---
+
+<style>
+  img {
+    width: 90px;
+  }
+</style>
+
+<Layout title="Adrián Palomo | Certifications">
+  <section
+    class="flex flex-col w-full justify-center items-center bg-black/60 backdrop-blur-sm rounded-lg shadow-[0px_0px_32px_-3px_#080808]"
+    transition:name="certificationsDetail"
+  >
+    <div class="h-1/12 w-full pt-6 px-10 flex justify-between">
+      <div>
+        <a href="/"
+          ><span class="hover:text-text-light2 duration-300">← Volver</span></a
+        >
+      </div>
+      <div>
+        <a
+          target="_blank"
+          href="https://www.salesforce.com/trailblazer/adrianpalomo"
+          class="flex items-center justify-center -mt-6 mr-6 hover:text-text-light2 duration-300"
+        >
+          <img
+            src="/src/assets/images/trailhead.svg"
+            alt="Trailhead"
+            class="scale-18 -mr-7"
+          />
+          <span>Trailhead</span>
+        </a>
+      </div>
+    </div>
+    <div class="flex h-11/12 w-full justify-center items-center">
+      <div class="h-9/12 w-10/12 flex">
+        <div class="flex flex-col justify-between h-full w-full">
+          <div class="flex hover:scale-103 duration-300">
+            <div>
+              <img
+                src="src/assets/images/jd1.webp"
+                alt="Salesforce Certification - Javascript Developer 1"
+              />
+            </div>
+            <div class="flex flex-col pl-8">
+              <span class="font-extrabold text-xl mb-1"
+                >Salesforce Javascript Developer I</span
+              >
+              <span class="text-text-light2">Octubre 2024</span>
+              <span class="text-text-light2 italic text-sm"
+                >Credential ID: 5074824</span
+              >
+            </div>
+          </div>
+          <div class="flex hover:scale-103 duration-300">
+            <div>
+              <img
+                src="src/assets/images/pd2.webp"
+                alt="Salesforce Certification - Platform Developer 2"
+                transition:name="pd2"
+              />
+            </div>
+            <div class="flex flex-col pl-8">
+              <span class="font-extrabold text-xl mb-1"
+                >Salesforce Platform Developer II</span
+              >
+              <span class="text-text-light2">Octubre 2024</span>
+              <span class="text-text-light2 italic text-sm"
+                >Credential ID: 4978768</span
+              >
+            </div>
+          </div>
+          <div class="flex hover:scale-103 duration-300">
+            <div>
+              <img
+                src="src/assets/images/pd1.webp"
+                alt="Salesforce Certification - Platform Developer 1"
+                transition:name="pd1"
+              />
+            </div>
+            <div class="flex flex-col pl-8">
+              <span class="font-extrabold text-xl mb-1"
+                >Salesforce Platform Developer I</span
+              >
+              <span class="text-text-light2">Octubre 2022</span>
+              <span class="text-text-light2 italic text-sm"
+                >Credential ID: 2609772</span
+              >
+            </div>
+          </div>
+          <div class="flex hover:scale-103 duration-300">
+            <div>
+              <img
+                src="src/assets/images/afs.webp"
+                alt="Salesforce Certification - Agentforce Specialist"
+                transition:name="afs"
+              />
+            </div>
+            <div class="flex flex-col pl-8">
+              <span class="font-extrabold text-xl mb-1"
+                >Salesforce Agentforce Specialist</span
+              >
+              <span class="text-text-light2">Septiembre 2024</span>
+              <span class="text-text-light2 italic text-sm"
+                >Credential ID: 4923051</span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col justify-between h-full w-full">
+          <div class="flex hover:scale-103 duration-300">
+            <div>
+              <img
+                src="src/assets/images/admin.webp"
+                alt="Salesforce Certification - Administrator"
+                transition:name="admin"
+              />
+            </div>
+            <div class="flex flex-col pl-8">
+              <span class="font-extrabold text-xl mb-1"
+                >Salesforce Administrator</span
+              >
+              <span class="text-text-light2">Enero 2023</span>
+              <span class="text-text-light2 italic text-sm"
+                >Credential ID: 2935952</span
+              >
+            </div>
+          </div>
+          <div class="flex hover:scale-103 duration-300">
+            <div>
+              <img
+                src="src/assets/images/pab.webp"
+                alt="Salesforce Certification - Platform App Builder"
+                transition:name="pab"
+              />
+            </div>
+            <div class="flex flex-col pl-8">
+              <span class="font-extrabold text-xl mb-1"
+                >Salesforce Platform App Builder</span
+              >
+              <span class="text-text-light2">Febrero 2023</span>
+              <span class="text-text-light2 italic text-sm"
+                >Credential ID: 3042099</span
+              >
+            </div>
+          </div>
+          <div class="flex hover:scale-103 duration-300">
+            <div>
+              <img
+                src="src/assets/images/aiAss.webp"
+                alt="Salesforce Certification - AI Associate"
+                transition:name="aiAss"
+              />
+            </div>
+            <div class="flex flex-col pl-8">
+              <span class="font-extrabold text-xl mb-1"
+                >Salesforce AI Associate</span
+              >
+              <span class="text-text-light2">Septiembre 2024</span>
+              <span class="text-text-light2 italic text-sm"
+                >Credential ID: 4923219</span
+              >
+            </div>
+          </div>
+          <div class="flex hover:scale-103 duration-300">
+            <div>
+              <img
+                src="src/assets/images/ass.webp"
+                alt="Salesforce Certification - Associate"
+                transition:name="ass"
+              />
+            </div>
+            <div class="flex flex-col pl-8">
+              <span class="font-extrabold text-xl mb-1"
+                >Salesforce Associate</span
+              >
+              <span class="text-text-light2">Julio 2023</span>
+              <span class="text-text-light2 italic text-sm"
+                >Credential ID: 3553169</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@theme {
+    --color-primary: #343434;
+    --color-secondary: #00204A;
+    --color-tertiary: #454551;
+    --color-remark: #DD343A;
+    --color-text-light: #dbdbdb;
+    --color-text-light2: #c2c2c2;
+    --color-text-light3: #909090;
+    --color-text-dark: #0E0E0E;
+    --color-text-light-hover: #a3a3a3;
+    --color-text-dark-hover: #e2e2e2;
+}
+
+body{
+    color: var(--color-text-light);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
+}
