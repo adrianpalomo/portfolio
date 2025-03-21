@@ -1,17 +1,13 @@
 ---
 import Back from "@/components/Back.astro";
+import Copy from "@/components/icons/Copy.astro";
 import Github from "@/components/icons/github.astro";
 import Linkedin from "@/components/icons/linkedin.astro";
 import Mail from "@/components/icons/mail.astro";
 import Share from "@/components/icons/Share.astro";
+import WhatsApp from "@/components/icons/WhatsApp.astro";
 import Layout from "@/layouts/Layout.astro";
 ---
-
-<style>
-  img {
-    width: 90px;
-  }
-</style>
 
 <Layout title="Adrián Palomo | Certifications">
   <section
@@ -21,16 +17,84 @@ import Layout from "@/layouts/Layout.astro";
     <div class="h-1/12 w-full pt-6 px-10 flex justify-between">
       <Back />
     </div>
-    <div class="flex h-11/12 w-full justify-center items-center">
-      <div class="h-9/12 w-10/12 flex"> 
-        <!-- Correo, WhatsApp, Linkedin, compartir web -->
-     <!--   <Github class="size-6" />
-        <Mail class="size-6" />
-        <Linkedin class="size-6" /> 
-        <Share class="size-6" />  -->
+    <div class="flex h-11/12 p-20 w-full justify-center items-center">
+      <div class="flex w-full h-full justify-center">
+        <div class="flex w-6/12 justify-center items-center">
+          <span class="text-xl text-center p-6">
+            <span class="font-bold"
+              >¿Por qué a una persona y no una gran consultora?</span
+            >
+            <br /><br />
+            La habilidad para comprender tus necesidades en un servicio personal(izado)
+            son mucho mayores, encontrando sinergias que crean un espacio libre para
+            la creatividad y soluciones reales a problemas reales.
+          </span>
+        </div>
+        <div class="flex flex-col w-6/12 gap-3 justify-center ml-38">
+          <div class="flex gap-3 items-center">
+            <a
+              class="flex gap-2 items-center"
+              target="_blank"
+              href="mailto:hi@adrianpalomo.com"
+            >
+              <Mail class="size-7" />
+              <span>hi@adrianpalomo.com</span>
+            </a>
+            <Copy
+              id="copyMail"
+              class="size-5 hover:stroke-theme-text-light-hover hover:cursor-copy"
+            />
+          </div>
 
-       
+          <div>
+            <a
+              class="flex gap-2 items-center hover:cursor"
+              target="_blank"
+              href="https://api.whatsapp.com/send/?phone=%2B34663610856&text&type=phone_number&app_absent=0"
+            >
+              <WhatsApp class="size-7" />
+              <span>Háblame al Wa!</span>
+            </a>
+          </div>
+          <div class="flex gap-2">
+            <a
+              class="flex gap-2 items-center"
+              target="_blank"
+              href="https://www.linkedin.com/in/adrianpalomomagan/"
+            >
+              <Linkedin class="size-7" />
+              <span>LinkedIn</span>
+            </a>
+          </div>
+
+          <div class="flex gap-2">
+            <a
+              class="flex gap-2 items-center"
+              target="_blank"
+              href="https://github.com/adrianpalomo/"
+            >
+              <Github class="size-7" />
+              <span>GitHub</span>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 </Layout>
+
+<script>
+  const copyMailBtn = document.getElementById("copyMail");
+  if (copyMailBtn) {
+    copyMailBtn.addEventListener("click", () => {
+      navigator.clipboard.writeText("hi@adrianpalomo.com");
+
+      const originalStroke = copyMailBtn.style.stroke;
+      copyMailBtn.style.stroke = "green";
+
+      setTimeout(() => {
+        copyMailBtn.style.stroke = originalStroke;
+      }, 750);
+    });
+  }
+</script>

@@ -1,5 +1,5 @@
 ---
-import "./src/styles/global.css";
+import "/src/styles/global.css";
 import { ClientRouter } from "astro:transitions";
 import Header from "@/components/Header.astro";
 
@@ -11,13 +11,13 @@ const { title = "Adrián Palomo | Portfolio" } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/png" href="src/assets/images/Fav.webp" />
+    <link rel="icon" type="image/png" href="/images/Fav.webp" />
     <title>{title}</title>
     <ClientRouter />
   </head>
   <body>
     <div
-      class="flex flex-col h-full w-full gap-6 p-6 bg-[url(/src/assets/images/rainbow-vortex.svg)] bg-cover bg-center bg-gradient-to-br from-blue-700 to-black text-text-light"
+      class="flex flex-col h-full w-full gap-6 p-6 bg-[url(/src/assets/rainbow-vortex.svg)] bg-cover bg-center bg-gradient-to-br from-blue-700 to-black text-theme-text-light"
     >
       <div class="flex h-2/12 w-full">
         <Header />
