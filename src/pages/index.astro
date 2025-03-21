@@ -7,74 +7,78 @@ import About from "@/components/About.astro";
 import Blog from "@/components/Blog.astro";
 import Experience from "@/components/Experience.astro";
 import Saludation from "@/components/Saludation.astro";
-import SectionContainer from "@/components/SectionContainer.astro";
 import Layout from "@/layouts/Layout.astro";
 ---
 
 <Layout>
-  <section class="grid h-full w-full gap-8 grid-cols-10 grid-rows-5">
+  <div class="grid h-full w-full gap-8 grid-cols-10 grid-rows-5">
     <!-- Saludation -->
-    <SectionContainer
-      id="saludation"
-      cols="3"
-      rows="2"
-      opacity="45"
-      scale="1.04"
+    <section
+      class="col-span-3 row-span-2 bg-black/45 backdrop-blur-sm rounded-lg shadow-[0px_0px_32px_-3px_#080808] transition-transform duration-300 hover:scale-[1.04]"
     >
       <Saludation />
-    </SectionContainer>
+    </section>
 
     <!-- Projects -->
-    <SectionContainer id="projects" cols="7" rows="3" opacity="60" scale="1.02">
+    <section class="col-span-7 row-span-3" transition:name="projectsDetail">
       <Projects />
-    </SectionContainer>
+    </section>
 
     <!-- Experience -->
-    <SectionContainer
-      id="experience"
-      cols="3"
-      rows="3"
-      opacity="60"
-      scale="1.02"
+
+    <section
+      class="col-span-3 row-span-3 bg-black/60 backdrop-blur-sm rounded-lg shadow-[0px_0px_32px_-3px_#080808] transition-transform duration-300 hover:scale-[1.04]"
     >
       <Experience />
-    </SectionContainer>
+    </section>
 
     <!-- About -->
-    <SectionContainer id="about" cols="3" rows="2" opacity="60" scale="1.02">
+    <section
+      class="col-span-3 row-span-2 bg-black/65 backdrop-blur-sm rounded-lg shadow-[0px_0px_32px_-3px_#080808] transition-transform duration-300 hover:scale-[1.04]"
+    >
       <About />
-    </SectionContainer>
+    </section>
 
     <!-- Certifications -->
-    <SectionContainer
-      id="certifications"
-      cols="4"
-      rows="1"
-      opacity="60"
-      scale="1.02"
+
+    <section
+      class="col-span-4 row-span-1 bg-black/60 backdrop-blur-sm rounded-lg shadow-[0px_0px_32px_-3px_#080808] transition-transform duration-300 hover:scale-[1.04]"
+      transition:name="certificationsDetail"
     >
       <a href="/CertificationsDetail">
         <Certifications />
       </a>
-    </SectionContainer>
+    </section>
 
     <!-- Contact -->
-    <SectionContainer id="contact" cols="2" rows="1" opacity="60" scale="1.02">
-      <Contact />
-    </SectionContainer>
 
+    <section
+      class="col-span-2 row-span-1 bg-black/95 backdrop-blur-sm rounded-lg shadow-[0px_0px_32px_-3px_#080808] transition-transform duration-300 hover:scale-[1.04]"
+      transition:name="contactDetail"
+    >
+      <a href="/ContactDetail">
+        <Contact />
+      </a>
+    </section>
     <!-- Blog -->
-    <SectionContainer id="blog" cols="1" rows="1" opacity="60" scale="1.02">
+
+    <section
+      class="col-span-1 row-span-1 bg-black/90 backdrop-blur-sm rounded-lg shadow-[0px_0px_32px_-3px_#080808] transition-transform duration-300 hover:scale-[1.04]"
+    >
       <a href="/">
         <Blog />
       </a>
-    </SectionContainer>
+    </section>
 
     <!-- Legal -->
-    <SectionContainer id="legal" cols="1" rows="1" opacity="60" scale="1.02">
+
+    <section
+      class="col-span-1 row-span-1 bg-black/80 backdrop-blur-sm rounded-lg shadow-[0px_0px_32px_-3px_#080808] transition-transform duration-300 hover:scale-[1.04]"
+      transition:name="legalDetail"
+    >
       <a href="/LegalDetail">
         <Legal />
       </a>
-    </SectionContainer>
-  </section>
+    </section>
+  </div>
 </Layout>

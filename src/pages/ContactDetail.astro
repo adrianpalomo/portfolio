@@ -1,3 +1,36 @@
-<script src="https://platform.linkedin.com/badges/js/profile.js" async defer type="text/javascript"></script>
+---
+import Back from "@/components/Back.astro";
+import Github from "@/components/icons/github.astro";
+import Linkedin from "@/components/icons/linkedin.astro";
+import Mail from "@/components/icons/mail.astro";
+import Share from "@/components/icons/Share.astro";
+import Layout from "@/layouts/Layout.astro";
+---
 
-<div class="badge-base LI-profile-badge" data-locale="en_US" data-size="large" data-theme="dark" data-type="HORIZONTAL" data-vanity="adrianpalomomagan" data-version="v1"><a class="badge-base__link LI-simple-link" href="https://es.linkedin.com/in/adrianpalomomagan/en?trk=profile-badge">Adrián Palomo Magán</a></div>         
+<style>
+  img {
+    width: 90px;
+  }
+</style>
+
+<Layout title="Adrián Palomo | Certifications">
+  <section
+    class="flex flex-col w-full justify-center items-center bg-black/60 backdrop-blur-sm rounded-lg shadow-[0px_0px_32px_-3px_#080808]"
+    transition:name="contactDetail"
+  >
+    <div class="h-1/12 w-full pt-6 px-10 flex justify-between">
+      <Back />
+    </div>
+    <div class="flex h-11/12 w-full justify-center items-center">
+      <div class="h-9/12 w-10/12 flex"> 
+        <!-- Correo, WhatsApp, Linkedin, compartir web -->
+     <!--   <Github class="size-6" />
+        <Mail class="size-6" />
+        <Linkedin class="size-6" /> 
+        <Share class="size-6" />  -->
+
+       
+      </div>
+    </div>
+  </section>
+</Layout>
