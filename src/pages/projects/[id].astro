@@ -1,5 +1,5 @@
 ---
-import Back from "@/components/Back.astro";
+import PageHeader from "@/components/PageHeader.astro";
 import Layout from "@/layouts/Layout.astro";
 import { getCollection, render } from "astro:content";
 
@@ -19,18 +19,10 @@ const { Content } = await render(project);
 ---
 
 <Layout title=`Adrián Palomo | ${title}`>
-  <section
-    class="flex w-full flex-col items-center justify-center rounded-lg bg-black/60 shadow-[0px_0px_32px_-3px_#080808] backdrop-blur-sm"
-    transition:name="projectsDetail"
-  >
-    <div class="flex h-1/12 w-full items-center justify-between px-10 pt-6">
-      <Back />
+  <PageHeader transitionName="projectsDetail" showTrailhead={false}>
+    <div class="flex w-full flex-col gap-8 px-8">
+      <h1 class="text-center text-2xl font-bold">{title}</h1>
+      <Content />
     </div>
-    <div class="flex h-11/12 w-full items-center justify-center">
-      <div class="flex h-full w-full flex-col gap-10 p-18">
-        <h1 class="text-center text-3xl font-bold">{title}</h1>
-        <Content />
-      </div>
-    </div>
-  </section>
+  </PageHeader>
 </Layout>
