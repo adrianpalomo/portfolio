@@ -6,9 +6,8 @@ const projects = await getCollection("projects");
 ---
 
 <script is:inline data-astro-rerun type="module">
-  import EmblaCarousel from "/node_modules/embla-carousel";
-  import Autoplay from "/node_modules/embla-carousel-autoplay";
-
+  import EmblaCarousel from "../../node_modules/embla-carousel";
+  import Autoplay from "../../node_modules/embla-carousel-autoplay";
   const OPTIONS = { align: "start", loop: true };
 
   const emblaNode = document.querySelector(".embla");
