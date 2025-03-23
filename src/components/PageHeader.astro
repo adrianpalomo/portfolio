@@ -1,0 +1,41 @@
+---
+import Back from "./Back.astro";
+import Trailhead from "./icons/Trailhead.astro";
+
+interface Props {
+  transitionName: string;
+  showTrailhead: boolean;
+}
+
+const { transitionName, showTrailhead } = Astro.props;
+---
+
+<section
+  class="flex w-full flex-col items-center justify-center rounded-lg bg-black/60 shadow-[0px_0px_32px_-3px_#080808] backdrop-blur-sm"
+  transition:name={transitionName}
+>
+  <div class="mt-4 flex h-16 w-full items-center justify-between px-6 md:px-12">
+    <Back />
+
+    {
+      showTrailhead && (
+        <div>
+          <a
+            target="_blank"
+            href="https://www.salesforce.com/trailblazer/adrianpalomo"
+            class="mr-6 flex items-center justify-center"
+          >
+            <Trailhead class="mr-1 size-5" />
+            <span>Trailhead</span>
+          </a>
+        </div>
+      )
+    }
+  </div>
+
+  <div
+    class="my-8 flex w-full flex-col items-center justify-center gap-6 px-6 md:px-18 lg:flex-row"
+  >
+    <slot />
+  </div>
+</section>
