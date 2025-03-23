@@ -5,11 +5,12 @@ import { getCollection } from "astro:content";
 const projects = await getCollection("projects");
 ---
 
-<script>
-  import EmblaCarousel from "embla-carousel";
-  import Autoplay from "embla-carousel-autoplay";
+<script is:inline data-astro-rerun type="module">
+  import EmblaCarousel from "/node_modules/embla-carousel";
+  import Autoplay from "/node_modules/embla-carousel-autoplay";
 
   const OPTIONS = { align: "start", loop: true };
+  console.log({ OPTIONS });
 
   const emblaNode = document.querySelector(".embla");
   const viewportNode = emblaNode.querySelector(".embla__viewport");
@@ -17,20 +18,20 @@ const projects = await getCollection("projects");
   const emblaApi = EmblaCarousel(viewportNode, OPTIONS, [Autoplay()]);
 </script>
 
-<section class="w-full h-full flex items-center justify-center" >
-  <div class="embla w-full h-full">
+<section class="flex h-full w-full items-center justify-center">
+  <div class="embla h-full w-full">
     <div class="embla__viewport h-full overflow-hidden">
       <div
-        class="h-full flex touch-pan-y touch-pinch-zoom ml-[calc(var(--slide-spacing)*-1)]"
+        class="ml-[calc(var(--slide-spacing)*-1)] flex h-full touch-pan-y touch-pinch-zoom"
       >
         {
           projects.map((project) => {
             return (
               <section class="embla__slide">
-                <div class="embla__slide__number rounded-lg flex items-center justify-center h-full select-none bg-black/50 backdrop-blur-sm  shadow-[0px_0px_32px_-3px_#080808]  transition-transform duration-300 hover:scale-[1.03]">
+                <div class="embla__slide__number flex h-full items-center justify-center rounded-lg bg-black/50 select-none">
                   <a
-                    class="flex flex-col w-full h-full"
-                    href={`/projects/${project.id}`}                    
+                    class="flex h-full w-full flex-col"
+                    href={`/projects/${project.id}`}
                   >
                     <ProjectsSlot {...project.data} />
                   </a>
@@ -47,8 +48,15 @@ const projects = await getCollection("projects");
 <style>
   .embla {
     --slide-height: 19rem;
-    --slide-spacing: 2rem;
-    --slide-size: 45%;
+    --slide-spacing: 1rem;
+    --slide-size: 90%;
+  }
+
+  @media (min-width: 768px) {
+    .embla {
+      --slide-size: 45%;
+      --slide-spacing: 1.5rem;
+    }
   }
 
   .embla__slide {

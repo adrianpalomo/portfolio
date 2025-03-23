@@ -1,82 +1,89 @@
 ---
 import Back from "@/components/Back.astro";
 import Copy from "@/components/icons/Copy.astro";
-import Github from "@/components/icons/github.astro";
-import Linkedin from "@/components/icons/linkedin.astro";
-import Mail from "@/components/icons/mail.astro";
-import Share from "@/components/icons/Share.astro";
+import Github from "@/components/icons/Github.astro";
+import Linkedin from "@/components/icons/LinkedIn.astro";
+import Mail from "@/components/icons/Mail.astro";
 import WhatsApp from "@/components/icons/WhatsApp.astro";
 import Layout from "@/layouts/Layout.astro";
 ---
 
 <Layout title="Adrián Palomo | Certifications">
   <section
-    class="flex flex-col w-full justify-center items-center bg-black/60 backdrop-blur-sm rounded-lg shadow-[0px_0px_32px_-3px_#080808]"
+    class="flex w-full flex-col items-center justify-center rounded-lg bg-black/60 shadow-[0px_0px_32px_-3px_#080808] backdrop-blur-sm"
     transition:name="contactDetail"
   >
-    <div class="h-1/12 w-full pt-6 px-10 flex justify-between">
+    <div class="mt-4 flex h-16 w-full items-center justify-between px-12">
       <Back />
     </div>
-    <div class="flex h-11/12 p-20 w-full justify-center items-center">
-      <div class="flex w-full h-full justify-center">
-        <div class="flex w-6/12 justify-center items-center">
-          <span class="text-xl text-center p-6">
+    <div
+      class="my-8 flex w-full flex-col items-center justify-center gap-8 px-6 md:px-18 lg:flex-row"
+    >
+      <div class="flex w-full flex-col justify-center lg:w-6/12 lg:flex-row">
+        <div class="flex items-center justify-center p-6">
+          <article class="flex flex-col gap-6 text-center text-pretty">
             <span class="font-bold"
-              >¿Por qué a una persona y no una gran consultora?</span
+              >¿Por qué a un freelancer y no una gran compania?</span
             >
-            <br /><br />
-            La habilidad para comprender tus necesidades en un servicio personal(izado)
-            son mucho mayores, encontrando sinergias que crean un espacio libre para
-            la creatividad y soluciones reales a problemas reales.
-          </span>
+            <span>
+              La habilidad para comprender tus necesidades en un servicio
+              personal(izado) son mucho mayores, encontrando sinergias que crean
+              un espacio libre para la creatividad y soluciones reales a
+              problemas reales.
+            </span>
+          </article>
         </div>
-        <div class="flex flex-col w-6/12 gap-3 justify-center ml-38">
-          <div class="flex gap-3 items-center">
-            <a
-              class="flex gap-2 items-center"
-              target="_blank"
-              href="mailto:hi@adrianpalomo.com"
-            >
-              <Mail class="size-7" />
-              <span>hi@adrianpalomo.com</span>
-            </a>
-            <Copy
-              id="copyMail"
-              class="size-5 hover:stroke-theme-text-light-hover hover:cursor-copy"
-            />
-          </div>
+      </div>
+      <!--       div que sea una linea que solo aparezca de md hacia mas paqueño
+ -->
+      <div class="h-[1px] w-[80%] bg-theme-text-light mb-3 lg:hidden"></div>
 
-          <div>
-            <a
-              class="flex gap-2 items-center hover:cursor"
-              target="_blank"
-              href="https://api.whatsapp.com/send/?phone=%2B34663610856&text&type=phone_number&app_absent=0"
-            >
-              <WhatsApp class="size-7" />
-              <span>Háblame al Wa!</span>
-            </a>
-          </div>
-          <div class="flex gap-2">
-            <a
-              class="flex gap-2 items-center"
-              target="_blank"
-              href="https://www.linkedin.com/in/adrianpalomomagan/"
-            >
-              <Linkedin class="size-7" />
-              <span>LinkedIn</span>
-            </a>
-          </div>
+      <div class="flex flex-col justify-center gap-3 lg:ml-38 lg:w-6/12">
+        <div class="flex items-center gap-3">
+          <a
+            class="flex items-center gap-2"
+            target="_blank"
+            href="mailto:hi@adrianpalomo.com"
+          >
+            <Mail class="size-7" />
+            <span>hi@adrianpalomo.com</span>
+          </a>
+          <Copy
+            id="copyMail"
+            class="hover:stroke-theme-text-light-hover size-5 hover:cursor-copy"
+          />
+        </div>
 
-          <div class="flex gap-2">
-            <a
-              class="flex gap-2 items-center"
-              target="_blank"
-              href="https://github.com/adrianpalomo/"
-            >
-              <Github class="size-7" />
-              <span>GitHub</span>
-            </a>
-          </div>
+        <div>
+          <a
+            class="hover:cursor flex items-center gap-2"
+            target="_blank"
+            href="https://api.whatsapp.com/send/?phone=%2B34663610856&text&type=phone_number&app_absent=0"
+          >
+            <WhatsApp class="size-7" />
+            <span>Háblame al Wa!</span>
+          </a>
+        </div>
+        <div class="flex gap-2">
+          <a
+            class="flex items-center gap-2"
+            target="_blank"
+            href="https://www.linkedin.com/in/adrianpalomomagan/"
+          >
+            <Linkedin class="size-7" />
+            <span>LinkedIn</span>
+          </a>
+        </div>
+
+        <div class="flex gap-2">
+          <a
+            class="flex items-center gap-2"
+            target="_blank"
+            href="https://github.com/adrianpalomo/"
+          >
+            <Github class="size-7" />
+            <span>GitHub</span>
+          </a>
         </div>
       </div>
     </div>

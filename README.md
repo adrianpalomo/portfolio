@@ -5,6 +5,7 @@
 ## Descripción
 
 Este portfolio ha sido creado con el objetivo de:
+
 - Mostrar mis proyectos y trabajos realizados.
 - Detallar las tecnologías y herramientas que manejo.
 - Brindar una plataforma de contacto y colaboración para futuros proyectos.

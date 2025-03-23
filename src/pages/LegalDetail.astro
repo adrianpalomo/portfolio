@@ -5,18 +5,18 @@ import Layout from "@/layouts/Layout.astro";
 
 <Layout title="Adrián Palomo | Legal">
   <section
-    class="flex flex-col w-full justify-center items-center bg-black/60 backdrop-blur-sm rounded-lg shadow-[0px_0px_32px_-3px_#080808]"
+    class="flex h-full w-full flex-col items-center justify-center rounded-lg bg-black/60 shadow-[0px_0px_32px_-3px_#080808] backdrop-blur-sm"
     transition:name="legalDetail"
   >
-    <div class="h-1/12 w-full pt-6 px-10 flex justify-between">
+    <div class="flex h-1/12 w-full justify-between px-10 pt-6">
       <Back />
     </div>
-    <div class="h-11/12 w-full overflow-y-auto no-scrollbar">
+    <div class="no-scrollbar h-11/12 w-full overflow-y-auto">
       <div class="container mx-auto p-4">
         <!-- Sección: Política de Privacidad -->
         <div class="mx-auto mb-8">
           <header class="text-center">
-            <h2 class="text-2xl font-bold mb-2">
+            <h2 class="mb-2 text-2xl font-bold">
               POLÍTICA DE PRIVACIDAD DEL SITIO WEB
             </h2>
             <h4 class="text-lg">
@@ -24,7 +24,7 @@ import Layout from "@/layouts/Layout.astro";
             </h4>
           </header>
           <div class="mt-4">
-            <h3 class="text-xl font-semibold mt-4">
+            <h3 class="mt-4 text-xl font-semibold">
               I. POLÍTICA DE PRIVACIDAD Y PROTECCIÓN DE DATOS
             </h3>
             <p class="mt-2 text-base">
@@ -34,7 +34,7 @@ import Layout from "@/layouts/Layout.astro";
               técnicas y organizativas necesarias, según el nivel de seguridad adecuado
               al riesgo de los datos recogidos.
             </p>
-            <h4 class="text-lg font-semibold mt-4">
+            <h4 class="mt-4 text-lg font-semibold">
               Leyes que incorpora esta política de privacidad
             </h4>
             <p class="mt-2 text-base">
@@ -42,7 +42,7 @@ import Layout from "@/layouts/Layout.astro";
               y europea vigente en materia de protección de datos personales en
               internet. En concreto, la misma respeta las siguientes normas:
             </p>
-            <ul class="list-disc ml-6 mt-2 text-base">
+            <ul class="mt-2 ml-6 list-disc text-base">
               <li>
                 El Reglamento (UE) 2016/679 del Parlamento Europeo y del
                 Consejo, de 27 de abril de 2016, relativo a la protección de las
@@ -65,7 +65,7 @@ import Layout from "@/layouts/Layout.astro";
                 la Información y de Comercio Electrónico (LSSI-CE).
               </li>
             </ul>
-            <h4 class="text-lg font-semibold mt-4">
+            <h4 class="mt-4 text-lg font-semibold">
               Identidad del responsable del tratamiento de los datos personales
             </h4>
             <p class="mt-2 text-base" ng-show="data.claseTitular == 'persona'">
@@ -82,7 +82,7 @@ import Layout from "@/layouts/Layout.astro";
                 >hi@adrianpalomo.com</span
               >
             </p>
-            <h4 class="text-lg font-semibold mt-4">
+            <h4 class="mt-4 text-lg font-semibold">
               Registro de Datos de Carácter Personal
             </h4>
             <p class="mt-2 text-base">
@@ -103,7 +103,7 @@ import Layout from "@/layouts/Layout.astro";
               de tratamiento llevadas a cabo y las demás circunstancias establecidas
               en el RGPD.
             </p>
-            <h4 class="text-lg font-semibold mt-4">
+            <h4 class="mt-4 text-lg font-semibold">
               Principios aplicables al tratamiento de los datos personales
             </h4>
             <p class="mt-2 text-base">
@@ -113,7 +113,7 @@ import Layout from "@/layouts/Layout.astro";
               diciembre, de Protección de Datos Personales y garantía de los
               derechos digitales:
             </p>
-            <ul class="list-disc ml-6 mt-2 text-base">
+            <ul class="mt-2 ml-6 list-disc text-base">
               <li>
                 Principio de licitud, lealtad y transparencia: se requerirá en
                 todo momento el consentimiento del Usuario previa información
@@ -150,7 +150,7 @@ import Layout from "@/layouts/Layout.astro";
                 anteriores se cumplen.
               </li>
             </ul>
-            <h4 class="text-lg font-semibold mt-4">
+            <h4 class="mt-4 text-lg font-semibold">
               Categorías de datos personales
             </h4>
             <p
@@ -194,7 +194,7 @@ import Layout from "@/layouts/Layout.astro";
               personales, será necesario en todo caso el consentimiento
               explícito del Usuario para uno o varios fines específicos.
             </p>
-            <h4 class="text-lg font-semibold mt-4">
+            <h4 class="mt-4 text-lg font-semibold">
               Base legal para el tratamiento de los datos personales
             </h4>
             <p class="mt-2 text-base">
@@ -220,7 +220,7 @@ import Layout from "@/layouts/Layout.astro";
               imprescindibles para el correcto desarrollo de la operación
               realizada.
             </p>
-            <h4 class="text-lg font-semibold mt-4">
+            <h4 class="mt-4 text-lg font-semibold">
               Fines del tratamiento a que se destinan los datos personales
             </h4>
             <p class="mt-2 text-base">
@@ -247,7 +247,7 @@ import Layout from "@/layouts/Layout.astro";
               tratamiento a que se destinarán los datos personales; es decir,
               del uso o usos que se dará a la información recopilada.
             </p>
-            <h4 class="text-lg font-semibold mt-4">
+            <h4 class="mt-4 text-lg font-semibold">
               Períodos de retención de los datos personales
             </h4>
             <p class="mt-2 text-base">
@@ -263,7 +263,7 @@ import Layout from "@/layouts/Layout.astro";
               conservarán los datos personales o, cuando eso no sea posible, los
               criterios utilizados para determinar este plazo.
             </p>
-            <h4 class="text-lg font-semibold mt-4">
+            <h4 class="mt-4 text-lg font-semibold">
               Destinatarios de los datos personales
             </h4>
             <p class="mt-2 text-base" ng-show="data.datosCompartidos == 'No'">
@@ -296,7 +296,7 @@ import Layout from "@/layouts/Layout.astro";
               transferir los datos, así como de la existencia o ausencia de una
               decisión de adecuación de la Comisión.
             </p>
-            <h4 class="text-lg font-semibold mt-4">
+            <h4 class="mt-4 text-lg font-semibold">
               Datos personales de menores de edad
             </h4>
             <p class="mt-2 text-base">
@@ -311,7 +311,7 @@ import Layout from "@/layouts/Layout.astro";
               solo se considerará lícito en la medida en la que los mismos lo
               hayan autorizado.
             </p>
-            <h4 class="text-lg font-semibold mt-4">
+            <h4 class="mt-4 text-lg font-semibold">
               Secreto y seguridad de los datos personales
             </h4>
             <p class="mt-2 text-base">
@@ -352,7 +352,7 @@ import Layout from "@/layouts/Layout.astro";
               dicha confidencialidad sea respetada por sus empleados, asociados,
               y toda persona a la cual le haga accesible la información.
             </p>
-            <h4 class="text-lg font-semibold mt-4">
+            <h4 class="mt-4 text-lg font-semibold">
               Derechos derivados del tratamiento de los datos personales
             </h4>
             <p class="mt-2 text-base">
@@ -363,7 +363,7 @@ import Layout from "@/layouts/Layout.astro";
               de 5 de diciembre, de Protección de Datos Personales y garantía de
               los derechos digitales:
             </p>
-            <ul class="list-disc ml-6 mt-2 text-base">
+            <ul class="mt-2 ml-6 list-disc text-base">
               <li>
                 <i>Derecho de acceso:</i> Es el derecho del Usuario a obtener confirmación
                 de si <span class="blanc-space ng-binding"
@@ -443,7 +443,7 @@ import Layout from "@/layouts/Layout.astro";
                 >www.adrianpalomo.com</span
               >", especificando:
             </p>
-            <ul class="list-disc ml-6 mt-2 text-base">
+            <ul class="mt-2 ml-6 list-disc text-base">
               <li>
                 Nombre, apellidos del Usuario y copia del DNI. En los casos en
                 que se admita la representación, será también necesaria la
@@ -470,7 +470,7 @@ import Layout from "@/layouts/Layout.astro";
                 >hi@adrianpalomo.com</span
               >
             </p>
-            <h4 class="text-lg font-semibold mt-4">
+            <h4 class="mt-4 text-lg font-semibold">
               Enlaces a sitios web de terceros
             </h4>
             <p class="mt-2 text-base">
@@ -484,7 +484,7 @@ import Layout from "@/layouts/Layout.astro";
               caso, responsables de sus propios ficheros y de sus propias
               prácticas de privacidad.
             </p>
-            <h4 class="text-lg font-semibold mt-4">
+            <h4 class="mt-4 text-lg font-semibold">
               Reclamaciones ante la autoridad de control
             </h4>
             <p class="mt-2 text-base">
@@ -497,7 +497,7 @@ import Layout from "@/layouts/Layout.astro";
               el caso de España, la autoridad de control es la Agencia Española
               de Protección de Datos (https://www.aepd.es/).
             </p>
-            <h3 class="text-xl font-semibold mt-8">
+            <h3 class="mt-8 text-xl font-semibold">
               II. ACEPTACIÓN Y CAMBIOS EN ESTA POLÍTICA DE PRIVACIDAD
             </h3>
             <p class="mt-2 text-base">
@@ -542,7 +542,7 @@ import Layout from "@/layouts/Layout.astro";
       <!-- Sección: Aviso Legal y Condiciones Generales de Uso -->
       <div class="container mx-auto mb-8">
         <header class="text-center">
-          <h2 class="text-2xl font-bold mb-2">
+          <h2 class="mb-2 text-2xl font-bold">
             AVISO LEGAL Y CONDICIONES GENERALES DE USO
           </h2>
           <h4 class="text-lg">
@@ -550,7 +550,7 @@ import Layout from "@/layouts/Layout.astro";
           </h4>
         </header>
         <div class="mt-4">
-          <h3 class="text-xl font-semibold mt-4">I. INFORMACIÓN GENERAL</h3>
+          <h3 class="mt-4 text-xl font-semibold">I. INFORMACIÓN GENERAL</h3>
           <p class="mt-2 text-base">
             En cumplimiento con el deber de información dispuesto en la Ley
             34/2002 de Servicios de la Sociedad de la Información y el Comercio
@@ -569,10 +569,10 @@ import Layout from "@/layouts/Layout.astro";
               >hi@adrianpalomo.com</span
             >
           </p>
-          <h3 class="text-xl font-semibold mt-4">
+          <h3 class="mt-4 text-xl font-semibold">
             II. TÉRMINOS Y CONDICIONES GENERALES DE USO
           </h3>
-          <h4 class="text-lg font-semibold mt-4">
+          <h4 class="mt-4 text-lg font-semibold">
             El objeto de las condiciones: El Sitio Web
           </h4>
           <p class="mt-2 text-base">
@@ -631,7 +631,7 @@ import Layout from "@/layouts/Layout.astro";
             La utilización de los Contenidos no requiere previa suscripción o
             registro alguno.
           </p>
-          <h4 class="text-lg font-semibold mt-4">El Usuario</h4>
+          <h4 class="mt-4 text-lg font-semibold">El Usuario</h4>
           <p class="mt-2 text-base">
             El acceso, la navegación y uso del Sitio Web, <span
               ng-show="data.interaccionLibre == 'Sí'"
@@ -654,7 +654,7 @@ import Layout from "@/layouts/Layout.astro";
             asume su responsabilidad para realizar un uso correcto del Sitio Web.
             Esta responsabilidad se extenderá a:
           </p>
-          <ul class="list-disc ml-6 mt-2 text-base">
+          <ul class="mt-2 ml-6 list-disc text-base">
             <li>
               Un uso de la información, Contenidos y/o Servicios y datos
               ofrecidos por <span class="blanc-space ng-binding"
@@ -742,7 +742,7 @@ import Layout from "@/layouts/Layout.astro";
               class="blanc-space ng-binding">Adrián Palomo Portfolio</span
             > responsabilidad alguna que se pueda derivar de dicho acceso.
           </p>
-          <h3 class="text-xl font-semibold mt-8">
+          <h3 class="mt-8 text-xl font-semibold">
             III. ACCESO Y NAVEGACIÓN EN EL SITIO WEB: EXCLUSIÓN DE GARANTÍAS Y
             RESPONSABILIDAD
           </h3>
@@ -773,7 +773,7 @@ import Layout from "@/layouts/Layout.astro";
             en modo alguno de las caídas, interrupciones, falta o defecto de las
             telecomunicaciones que pudieran ocurrir.
           </p>
-          <h3 class="text-xl font-semibold mt-8">IV. POLÍTICA DE ENLACES</h3>
+          <h3 class="mt-8 text-xl font-semibold">IV. POLÍTICA DE ENLACES</h3>
           <p class="mt-2 text-base" ng-show="data.enlacesTerceros == 'Sí'">
             Se informa que el Sitio Web de <span class="blanc-space ng-binding"
               >Adrián Palomo Portfolio</span
@@ -861,7 +861,7 @@ import Layout from "@/layouts/Layout.astro";
             > de los contenidos, servicios y/o actividades ofrecidas en dicho sitio
             web, y viceversa.
           </p>
-          <h3 class="text-xl font-semibold mt-8">
+          <h3 class="mt-8 text-xl font-semibold">
             V. PROPIEDAD INTELECTUAL E INDUSTRIAL
           </h3>
           <p class="mt-2 text-base">
@@ -908,7 +908,7 @@ import Layout from "@/layouts/Layout.astro";
             > a través de los datos de contacto del apartado de INFORMACIÓN GENERAL
             de este Aviso Legal y Condiciones Generales de Uso.
           </p>
-          <h3 class="text-xl font-semibold mt-8">
+          <h3 class="mt-8 text-xl font-semibold">
             VI. ACCIONES LEGALES, LEGISLACIÓN APLICABLE Y JURISDICCIÓN
           </h3>
           <p class="mt-2 text-base">
