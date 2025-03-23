@@ -5,15 +5,18 @@ import { getCollection } from "astro:content";
 const projects = await getCollection("projects");
 ---
 
-<script is:inline data-astro-rerun type="module">
-  import EmblaCarousel from "../../node_modules/embla-carousel";
-  import Autoplay from "../../node_modules/embla-carousel-autoplay";
-  const OPTIONS = { align: "start", loop: true };
+<script>
+  import EmblaCarousel from "embla-carousel";
+  import Autoplay from "embla-carousel-autoplay";
+  
+  document.addEventListener("astro:page-load", () => {
+    const OPTIONS = { align: "start", loop: true };
 
-  const emblaNode = document.querySelector(".embla");
-  const viewportNode = emblaNode.querySelector(".embla__viewport");
+    const emblaNode = document.querySelector(".embla");
+    const viewportNode = emblaNode?.querySelector(".embla__viewport");
 
-  const emblaApi = EmblaCarousel(viewportNode, OPTIONS, [Autoplay()]);
+    const emblaApi = EmblaCarousel(viewportNode, OPTIONS, [Autoplay()]);
+  });
 </script>
 
 <section class="flex h-full w-full items-center justify-center">
