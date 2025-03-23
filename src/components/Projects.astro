@@ -8,25 +8,20 @@ const projects = await getCollection("projects");
 <script is:inline data-astro-rerun type="module">
   import EmblaCarousel from "/node_modules/embla-carousel";
   import Autoplay from "/node_modules/embla-carousel-autoplay";
-  import { WheelGesturesPlugin } from "/node_modules/embla-carousel-wheel-gestures";Add plugin
 
   const OPTIONS = { align: "start", loop: true };
-  console.log({ OPTIONS });
 
   const emblaNode = document.querySelector(".embla");
   const viewportNode = emblaNode.querySelector(".embla__viewport");
 
-  const emblaApi = EmblaCarousel(viewportNode, OPTIONS, [
-    Autoplay(),
-    WheelGesturesPlugin(),
-  ]);
+  const emblaApi = EmblaCarousel(viewportNode, OPTIONS, [Autoplay()]);
 </script>
 
 <section class="flex h-full w-full items-center justify-center">
   <div class="embla h-full w-full">
     <div class="embla__viewport h-full overflow-hidden">
       <div
-        class="ml-[calc(var(--slide-spacing)*-1)] flex h-full touch-pan-y touch-pinch-zoom"
+        class="embla__container ml-[calc(var(--slide-spacing)*-1)] flex h-full touch-pan-y touch-pinch-zoom"
       >
         {
           projects.map((project) => {
