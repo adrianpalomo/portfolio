@@ -1,23 +1,20 @@
 <header
   class="h-full w-full rounded-lg bg-black/80 shadow-[0px_0px_32px_-3px_#080808] backdrop-blur-sm"
 >
-  <div class="-mt-1 flex h-full items-center justify-between px-7 md:px-12">
+  <div class="flex h-full w-full items-center justify-between px-6 md:px-12">
     <div class="flex items-center">
-      <a
-        href="/"
-        class="-ml-10 scale-75 md:-ml-0 md:scale-100"
-      >
-        <div class="selectable group -mt-1 flex flex-col">
+      <a href="/">
+        <div class="selectable group flex flex-col">
           <h1
-            class="text-theme-text-light text-[23pt] tracking-[0.2rem] transition-all duration-300 group-hover:text-[25pt] group-hover:tracking-[0.3rem] text-nowrap"
+            class="text-theme-text-light text-xl tracking-wider text-nowrap transition-all duration-300 group-hover:text-2xl sm:group-hover:text-3xl md:text-2xl"
           >
             Adrián Palomo
           </h1>
           <h2
-            class="text-theme-text-light -mt-3 text-lg transition-all duration-300 group-hover:text-xl"
+            class="text-theme-text-light -mt-1 text-xs transition-all duration-300 group-hover:text-sm md:-mt-2 md:text-lg md:group-hover:text-xl"
           >
             <span
-              class="text-theme-text-light after:bg-theme-text-light relative inline-block text-[12pt] duration-300 group-hover:text-[13pt] after:-mb-1 after:block after:h-[1px] after:origin-left after:scale-x-0 after:transition-all after:duration-300 group-hover:after:origin-left group-hover:after:scale-x-100 text-nowrap"
+              class="text-theme-text-light after:bg-theme-text-light relative inline-block text-xs text-nowrap duration-300 group-hover:text-sm after:-mb-1 after:block after:h-[1px] after:origin-left after:scale-x-0 after:transition-all after:duration-300 group-hover:after:origin-left group-hover:after:scale-x-100 md:text-lg md:group-hover:text-xl"
             >
               End-2-End
             </span>
@@ -45,19 +42,18 @@
         </div>
       </a>
     </div>
-    <nav class="flex items-center gap-4">
+    <nav class="flex flex-col md:flex-row md:items-center md:gap-4">
       <a
-        target="_blank"
-        href="/AdrianPalomo_Sr_Sf_Dev.pdf"
-        class="text-theme-text-light"
-        title="CV de Adrián Palomo - Salesforce Developer"
+        transition:name="contactDetail"
+        href="/ContactDetail"
+        class="text-theme-text-light text-right text-sm md:text-base"
       >
-        CV
+        Contacto
       </a>
       <a
         target="_blank"
         href="https://blog.adrianpalomo.com/"
-        class="text-theme-text-light"
+        class="text-theme-text-light text-right text-sm md:text-base"
         rel="noopener noreferrer"
       >
         Blog
