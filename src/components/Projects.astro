@@ -7,19 +7,30 @@ const projects = await getCollection("projects");
 
 <script>
   import EmblaCarousel from "embla-carousel";
-    import Autoplay from "embla-carousel-autoplay";
-  
+  import Autoplay from "embla-carousel-autoplay";
+  import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
+
   document.addEventListener("astro:page-load", () => {
-    const OPTIONS = { align: "start", loop: true };
+    const OPTIONS = {
+      align: "start",
+      loop: true,
+    };
 
     const emblaNode = document.querySelector(".embla");
     const viewportNode = emblaNode?.querySelector(".embla__viewport");
 
-    const emblaApi = EmblaCarousel(viewportNode, OPTIONS, [Autoplay()]);
+    const emblaApi = EmblaCarousel(viewportNode, OPTIONS, [
+      Autoplay({
+        delay: 2000,
+        stopOnMouseEnter: true,
+        stopOnInteraction: false,
+      }),
+      WheelGesturesPlugin(),
+    ]);
   });
 </script>
 
-<section class="h-full w-full" >
+<section class="h-full w-full">
   <div class="embla h-full w-full">
     <div class="embla__viewport h-full overflow-hidden">
       <div
@@ -29,11 +40,10 @@ const projects = await getCollection("projects");
           projects.map((project) => {
             return (
               <section class="embla__slide">
-                <div class="embla__slide__numbers flex h-full items-center select-none hover:bg-black/10 transition-all duration-300">
+                <div class="embla__slide__numbers flex h-full items-center transition-all duration-300 select-none hover:bg-black/10">
                   <a
-                    class="flex h-full w-full flex-col hover:text-theme-text-light"
+                    class="hover:text-theme-text-light flex h-full w-full flex-col"
                     href={`/projects/${project.id}`}
-                    
                   >
                     <ProjectsSlot {...project.data} />
                   </a>
