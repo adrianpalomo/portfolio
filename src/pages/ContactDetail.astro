@@ -3,6 +3,7 @@ import Copy from "@/components/icons/Copy.astro";
 import Github from "@/components/icons/Github.astro";
 import Linkedin from "@/components/icons/LinkedIn.astro";
 import Mail from "@/components/icons/Mail.astro";
+import Malt from "@/components/icons/Malt.astro";
 import WhatsApp from "@/components/icons/WhatsApp.astro";
 import PageHeader from "@/components/PageHeader.astro";
 import Layout from "@/layouts/Layout.astro";
@@ -29,10 +30,16 @@ import Layout from "@/layouts/Layout.astro";
     <div class="bg-theme-text-light mb-3 h-[1px] w-[80%] lg:hidden"></div>
 
     <div class="flex flex-col justify-center gap-3 lg:ml-38 lg:w-6/12">
+      <div class="flex items-center mb-3">
+        <span class="text-pretty italic text-sm"
+          >-Únicamente consultoría o proyectos pequeños-</span
+        >
+      </div>
       <div class="flex items-center gap-3">
         <a
           class="flex items-center gap-2"
           target="_blank"
+          rel="noopener noreferrer"
           href="mailto:hi@adrianpalomo.com"
         >
           <Mail class="size-7" />
@@ -48,27 +55,40 @@ import Layout from "@/layouts/Layout.astro";
         <a
           class="hover:cursor flex items-center gap-2"
           target="_blank"
+          rel="noopener noreferrer"
           href="https://api.whatsapp.com/send/?phone=%2B34663610856&text&type=phone_number&app_absent=0"
         >
           <WhatsApp class="size-7" />
-          <span>Háblame al Wa!</span>
+          <span>WhatsApp</span>
         </a>
       </div>
       <div class="flex gap-2">
         <a
           class="flex items-center gap-2"
           target="_blank"
+          rel="noopener noreferrer"
           href="https://www.linkedin.com/in/adrianpalomomagan/"
         >
           <Linkedin class="size-7" />
           <span>LinkedIn</span>
         </a>
       </div>
-
       <div class="flex gap-2">
         <a
           class="flex items-center gap-2"
           target="_blank"
+          rel="noopener noreferrer"
+          href="https://www.malt.es/profile/adrianpalomomagan"
+        >
+          <Malt class="size-7" />
+          <span>Malt</span>
+        </a>
+      </div>
+      <div class="flex gap-2">
+        <a
+          class="flex items-center gap-2"
+          target="_blank"
+          rel="noopener noreferrer"
           href="https://github.com/adrianpalomo/"
         >
           <Github class="size-7" />

@@ -1,10 +1,7 @@
 ---
 import Certifications from "@/components/Certifications.astro";
-import Contact from "@/components/Contact.astro";
-import Legal from "@/components/Legal.astro";
 import Projects from "@/components/Projects.astro";
 import About from "@/components/About.astro";
-import Blog from "@/components/Blog.astro";
 import Experience from "@/components/Experience.astro";
 import Saludation from "@/components/Saludation.astro";
 import Layout from "@/layouts/Layout.astro";
@@ -12,18 +9,18 @@ import Layout from "@/layouts/Layout.astro";
 
 <Layout>
   <div
-    class="grid w-full grid-cols-3 grid-rows-7 gap-4 md:grid-cols-3 md:grid-rows-7 md:gap-8 xl:max-h-[700px] xl:grid-cols-8 xl:grid-rows-5"
+    class="flex w-full flex-col gap-6 md:grid md:grid-cols-3 md:grid-rows-6 md:gap-8 xl:max-h-[700px] xl:grid-cols-8 xl:grid-rows-5"
   >
     <!-- Saludation -->
     <section
-      class="order-1 col-span-3 row-span-1 rounded-lg bg-black/45 shadow-[0px_0px_32px_-3px_#080808] backdrop-blur-sm transition-transform duration-300 hover:scale-[1.04] md:order-1 md:col-span-3 md:row-span-1 xl:col-span-3 xl:row-span-2"
+      class="order-1 w-full rounded-lg bg-black/45 shadow-[0px_0px_32px_-3px_#080808] backdrop-blur-sm transition-transform duration-300 hover:scale-[1.04] md:order-1 md:col-span-3 md:row-span-1 xl:col-span-3 xl:row-span-2"
     >
       <Saludation />
     </section>
 
     <!-- Projects -->
     <section
-      class="order-2 col-span-3 row-span-2 rounded-lg bg-black/45 shadow-[0px_0px_32px_-3px_#080808] backdrop-blur-sm transition-transform duration-300 hover:scale-[1.03] md:order-2 md:col-span-3 md:row-span-2 xl:col-span-5 xl:row-span-3"
+      class="order-2 w-full rounded-lg bg-black/45 shadow-[0px_0px_32px_-3px_#080808] backdrop-blur-sm transition-transform duration-300 hover:scale-[1.03] md:order-2 md:col-span-3 md:row-span-2 xl:col-span-5 xl:row-span-3"
       transition:name="projectsDetail"
     >
       <Projects />
@@ -31,14 +28,14 @@ import Layout from "@/layouts/Layout.astro";
 
     <!-- Experience -->
     <section
-      class="order-3 col-span-3 row-span-2 rounded-lg bg-black/50 shadow-[0px_0px_32px_-3px_#080808] backdrop-blur-sm transition-transform duration-300 hover:scale-[1.04] md:order-3 md:col-span-2 md:row-span-2 xl:col-span-3 xl:row-span-3"
+      class="order-3 w-full rounded-lg bg-black/50 shadow-[0px_0px_32px_-3px_#080808] backdrop-blur-sm transition-transform duration-300 hover:scale-[1.04] md:order-3 md:col-span-2 md:row-span-2 xl:col-span-3 xl:row-span-3"
     >
       <Experience />
     </section>
 
     <!-- Certifications -->
     <section
-      class="order-4 col-span-3 row-span-1 rounded-lg bg-black/50 shadow-[0px_0px_32px_-3px_#080808] backdrop-blur-sm transition-transform duration-300 hover:scale-[1.04] md:order-4 md:col-span-1 md:row-span-2 xl:order-5 xl:col-span-3 xl:row-span-1"
+      class="order-4 w-full rounded-lg bg-black/50 shadow-[0px_0px_32px_-3px_#080808] backdrop-blur-sm transition-transform duration-300 hover:scale-[1.04] md:order-4 md:col-span-1 md:row-span-2 xl:order-5 xl:col-span-2 xl:row-span-2"
       transition:name="certificationsDetail"
     >
       <a href="/CertificationsDetail">
@@ -48,38 +45,9 @@ import Layout from "@/layouts/Layout.astro";
 
     <!-- About  -->
     <section
-      class="order-5 col-span-3 row-span-1 rounded-lg bg-black/55 shadow-[0px_0px_32px_-3px_#080808] backdrop-blur-sm transition-transform duration-300 hover:scale-[1.04] md:order-5 md:col-span-3 md:row-span-1 xl:order-4 xl:col-span-2 xl:row-span-2"
+      class="order-5 w-full rounded-lg bg-black/55 shadow-[0px_0px_32px_-3px_#080808] backdrop-blur-sm transition-transform duration-300 hover:scale-[1.04] md:order-5 md:col-span-3 md:row-span-1 xl:order-4 xl:col-span-3 xl:row-span-2"
     >
       <About />
-    </section>
-
-    <!-- Contact -->
-    <section
-      class="order-6 col-span-1 row-span-1 max-h-20 rounded-lg bg-black/60 shadow-[0px_0px_32px_-3px_#080808] backdrop-blur-sm transition-transform duration-300 hover:scale-[1.04] md:max-h-25 xl:max-h-full"
-      transition:name="contactDetail"
-    >
-      <a href="/ContactDetail">
-        <Contact />
-      </a>
-    </section>
-
-    <!-- Blog -->
-    <section
-      class="order-6 col-span-1 row-span-1 max-h-20 rounded-lg bg-black/60 shadow-[0px_0px_32px_-3px_#080808] backdrop-blur-sm transition-transform duration-300 hover:scale-[1.04] md:max-h-25 xl:max-h-full"
-    >
-      <a href="/">
-        <Blog />
-      </a>
-    </section>
-
-    <!-- Legal -->
-    <section
-      class="order-6 col-span-1 row-span-1 max-h-20 rounded-lg bg-black/60 shadow-[0px_0px_32px_-3px_#080808] backdrop-blur-sm transition-transform duration-300 hover:scale-[1.04] md:max-h-25 xl:max-h-full"
-      transition:name="legalDetail"
-    >
-      <a href="/LegalDetail">
-        <Legal />
-      </a>
     </section>
   </div>
 </Layout>
