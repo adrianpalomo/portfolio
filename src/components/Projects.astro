@@ -7,19 +7,19 @@ const projects = await getCollection("projects");
 
 <script>
   import EmblaCarousel from "embla-carousel";
-  import Autoplay from "embla-carousel-autoplay";
-  
+  /*   import Autoplay from "embla-carousel-autoplay";
+   */
   document.addEventListener("astro:page-load", () => {
     const OPTIONS = { align: "start", loop: true };
 
     const emblaNode = document.querySelector(".embla");
     const viewportNode = emblaNode?.querySelector(".embla__viewport");
 
-    const emblaApi = EmblaCarousel(viewportNode, OPTIONS, [Autoplay()]);
+    const emblaApi = EmblaCarousel(viewportNode, OPTIONS, []);
   });
 </script>
 
-<section class="flex h-full w-full items-center justify-center">
+<section class="h-full w-full" >
   <div class="embla h-full w-full">
     <div class="embla__viewport h-full overflow-hidden">
       <div
@@ -29,10 +29,11 @@ const projects = await getCollection("projects");
           projects.map((project) => {
             return (
               <section class="embla__slide">
-                <div class="embla__slide__number flex h-full items-center justify-center rounded-lg bg-black/50 select-none">
+                <div class="embla__slide__numbers flex h-full items-center select-none hover:bg-black/10 transition-all duration-300">
                   <a
-                    class="flex h-full w-full flex-col"
+                    class="flex h-full w-full flex-col hover:text-theme-text-light"
                     href={`/projects/${project.id}`}
+                    
                   >
                     <ProjectsSlot {...project.data} />
                   </a>
@@ -49,14 +50,14 @@ const projects = await getCollection("projects");
 <style>
   .embla {
     --slide-height: 19rem;
-    --slide-spacing: 1rem;
+    --slide-spacing: 0rem;
     --slide-size: 90%;
   }
 
   @media (min-width: 768px) {
     .embla {
       --slide-size: 45%;
-      --slide-spacing: 1.5rem;
+      --slide-spacing: 0rem;
     }
   }
 
