@@ -3,11 +3,11 @@ import Back from "./Back.astro";
 import Trailhead from "./icons/Trailhead.astro";
 
 interface Props {
-  transitionName: string;
-  showTrailhead: boolean;
+  transitionName?: string;
+  showTrailhead?: boolean;
 }
 
-const { transitionName, showTrailhead } = Astro.props;
+const { transitionName, showTrailhead = false } = Astro.props;
 ---
 
 <section

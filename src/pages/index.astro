@@ -13,30 +13,8 @@ import Layout from "@/layouts/Layout.astro";
   >
     <Saludation />
     <Projects />
-
-
-    <!-- Experience -->
-    <section
-      class="order-3 w-full rounded-lg bg-black/50 shadow-[0px_0px_32px_-3px_#080808] backdrop-blur-sm transition-transform duration-300 hover:scale-[1.04] md:order-3 md:col-span-2 md:row-span-2 xl:col-span-3 xl:row-span-3"
-    >
-      <Experience />
-    </section>
-
-    <!-- Certifications -->
-    <section
-      class="order-4 w-full rounded-lg bg-black/50 shadow-[0px_0px_32px_-3px_#080808] backdrop-blur-sm transition-transform duration-300 hover:scale-[1.04] md:order-4 md:col-span-1 md:row-span-2 xl:order-5 xl:col-span-2 xl:row-span-2"
-      transition:name="certificationsDetail"
-    >
-      <a href="/CertificationsDetail">
-        <Certifications />
-      </a>
-    </section>
-
-    <!-- About  -->
-    <section
-      class="order-5 w-full rounded-lg bg-black/55 shadow-[0px_0px_32px_-3px_#080808] backdrop-blur-sm transition-transform duration-300 hover:scale-[1.04] md:order-5 md:col-span-3 md:row-span-1 xl:order-4 xl:col-span-3 xl:row-span-2"
-    >
-      <About />
-    </section>
+    <Experience />
+    <Certifications />
+    <About />
   </div>
 </Layout>
