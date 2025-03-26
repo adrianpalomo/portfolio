@@ -1,8 +1,14 @@
 ---
 title: Digital Sign
-author: Adrián Palomo
-img: offers-creator.jpg
-description: Offers Creator es una herramienta innovadora que simplifica la creación y gestión de ofertas.
+startDate: 03-2023
+endDate: 06-2023
+company: Utopicus
+companyLogo: /images/utopicus-logo.webp
+technologies: [S-Docs, E-Signature]
+tags: [Sales Cloud]
+links: [{ name: "S-Docs", link: "https://www.sdocs.com/" }]
+img: digital-sign.webp
+description: Puesta en marcha de un sistema de creación personalizada y automática de documentos, y su posterior gestión para la firma electrónica de contratos.
 ---
 
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt officia labore quisquam, numquam facilis pariatur maxime similique voluptatum at. Eum, laborum iure illo cum ea eveniet officia iste ipsa neque.
+Puesta en marcha de un sistema de creación personalizada y automática de documentos, y su posterior gestión para la firma electrónica de contratos.

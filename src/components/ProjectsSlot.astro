@@ -1,19 +1,48 @@
 ---
+import Pills from "./Pills.astro";
+
 interface Props {
   title: string;
   description: string;
-  img?: string;
-  author: string;
+  img: string;
+  technologies: string[];
+  tags: string[];
+  links: {
+    name: string;
+    link: string;
+  }[];
+  startDate: string;
+  endDate: string;
+  company: string;
+  companyLogo: string;
 }
 
-const { title, description, img, author } = Astro.props;
+const {
+  title,
+  description,
+  img,
+  technologies,
+  tags,
+  company,
+  companyLogo,
+  startDate,
+  endDate,
+  links,
+} = Astro.props;
 ---
 
-<section>
-  <div class="flex h-full w-full flex-col gap-10 p-6">
-    <h1 class="text-center text-3xl font-bold">{title}</h1>
-    <div class="flex h-full w-full flex-col text-center">
-      {description}
-    </div>
+<div class="mb-8 flex h-full flex-col items-center gap-3 md:mb-0">
+  <div class="text-center md:h-6/12 md:px-2">
+    <h2 class="mb-4 text-center text-xl font-bold">{title}</h2>
+    <span class="text-theme-text-light text-pretty">{description}</span>
   </div>
-</section>
+
+  <div class="flex flex-col items-center gap-2 md:h-6/12">
+    <Pills pills={technologies} pillStyle="black" />
+    <Pills pills={tags} pillStyle="blue-1" />
+  </div>
+</div>
+
+<div class="absolute bottom-4 left-4 rounded-full bg-white p-1">
+  <img src={companyLogo} alt={company} class="h-7 w-auto rounded-lg" />
+</div>

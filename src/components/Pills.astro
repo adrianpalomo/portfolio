@@ -1,0 +1,40 @@
+---
+interface Props {
+  pills: string[];
+  pillStyle:
+    | "black"
+    | "gray-1"
+    | "gray-2"
+    | "gray-3"
+    | "blue-1"
+    | "blue-2"
+    | "red-1"
+    | "red-2"
+    | "white";
+}
+
+const { pills, pillStyle } = Astro.props;
+
+const colorClasses = {
+  black: "bg-black/30 text-theme-text-light",
+  "gray-1": "bg-gray-600/50 text-theme-text-light",
+  "gray-2": "bg-gray-900/50 text-theme-text-light",
+  "blue-1": "bg-blue-700/50 text-theme-text-light",
+  "blue-2": "bg-blue-900/50 text-theme-text-light",
+  "red-1": "bg-red-600/50 text-theme-text-light",
+  "red-2": "bg-red-900/50 text-theme-text-light",
+  white: "bg-white/60 text-theme-text-light",
+};
+---
+
+<div class="flex flex-wrap justify-center gap-2">
+  {
+    pills.map((pill) => (
+      <span
+        class={`rounded-full px-2 py-1 text-xs font-semibold ${colorClasses[pillStyle]}`}
+      >
+        {pill}
+      </span>
+    ))
+  }
+</div>

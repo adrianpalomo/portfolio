@@ -1,8 +1,15 @@
 ---
 title: Offers Creator
-author: Adrián Palomo
-img: offers-creator.jpg
-description: Offers Creator es una herramienta innovadora que simplifica la creación y gestión de ofertas.
+startDate: 05-2024
+endDate: En proceso
+company: Idealista
+companyLogo: /images/idealista-logo.webp
+technologies: [Apex, LWC]
+tags: [Sales Cloud, Email services, Avonni Components]
+links:
+  [{ name: "Offers Creator", link: "https://offers-creator.idealista.com/" }]
+img: offers-creator.webp
+description: Solución destinada a la creación de ofertas, con selección dinámica de productos, multi-idioma, visualización en tiempo real, disponible en tres países, etc.
 ---
 
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt officia labore quisquam, numquam facilis pariatur maxime similique voluptatum at. Eum, laborum iure illo cum ea eveniet officia iste ipsa neque.
+Solución destinada a la creación de ofertas, con selección dinámica de productos, multi-idioma, visualización en tiempo real, disponible en tres países, etc.
