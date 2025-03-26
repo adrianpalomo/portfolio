@@ -14,14 +14,15 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { data } = project;
-const { title, author, img, description } = data;
+const { title, img, description, tags, links, technologies, startDate, endDate, company, companyLogo } = data;
 const { Content } = await render(project);
 ---
 
 <Layout title=`Adrián Palomo | ${title}`>
-  <PageHeader transitionName="projectsDetail" showTrailhead={false}>
+  <PageHeader transitionName="projectsDetail">
     <div class="flex w-full flex-col gap-8 px-8">
       <h1 class="text-center text-2xl font-bold">{title}</h1>
+      <h2 class="text-center text-xl font-bold">En construcción</h2>
       <Content />
     </div>
   </PageHeader>
