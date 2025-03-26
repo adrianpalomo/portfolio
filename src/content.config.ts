@@ -16,4 +16,8 @@ const about = defineCollection({
   loader: glob({ base: "./src/content/about", pattern: "**/*.{md,mdx}" }),
 });
 
-export const collections = { projects, about };
+const legal = defineCollection({
+  loader: glob({ base: "./src/content/legal", pattern: "**/*.{md,mdx}" }),
+});
+
+export const collections = { projects, about, legal };

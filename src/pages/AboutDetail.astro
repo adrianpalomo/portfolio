@@ -12,136 +12,18 @@ const { Content } = await render(aboutContent);
   <PageHeader transitionName="aboutDetail" showTrailhead={false}>
     <div class="flex flex-col items-center gap-2">
       <article
-        class="prose prose-stone prose-invert mb-14 flex w-full flex-col text-justify"
+        class="prose prose-stone prose-invert mb-14 flex w-full flex-col"
       >
         <Content />
       </article>
-      <div
-        class="mx-auto grid w-full max-w-5xl grid-cols-1 place-items-center gap-8 lg:grid-cols-2"
-      >
-        <div class="h-[600px] w-[400px] overflow-hidden">
-          <img
-            class="border-theme-text-light2 h-full w-full rounded-lg border-2 object-cover shadow-lg"
-            src="/images/about/sasha1.webp"
-            alt="Sasha"
-          />
-        </div>
-        <div class="h-[600px] w-[400px] overflow-hidden">
-          <img
-            class="border-theme-text-light2 h-full w-full rounded-lg border-2 object-cover shadow-lg"
-            src="/images/about/sasha2.webp"
-            alt="Sasha"
-          />
-        </div>
-        <div class="h-[600px] w-[400px] overflow-hidden">
-          <img
-            class="border-theme-text-light2 h-full w-full rounded-lg border-2 object-cover shadow-lg"
-            src="/images/about/sasha3.webp"
-            alt="Sasha"
-          />
-        </div>
-        <div class="h-[600px] w-[400px] overflow-hidden">
-          <img
-            class="border-theme-text-light2 h-full w-full rounded-lg border-2 object-cover shadow-lg"
-            src="/images/about/sasha4.webp"
-            alt="Sasha"
-          />
-        </div>
-        <div class="h-[600px] w-[400px] overflow-hidden">
-          <img
-            class="border-theme-text-light2 h-full w-full rounded-lg border-2 object-cover shadow-lg"
-            src="/images/about/sasha5.webp"
-            alt="Sasha"
-          />
-        </div><div class="h-[600px] w-[400px] overflow-hidden">
-          <img
-            class="border-theme-text-light2 h-full w-full rounded-lg border-2 object-cover shadow-lg"
-            src="/images/about/sasha6.webp"
-            alt="Sasha"
-          />
-        </div>
-        <div class="h-[600px] w-[400px] overflow-hidden">
-          <img
-            class="border-theme-text-light2 h-full w-full rounded-lg border-2 object-cover shadow-lg"
-            src="/images/about/sasha7.webp"
-            alt="Sasha"
-          />
-        </div>
-        <div class="h-[600px] w-[400px] overflow-hidden">
-          <img
-            class="border-theme-text-light2 h-full w-full rounded-lg border-2 object-cover shadow-lg"
-            src="/images/about/sasha8.webp"
-            alt="Sasha"
-          />
-        </div>
-        <div class="h-[600px] w-[400px] overflow-hidden">
-          <img
-            class="border-theme-text-light2 h-full w-full rounded-lg border-2 object-cover shadow-lg"
-            src="/images/about/sasha9.webp"
-            alt="Sasha"
-          />
-        </div>
-        <div class="h-[600px] w-[400px] overflow-hidden">
-          <img
-            class="border-theme-text-light2 h-full w-full rounded-lg border-2 object-cover shadow-lg"
-            src="/images/about/sasha10.webp"
-            alt="Sasha"
-          />
-        </div><div class="h-[600px] w-[400px] overflow-hidden">
-          <img
-            class="border-theme-text-light2 h-full w-full rounded-lg border-2 object-cover shadow-lg"
-            src="/images/about/sasha11.webp"
-            alt="Sasha"
-          />
-        </div>
-        <div class="h-[600px] w-[400px] overflow-hidden">
-          <img
-            class="border-theme-text-light2 h-full w-full rounded-lg border-2 object-cover shadow-lg"
-            src="/images/about/sasha12.webp"
-            alt="Sasha"
-          />
-        </div>
-        <div class="h-[600px] w-[400px] overflow-hidden">
-          <img
-            class="border-theme-text-light2 h-full w-full rounded-lg border-2 object-cover shadow-lg"
-            src="/images/about/sasha13.webp"
-            alt="Sasha"
-          />
-        </div>
-        <div class="h-[600px] w-[400px] overflow-hidden">
-          <img
-            class="border-theme-text-light2 h-full w-full rounded-lg border-2 object-cover shadow-lg"
-            src="/images/about/sasha14.webp"
-            alt="Sasha"
-          />
-        </div>
-        <div class="h-[600px] w-[400px] overflow-hidden">
-          <img
-            class="border-theme-text-light2 h-full w-full rounded-lg border-2 object-cover shadow-lg"
-            src="/images/about/sasha15.webp"
-            alt="Sasha"
-          />
-        </div><div class="h-[600px] w-[400px] overflow-hidden">
-          <img
-            class="border-theme-text-light2 h-full w-full rounded-lg border-2 object-cover shadow-lg"
-            src="/images/about/sasha16.webp"
-            alt="Sasha"
-          />
-        </div>
-        <div class="h-[600px] w-[400px] overflow-hidden">
-          <img
-            class="border-theme-text-light2 h-full w-full rounded-lg border-2 object-cover shadow-lg"
-            src="/images/about/sasha17.webp"
-            alt="Sasha"
-          />
-        </div>
-        <div class="h-[600px] w-[400px] overflow-hidden">
-          <img
-            class="border-theme-text-light2 h-full w-full rounded-lg border-2 object-cover shadow-lg"
-            src="/images/about/sasha18.webp"
-            alt="Sasha"
-          />
-        </div>
+
+      <div class="h-[500px] w-auto overflow-hidden md:h-auto md:w-[400px]">
+        <img
+          class="border-theme-text-light2 h-full w-full rounded-lg border-2 object-cover shadow-lg"
+          src="/images/about/sasha.webp"
+          alt="Sasham saludando"
+          loading="lazy"
+        />
       </div>
     </div>
   </PageHeader>
