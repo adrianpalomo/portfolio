@@ -19,14 +19,15 @@ const { transitionName, showTrailhead = false } = Astro.props;
 
     {
       showTrailhead && (
-        <div>
+        <div class="flex gap-2">
           <a
+            class="flex items-center gap-2 text-theme-text-light"
             target="_blank"
+            rel="noopener noreferrer"
             href="https://www.salesforce.com/trailblazer/adrianpalomo"
-            class="mr-6 flex items-center justify-center"
           >
-            <Trailhead class="mr-1 size-5" />
-            <span>Trailhead</span>
+            <Trailhead class="size-5" />
+            <span class="text-theme-text-light">Trailhead</span>
           </a>
         </div>
       )

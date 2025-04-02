@@ -18,7 +18,12 @@ const { title, img, description, tags, links, technologies, startDate, endDate, 
 const { Content } = await render(project);
 ---
 
-<Layout title=`Adrián Palomo | ${title}`>
+<Layout
+  title={title}
+  description={description}
+  image={img}
+  canonical={`https://www.adrianpalomo.com/projects/${project.id}`}
+>
   <PageHeader transitionName="projectsDetail">
     <div class="flex w-full flex-col gap-8 px-8">
       <h1 class="text-center text-2xl font-bold">{title}</h1>

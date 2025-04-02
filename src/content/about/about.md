@@ -1,4 +1,4 @@
-# ¿Qué hay de mi?
+# ¿Qué hay sobre mí?
 
 Estudié un grado superior de desarrollo de aplicaciones web, donde me enseñaron un montón de recursos útiles que pude aplicar a mi futu... mentira, no aprendí nada. Pero entendí que era una etapa en la que ya no podía fracasar y, quizás gracias a esto y la pasión que pongo en todo lo que hago, encontré un futuro profesional que se alineaba con los objetivos que en ese momento tenía, ah y también obtuve un "título" como el estudiante con la nota media más alta (lo tenía que decir).
 

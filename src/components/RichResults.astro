@@ -1,0 +1,18 @@
+---
+const profileSchema = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  dateCreated: "2025-04-01T12:34:00-00:00",
+  dateModified: "2025-04-01T12:34:00-00:00",
+  mainEntity: {
+    "@type": "Person",
+    name: "Adrián Palomo",
+    alternateName: "adrianpalomo",
+    description:
+      "Información sobre Adrián Palomo, desarrollador y consultor Full Stack del CRM Salesforce, disponible para proyectos freelance.",
+    image: "https://www.adrianpalomo.com/images/profile.webp",
+  },
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(profileSchema)} />

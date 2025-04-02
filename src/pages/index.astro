@@ -7,8 +7,12 @@ import Saludation from "@/components/Saludation.astro";
 import Layout from "@/layouts/Layout.astro";
 ---
 
-<Layout>
-  <div
+<Layout
+  title="Home"
+  description="Información sobre Adrián Palomo, desarrollador y consultor Full Stack del CRM Salesforce, disponible para proyectos freelance."
+  canonical="https://www.adrianpalomo.com"
+>
+  <main
     class="flex w-full flex-col gap-6 md:grid md:grid-cols-3 md:grid-rows-6 md:gap-8 xl:max-h-[700px] xl:grid-cols-8 xl:grid-rows-5"
   >
     <Saludation />
@@ -16,5 +20,5 @@ import Layout from "@/layouts/Layout.astro";
     <Experience />
     <Certifications />
     <About />
-  </div>
+  </main>
 </Layout>
