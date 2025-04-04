@@ -1,12 +1,12 @@
 ---
-title: Portfolio
+title: Web Personal
 startDate: 03-2024
 endDate: 03-2024
 company: Adrian Palomo
 companyLogo: /images/Fav.webp
 technologies: [Astro, TailWind]
 tags: [Web Development, Frontend, SEO]
-links: [{ name: "Portfolio", link: "https://adrianpalomo.com" }]
+links: [{ name: "Web Personal", link: "https://adrianpalomo.com" }]
 img: portfolio.webp
 description: Página web personal para mostrar proyectos, experiencia y conocimientos. Con la idea de crear un blog donde exponer ideas, reflexiones y tutoriales.
 ---
