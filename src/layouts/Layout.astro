@@ -13,9 +13,9 @@ interface Props {
   preload?: Array<Preload>;
   canonical?: string;
   image?: string;
+  index?: boolean;
 }
-
-const { title, description, preload, canonical, image } = Astro.props;
+const { title, description, preload, canonical, image, index } = Astro.props;
 ---
 
 <!doctype html>
@@ -27,6 +27,7 @@ const { title, description, preload, canonical, image } = Astro.props;
       image={image}
       preload={preload}
       title={title}
+      index={index}
     />
     <ClientRouter />
   </head>

@@ -14,7 +14,18 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { data } = project;
-const { title, img, description, tags, links, technologies, startDate, endDate, company, companyLogo } = data;
+const {
+  title,
+  img,
+  description,
+  tags,
+  links,
+  technologies,
+  startDate,
+  endDate,
+  company,
+  companyLogo,
+} = data;
 const { Content } = await render(project);
 ---
 
@@ -22,7 +33,8 @@ const { Content } = await render(project);
   title={title}
   description={description}
   image={img}
-  canonical={`https://www.adrianpalomo.com/projects/${project.id}`}
+  canonical={`https://www.adrianpalomo.com/projects/${project.id}`},
+  index={false}
 >
   <PageHeader transitionName="projectsDetail">
     <div class="flex w-full flex-col gap-8 px-8">
