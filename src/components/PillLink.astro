@@ -1,0 +1,22 @@
+---
+import Github from "@/components/icons/Github.astro";
+import Web from "@/components/icons/Web.astro";
+
+const { link, logo, name, nameAux } = Astro.props;
+---
+
+<a
+  class="flex items-center justify-center gap-1 rounded-full border border-theme-text-light px-1 py-0.5 transition-all hover:cursor-alias hover:bg-black/10"
+  href={link}
+  target="_blank"
+  aria-label={`Link a ${nameAux}`}
+>
+  {
+    logo === "GitHub" ? (
+      <Github class="size-5" />
+    ) : logo === "Web" ? (
+      <Web class="size-5" />
+    ) : null
+  }
+  <span class="text-current text-xs text-nowrap">{name}</span>
+</a>

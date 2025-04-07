@@ -7,7 +7,7 @@ companyLogo: /images/idealista-logo.webp
 technologies: [Apex, LWC]
 tags: [Sales Cloud, Email services, Avonni Components]
 links:
-  [{ name: "Offers Creator", link: "https://offers-creator.idealista.com/" }]
+  []
 img: offers-creator.webp
 description: Solución destinada a la creación de ofertas, con selección dinámica de productos, multi-idioma, visualización en tiempo real, disponible en tres países, etc.
 ---

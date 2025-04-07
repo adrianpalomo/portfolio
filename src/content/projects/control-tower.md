@@ -13,7 +13,7 @@ tags:
     Sales & Experience Cloud,
     Experience Cloud,
   ]
-links: [{ name: "Control Tower", link: "https://controltower.tubacex.com/" }]
+links: []
 img: control-tower.webp
 description: Solución destinada al seguimiento y control del envío intercontinental de materiales y herramientas destinadas al sector petrolífero.
 ---

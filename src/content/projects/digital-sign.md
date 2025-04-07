@@ -6,7 +6,7 @@ company: Utopicus
 companyLogo: /images/utopicus-logo.webp
 technologies: [S-Docs, E-Signature]
 tags: [Sales Cloud]
-links: [{ name: "S-Docs", link: "https://www.sdocs.com/" }]
+links: []
 img: digital-sign.webp
 description: Puesta en marcha de un sistema de creación personalizada y automática de documentos, y su posterior gestión para la firma electrónica de contratos.
 ---

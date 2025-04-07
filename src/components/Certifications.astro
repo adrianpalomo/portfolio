@@ -1,55 +1,25 @@
 ---
 import More from "./icons/More.astro";
+import { certifications } from "../consts/certifications";
 ---
 
 <section
-  class="order-4 h-full w-full rounded-lg bg-black/50 p-4 shadow-[0px_0px_32px_-3px_#080808] backdrop-blur-sm transition-transform duration-300 hover:scale-[1.04] md:order-4 md:col-span-1 md:row-span-2 xl:order-5 xl:col-span-2 xl:row-span-2 xl:px-2"
+  class="order-4 h-full w-full rounded-lg bg-black/50 p-4 shadow-[0px_0px_32px_-3px_#080808] backdrop-blur-sm transition-transform hover:scale-[1.04] md:order-4 md:col-span-1 md:row-span-2 xl:order-5 xl:col-span-2 xl:row-span-2 xl:px-2"
   transition:name="certificationsDetail"
 >
-  <a href="/CertificationsDetail"  class="flex h-full flex-col gap-4">
+  <a href="/CertificationsDetail" class="flex h-full flex-col gap-4">
     <div
       class="flex h-full flex-wrap items-center justify-center gap-2 xl:gap-2"
     >
-      <img
-        class="w-18 opacity-80"
-        src="/images/certs/jd1.webp"
-        alt="Salesforce Certification - Javascript Developer 1"
-      />
-      <img
-        class="w-18 opacity-80"
-        src="/images/certs/pd2.webp"
-        alt="Salesforce Certification - Plarform Developer 2"
-      />
-      <img
-        class="w-18 opacity-80"
-        src="/images/certs/pd1.webp"
-        alt="Salesforce Certification - Plarform Developer 1"
-      />
-      <img
-        class="w-18 opacity-80"
-        src="/images/certs/afs.webp"
-        alt="Salesforce Certification - Agentforce Specialist"
-      />
-      <img
-        class="w-18 opacity-80"
-        src="/images/certs/admin.webp"
-        alt="Salesforce Certification - Administrator"
-      />
-      <img
-        class="w-18 opacity-80"
-        src="/images/certs/pab.webp"
-        alt="Salesforce Certification - Platform App Builder"
-      />
-      <img
-        class="w-18 opacity-80"
-        src="/images/certs/aiAss.webp"
-        alt="Salesforce Certification - AI Associate"
-      />
-      <img
-        class="w-18 opacity-80"
-        src="/images/certs/ass.webp"
-        alt="Salesforce Certification - Associate"
-      />
+      {
+        certifications.map((cert) => (
+          <img
+            class="w-18"
+            src={`/images/certs/${cert.image}`}
+            alt={`Imagen de la certificación ${cert.title}`}
+          />
+        ))
+      }
     </div>
     <More />
   </a>

@@ -8,10 +8,8 @@ technologies: [Astro, Tailwind, OpenAI]
 tags: [Web Development, Frontend, SEO, API]
 links:
   [
-    {
-      name: "Buscador de palabras",
-      link: "https://buscador-palabras.es/",
-    },
+    { name: "Buscador de palabras", link: "https://buscador-palabras.es/" },
+    { name: "GitHub", link: "https://github.com/adrianpalomo/Diccionario-invertido" },
   ]
 img: https://buscador-palabras.es/og.webp
 description: Proyecto que surge tras una idea tomando café, donde poder dar una definición de cualquier palabra o concepto, y obtener la palabra deseada.
