@@ -1,0 +1,244 @@
+<!DOCTYPE html><html> <head><title>JSON Formatter | Adrian Palomo</title><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="UTF-8"><meta property="og:type" content="website"><meta property="og:url" content="https://adrianpalomo.com/"><meta property="og:title" content="Adrián Palomo | Tools"><meta property="og:site_name" content="Adrián Palomo | Tools"><meta property="og:locale" content="es_ES"><meta name="robots" content="noindex, nofollow, noimageindex"><link rel="icon" type="image/png" href="/images/Fav.webp"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/a11y-light.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script><style>body{font-family:Arial,sans-serif;background-color:#f4f6f9;margin:0;padding:20px}h1[data-astro-cid-mwlrrin4]{color:#0070d2}.textarea-container[data-astro-cid-mwlrrin4],.resultado-container[data-astro-cid-mwlrrin4]{margin-bottom:20px}textarea[data-astro-cid-mwlrrin4]{width:99%;padding:10px;margin-top:5px;border:1px solid #d9d9d9;border-radius:4px;height:150px;font-family:monospace;resize:vertical}button[data-astro-cid-mwlrrin4]{background-color:#0070d2;color:#fff;border:none;padding:10px 20px;text-align:center;text-decoration:none;display:inline-block;font-size:16px;margin:4px .5em 4px 2px;cursor:pointer;border-radius:4px}button[data-astro-cid-mwlrrin4]:hover{background-color:#005fb2}.panelControl[data-astro-cid-mwlrrin4] label[data-astro-cid-mwlrrin4]{margin-right:.5em}.panelControl[data-astro-cid-mwlrrin4]{display:flex;align-items:center}.panelControl[data-astro-cid-mwlrrin4] p[data-astro-cid-mwlrrin4]{margin-right:2em;font-weight:700}.invalid[data-astro-cid-mwlrrin4]{color:#ff5353;font-size:10pt}.valid[data-astro-cid-mwlrrin4]{color:#009200;font-size:10pt}#historyPicklist[data-astro-cid-mwlrrin4]{height:36px;width:200px;margin-left:1.5em}#clearHistoryButton[data-astro-cid-mwlrrin4]{color:gray;cursor:pointer;border-radius:20%;font-size:.85em;padding:.3em;margin-left:.7em}#clearHistoryButton[data-astro-cid-mwlrrin4]:hover{background-color:#fbdada;color:#ba0000}.buscador-container[data-astro-cid-mwlrrin4]{display:flex;align-items:center;position:relative}#buscador[data-astro-cid-mwlrrin4]{margin-left:1.5em;margin-right:1.5em;height:30px;width:170px;padding-right:2.5em;padding-left:1em}.contadorCoincidencias[data-astro-cid-mwlrrin4]{position:absolute;margin-left:16.5em;font-size:.8rem;color:#797979;font-weight:1}
+</style></head> <body>  <h1 data-astro-cid-mwlrrin4>JSON Formatter</h1> <div class="textarea-container" data-astro-cid-mwlrrin4> <label for="textoEntrada" data-astro-cid-mwlrrin4>Paste JSON here:</label> <textarea id="textoEntrada" data-astro-cid-mwlrrin4></textarea> <button id="formatButton" data-astro-cid-mwlrrin4>Format</button> <button id="compressButton" data-astro-cid-mwlrrin4>Compress</button> <span class="valid" id="valid" data-astro-cid-mwlrrin4></span> <span class="invalid" id="invalid" data-astro-cid-mwlrrin4></span> </div> <div class="resultado-container" data-astro-cid-mwlrrin4> <div class="panelControl" data-astro-cid-mwlrrin4> <p data-astro-cid-mwlrrin4>Result</p> <button onclick="copiarAlPortapapeles()" data-astro-cid-mwlrrin4>Copy</button> <button onclick="limpiarTexto()" data-astro-cid-mwlrrin4>Clear</button> <div class="buscador-container" data-astro-cid-mwlrrin4> <input type="text" id="buscador" placeholder="Search..." data-astro-cid-mwlrrin4> <span class="contadorCoincidencias" id="contadorCoincidencias" data-astro-cid-mwlrrin4></span> </div> <input type="checkbox" id="select2search" data-astro-cid-mwlrrin4> <label for="select2search" data-astro-cid-mwlrrin4>Select to Search</label> <input type="checkbox" id="caseSensitive" data-astro-cid-mwlrrin4> <label for="caseSensitive" data-astro-cid-mwlrrin4>Case Sensitive</label> <input type="checkbox" id="wholeWord" data-astro-cid-mwlrrin4> <label for="wholeWord" data-astro-cid-mwlrrin4>Whole Word</label> <select id="historyPicklist" onchange="loadFromHistory(this.value)" data-astro-cid-mwlrrin4></select> <span id="clearHistoryButton" title="Clear history" data-astro-cid-mwlrrin4>Clear</span> </div> <pre style="background-color: white; padding: 0 10px; border: 1px solid #d9d9d9; border-radius: 4px; overflow-x: auto;" data-astro-cid-mwlrrin4>      <code id="textoSalida" contenteditable class="json" style="white-space: pre-wrap; word-wrap: break-word; outline: none;" data-astro-cid-mwlrrin4></code>
+    </pre> </div>  </body></html> <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var textoGuardado = localStorage.getItem("textoJSON");
+    var isEdited = false;
+
+    if (textoGuardado) {
+      document.getElementById("textoEntrada").value = textoGuardado;
+    }
+    updateHistoryPicklist();
+
+    document
+      .getElementById("textoSalida")
+      .addEventListener("input", function () {
+        isEdited = true;
+      });
+
+    document
+      .getElementById("formatButton")
+      .addEventListener("click", function () {
+        if (isEdited) {
+          var confirmOverwrite = confirm(
+            "El contenido ha sido editado. ¿Seguro que quieres sobrescribirlo?"
+          );
+          if (!confirmOverwrite) {
+            return;
+          }
+        }
+        procesarTexto();
+        isEdited = false;
+      });
+
+    document.getElementById("buscador").addEventListener("input", function () {
+      buscarEnTexto();
+    });
+    document
+      .getElementById("caseSensitive")
+      .addEventListener("input", function () {
+        buscarEnTexto();
+      });
+    document.getElementById("wholeWord").addEventListener("input", function () {
+      buscarEnTexto();
+    });
+
+    document
+      .getElementById("select2search")
+      .addEventListener("input", function () {
+        buscarEnTexto();
+      });
+
+    document
+      .getElementById("clearHistoryButton")
+      .addEventListener("click", clearHistory);
+
+    document
+      .getElementById("compressButton")
+      .addEventListener("click", function () {
+        if (isEdited) {
+          var confirmOverwrite = confirm(
+            "El contenido ha sido editado. ¿Seguro que quieres sobrescribirlo?"
+          );
+          if (!confirmOverwrite) {
+            return;
+          }
+        }
+        comprimirTexto();
+        isEdited = false;
+      });
+
+    document.addEventListener("mouseup", function () {
+      if (document.getElementById("select2search").checked) {
+        var selectedText = window.getSelection().toString().trim();
+        if (selectedText.length > 0) {
+          document.getElementById("buscador").value = selectedText;
+          buscarEnTexto();
+        }
+      }
+    });
+  });
+
+  function comprimirTexto() {
+    var input = document.getElementById("textoEntrada").value;
+    if (input !== "") {
+      localStorage.setItem("textoJSON", input);
+      try {
+        var obj = JSON.parse(input);
+        var codeElement = document.querySelector("code");
+        codeElement.textContent = JSON.stringify(obj);
+        hljs.highlightElement(codeElement);
+
+        document.getElementById("valid").innerText = "Valid JSON";
+        document.getElementById("invalid").innerText = "";
+      } catch (e) {
+        document.getElementById("valid").innerText = "";
+        document.getElementById("invalid").innerText = e.message;
+      }
+    } else {
+      document.getElementById("invalid").innerText = "";
+      document.getElementById("valid").innerText = "";
+      document.querySelector("code").textContent = "";
+    }
+  }
+
+  function procesarTexto() {
+    var input = document.getElementById("textoEntrada").value;
+    if (input !== "") {
+      localStorage.setItem("textoJSON", input);
+      try {
+        var obj = JSON.parse(input);
+        var codeElement = document.querySelector("code");
+        if (codeElement.dataset.highlighted) {
+          delete codeElement.dataset.highlighted;
+        }
+        codeElement.textContent = JSON.stringify(obj, null, "  ");
+        hljs.highlightElement(codeElement);
+
+        document.getElementById("valid").innerText = "Valid JSON";
+        document.getElementById("invalid").innerText = "";
+
+        if (!checkDuplicateInHistory(input)) {
+          addToHistory(input);
+        }
+      } catch (e) {
+        document.getElementById("valid").innerText = "";
+        document.getElementById("invalid").innerText = e.message;
+      }
+    } else {
+      document.getElementById("invalid").innerText = "";
+      document.getElementById("valid").innerText = "";
+      document.querySelector("code").textContent = "";
+    }
+  }
+
+  function buscarEnTexto() {
+    var textoABuscar = document.getElementById("buscador").value;
+    var caseSensitive = document.getElementById("caseSensitive").checked;
+    var wholeWord = document.getElementById("wholeWord").checked;
+
+    if (textoABuscar.length < 2) {
+      document.getElementById("contadorCoincidencias").innerText = "";
+      procesarTexto();
+      return;
+    }
+
+    var flags = caseSensitive ? "g" : "gi";
+    var pattern = wholeWord
+      ? "\\b" + escapeRegExp(textoABuscar) + "\\b"
+      : escapeRegExp(textoABuscar);
+
+    function escapeRegExp(string) {
+      return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    var originalText = document.querySelector("code").textContent;
+    var regex = new RegExp(pattern, flags);
+
+    var matches = originalText.match(regex);
+    var contador = matches ? matches.length : 0;
+    document.getElementById("contadorCoincidencias").innerText = contador;
+
+    var highlightedText = originalText.replace(regex, function (match) {
+      return "<mark>" + match + "</mark>";
+    });
+    document.querySelector("code").innerHTML = highlightedText;
+    hljs.highlightElement(document.querySelector("code"));
+  }
+
+  function copiarAlPortapapeles() {
+    const elemento = document.createElement("textarea");
+    elemento.value = document.querySelector("code").textContent;
+    document.body.appendChild(elemento);
+    elemento.select();
+    document.execCommand("copy");
+    document.body.removeChild(elemento);
+  }
+
+  function limpiarTexto() {
+    document.getElementById("textoEntrada").value = "";
+    procesarTexto();
+  }
+
+  function addToHistory(jsonText) {
+    var history = JSON.parse(localStorage.getItem("jsonHistory") || "[]");
+
+    var entry = {
+      timestamp: new Date().toISOString(),
+      text: jsonText,
+    };
+
+    history.unshift(entry);
+    history = history.slice(0, 50);
+    localStorage.setItem("jsonHistory", JSON.stringify(history));
+
+    updateHistoryPicklist();
+  }
+
+  function checkDuplicateInHistory(jsonText) {
+    var history = JSON.parse(localStorage.getItem("jsonHistory") || "[]");
+    for (var i = 0; i < history.length; i++) {
+      if (history[i].text === jsonText) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function clearHistory() {
+    localStorage.setItem("jsonHistory", JSON.stringify([]));
+    updateHistoryPicklist();
+  }
+
+  function updateHistoryPicklist() {
+    var history = JSON.parse(localStorage.getItem("jsonHistory") || "[]");
+    var picklist = document.getElementById("historyPicklist");
+
+    picklist.innerHTML = "<option disabled selected>Historial JSON</option>";
+
+    history.forEach(function (entry) {
+      var date = new Date(entry.timestamp);
+      var dateString = `[${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())} ${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()}]`;
+      var textPreview = entry.text ? entry.text.substring(0, 120) : "";
+      var option = new Option(
+        dateString + " " + textPreview,
+        JSON.stringify(entry)
+      );
+      picklist.add(option);
+    });
+  }
+
+  function pad(number) {
+    return number < 10 ? "0" + number : number;
+  }
+
+  function loadFromHistory(selectedValue) {
+    if (!selectedValue) return;
+
+    var entry = JSON.parse(selectedValue);
+    if (entry && entry.text) {
+      document.getElementById("textoEntrada").value = entry.text;
+      procesarTexto();
+    }
+  }
+</script> 

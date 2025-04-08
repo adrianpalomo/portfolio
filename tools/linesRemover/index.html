@@ -1,0 +1,206 @@
+<!DOCTYPE html><html> <head><title>Lines remover | Adrian Palomo</title><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="UTF-8"><meta property="og:type" content="website"><meta property="og:url" content="https://adrianpalomo.com/"><meta property="og:title" content="Adrián Palomo | Tools"><meta property="og:site_name" content="Adrián Palomo | Tools"><meta property="og:locale" content="es_ES"><meta name="robots" content="noindex, nofollow, noimageindex"><link rel="icon" type="image/png" href="/images/Fav.webp"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/a11y-light.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script><style>body{font-family:Arial,sans-serif;background-color:#f4f6f9;margin:0;padding:20px}h1[data-astro-cid-h6qvqvjp]{color:#0070d2}.textarea-container[data-astro-cid-h6qvqvjp],.resultado-container[data-astro-cid-h6qvqvjp]{margin-bottom:20px}textarea[data-astro-cid-h6qvqvjp]{width:99%;padding:10px;margin-top:5px;border:1px solid #d9d9d9;border-radius:4px;height:150px;font-family:monospace;resize:vertical}button[data-astro-cid-h6qvqvjp]{background-color:#0070d2;color:#fff;border:none;padding:10px 20px;text-align:center;text-decoration:none;display:inline-block;font-size:16px;margin:4px .5em 4px 2px;cursor:pointer;border-radius:4px}button[data-astro-cid-h6qvqvjp]:hover{background-color:#005fb2}.panelControl[data-astro-cid-h6qvqvjp] label[data-astro-cid-h6qvqvjp]{margin-right:.5em}.panelControl[data-astro-cid-h6qvqvjp]{display:flex;align-items:center}.panelControl[data-astro-cid-h6qvqvjp] p[data-astro-cid-h6qvqvjp]{margin-right:2em;font-weight:700}.invalid[data-astro-cid-h6qvqvjp]{color:#ff5353;font-size:10pt}.valid[data-astro-cid-h6qvqvjp]{color:#009200;font-size:10pt}#historyPicklist[data-astro-cid-h6qvqvjp]{height:36px;width:200px;margin-left:1.5em}#clearHistoryButton[data-astro-cid-h6qvqvjp]{background-color:transparent;color:gray;cursor:pointer;border-radius:50%;width:25px;height:25px;display:inline-flex;align-items:center;justify-content:center;font-size:14px;line-height:1;padding:0;margin-left:10px;transition:background-color .3s,color .3s}#clearHistoryButton[data-astro-cid-h6qvqvjp]:hover{background-color:#fcc;color:#c00}.buscador-container[data-astro-cid-h6qvqvjp]{display:flex;align-items:center;position:relative}#buscador[data-astro-cid-h6qvqvjp],#keywordInput[data-astro-cid-h6qvqvjp]{margin-left:1.5em;margin-right:1.5em;height:30px;width:170px;padding-right:2.5em;padding-left:1em}.contadorCoincidencias[data-astro-cid-h6qvqvjp]{position:absolute;margin-left:16.5em;font-size:.8rem;color:#797979;font-weight:1}
+</style></head> <body>  <h1 data-astro-cid-h6qvqvjp>Lines remover</h1> <div class="textarea-container" data-astro-cid-h6qvqvjp> <label for="textoEntrada" data-astro-cid-h6qvqvjp>Paste text here:</label> <textarea id="textoEntrada" data-astro-cid-h6qvqvjp></textarea> <div class="panelControl" data-astro-cid-h6qvqvjp> <button id="formatButton" data-astro-cid-h6qvqvjp>Process</button> <div class="buscador-container" data-astro-cid-h6qvqvjp> <input type="text" id="keywordInput" placeholder="Keyword before processing..." style="margin-left: 1em;" data-astro-cid-h6qvqvjp> </div> <input type="checkbox" id="maintainOrRemove" data-astro-cid-h6qvqvjp> <label for="maintainOrRemove" data-astro-cid-h6qvqvjp>Maintain/Remove</label> <input type="checkbox" id="caseSensitive" data-astro-cid-h6qvqvjp> <label for="caseSensitive" data-astro-cid-h6qvqvjp>Case Sensitive</label> <input type="checkbox" id="wholeWord" data-astro-cid-h6qvqvjp> <label for="wholeWord" data-astro-cid-h6qvqvjp>Whole Word</label> <span class="valid" id="valid" data-astro-cid-h6qvqvjp></span> <span class="invalid" id="invalid" data-astro-cid-h6qvqvjp></span> </div> </div> <div class="resultado-container" data-astro-cid-h6qvqvjp> <div class="panelControl" data-astro-cid-h6qvqvjp> <p data-astro-cid-h6qvqvjp>Result</p> <button data-astro-cid-h6qvqvjp>Copy</button> <button data-astro-cid-h6qvqvjp>Clear</button> <div class="buscador-container" data-astro-cid-h6qvqvjp> <input type="text" id="buscador" placeholder="Keyword..." data-astro-cid-h6qvqvjp> <span class="contadorCoincidencias" id="contadorCoincidencias" data-astro-cid-h6qvqvjp></span> </div> <select id="historyPicklist" onchange="loadFromHistory(this.value)" data-astro-cid-h6qvqvjp></select> <button id="clearHistoryButton" title="Borrar historial" data-astro-cid-h6qvqvjp>x</button> </div> <pre style="background-color: white; padding: 0 10px; border: 1px solid #d9d9d9; border-radius: 4px; overflow-x: auto;" data-astro-cid-h6qvqvjp>                <code id="textoSalida" class="json" style="white-space: pre-wrap; word-wrap: break-word;" data-astro-cid-h6qvqvjp></code>
+            </pre> </div> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/a11y-light.css"> <script type="module" src="/_astro/linesRemover.astro_astro_type_script_index_0_lang.Cu8E7ajW.js"></script>  </body></html> <script type="module">
+  document.addEventListener("DOMContentLoaded", function () {
+    var textoGuardado = localStorage.getItem("textoGuardado");
+    if (textoGuardado) {
+      document.getElementById("textoEntrada").value = textoGuardado;
+    }
+    updateHistoryPicklist();
+
+    if (document.getElementById("textoSalida").dataset.highlighted) {
+      delete document.getElementById("textoSalida").dataset.highlighted;
+    }
+
+    document.getElementById("buscador").addEventListener("input", function () {
+      buscarEnTexto();
+    });
+
+    document
+      .getElementById("formatButton")
+      .addEventListener("click", function () {
+        eliminarLineas();
+      });
+
+    document
+      .getElementById("clearHistoryButton")
+      .addEventListener("click", clearHistory);
+  });
+
+  function eliminarLineas() {
+    var input = document.getElementById("textoEntrada").value;
+    var mantenerOEliminar = document.getElementById("maintainOrRemove").checked;
+    var textoABuscar = document.getElementById("keywordInput").value;
+    var caseSensitive = document.getElementById("caseSensitive").checked;
+    var wholeWord = document.getElementById("wholeWord").checked;
+    var lineas = input.split("\n");
+    var textoProcesado = "";
+
+    var flags = caseSensitive ? "g" : "gi";
+    var pattern = wholeWord
+      ? "\\b" + escapeRegExp(textoABuscar) + "\\b"
+      : escapeRegExp(textoABuscar);
+    var regex = new RegExp(pattern, flags);
+
+    lineas.forEach(function (linea) {
+      var coincide = regex.test(linea);
+      if ((mantenerOEliminar && coincide) || (!mantenerOEliminar && coincide)) {
+        textoProcesado += linea + "\n";
+      }
+    });
+
+    document.getElementById("textoSalida").textContent = textoProcesado;
+    hljs.highlightElement(document.getElementById("textoSalida"));
+    localStorage.setItem("textoGuardado", input);
+  }
+
+  /*   function buscarEnTexto(mantenerOEliminar = false) {
+    var textoABuscar = document.getElementById("buscador").value;
+    var caseSensitive = document.getElementById("caseSensitive").checked;
+    var wholeWord = document.getElementById("wholeWord").checked;
+    var textoSalida = document.getElementById("textoSalida").textContent;
+    var lineas = textoSalida.split("\n");
+    var textoProcesado = "";
+
+    var flags = caseSensitive ? "g" : "gi";
+    var pattern = wholeWord
+      ? "\\b" + escapeRegExp(textoABuscar) + "\\b"
+      : escapeRegExp(textoABuscar);
+    var regex = new RegExp(pattern, flags);
+
+    lineas.forEach(function (linea) {
+      var coincide = regex.test(linea);
+      if (
+        (mantenerOEliminar && coincide) ||
+        (!mantenerOEliminar && !coincide)
+      ) {
+        textoProcesado += linea + "\n";
+      }
+    });
+
+    document.getElementById("textoSalida").textContent = textoProcesado;
+    hljs.highlightElement(document.getElementById("textoSalida"));
+    actualizarContadorCoincidencias(textoEntrada, regex);
+  } */
+
+  function buscarEnTexto() {
+    var textoABuscar = document.getElementById("buscador").value;
+    var caseSensitive = document.getElementById("caseSensitive").checked;
+    var wholeWord = document.getElementById("wholeWord").checked;
+
+    if (textoABuscar.length < 2) {
+      document.getElementById("contadorCoincidencias").innerText = "";
+      procesarTexto();
+      return;
+    }
+
+    var flags = caseSensitive ? "g" : "gi";
+    var pattern = wholeWord
+      ? "\\b" + escapeRegExp(textoABuscar) + "\\b"
+      : escapeRegExp(textoABuscar);
+
+    function escapeRegExp(string) {
+      return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    var originalText = document.querySelector("code").textContent;
+    var regex = new RegExp(pattern, flags);
+
+    var matches = originalText.match(regex);
+    var contador = matches ? matches.length : 0;
+    document.getElementById("contadorCoincidencias").innerText = contador;
+
+    var highlightedText = originalText.replace(regex, function (match) {
+      return "<mark>" + match + "</mark>";
+    });
+    document.querySelector("code").innerHTML = highlightedText;
+    hljs.highlightElement(document.querySelector("code"));
+  }
+
+  function actualizarContadorCoincidencias(texto, regex) {
+    var coincidencias = texto.match(regex);
+    var contador = coincidencias ? coincidencias.length : 0;
+    document.getElementById("contadorCoincidencias").innerText = contador;
+  }
+
+  function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  function copiarAlPortapapeles() {
+    const elemento = document.createElement("textarea");
+    elemento.value = document.querySelector("code").textContent;
+    document.body.appendChild(elemento);
+    elemento.select();
+    document.execCommand("copy");
+    document.body.removeChild(elemento);
+  }
+
+  function limpiarTexto() {
+    document.getElementById("textoEntrada").value = "";
+    document.getElementById("textoSalida").textContent = "";
+    procesarTexto();
+  }
+
+  function addToHistory(jsonText) {
+    var history = JSON.parse(localStorage.getItem("jsonHistory") || "[]");
+
+    var entry = {
+      timestamp: new Date().toISOString(),
+      text: jsonText,
+    };
+
+    history.unshift(entry);
+    history = history.slice(0, 50);
+    localStorage.setItem("jsonHistory", JSON.stringify(history));
+
+    updateHistoryPicklist();
+  }
+
+  function checkDuplicateInHistory(jsonText) {
+    var history = JSON.parse(localStorage.getItem("jsonHistory") || "[]");
+    for (var i = 0; i < history.length; i++) {
+      if (history[i].text === jsonText) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function clearHistory() {
+    localStorage.setItem("jsonHistory", JSON.stringify([]));
+    updateHistoryPicklist();
+  }
+
+  function updateHistoryPicklist() {
+    var history = JSON.parse(localStorage.getItem("jsonHistory") || "[]");
+    var picklist = document.getElementById("historyPicklist");
+
+    picklist.innerHTML = "<option disabled selected>Historial JSON</option>";
+
+    history.forEach(function (entry) {
+      var date = new Date(entry.timestamp);
+      var dateString = `[${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())} ${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()}]`;
+      var textPreview = entry.text ? entry.text.substring(0, 120) : "";
+      var option = new Option(
+        dateString + " " + textPreview,
+        JSON.stringify(entry)
+      );
+      picklist.add(option);
+    });
+  }
+
+  function pad(number) {
+    return number < 10 ? "0" + number : number;
+  }
+
+  function loadFromHistory(selectedValue) {
+    if (!selectedValue) return;
+
+    var entry = JSON.parse(selectedValue);
+    if (entry && entry.text) {
+      document.getElementById("textoEntrada").value = entry.text;
+      procesarTexto();
+    }
+  }
+</script> 

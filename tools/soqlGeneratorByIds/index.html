@@ -1,0 +1,82 @@
+<!DOCTYPE html><html> <head><title>Formateador IDs | Adrian Palomo</title><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="UTF-8"><meta property="og:type" content="website"><meta property="og:url" content="https://adrianpalomo.com/"><meta property="og:title" content="Adrián Palomo | Tools"><meta property="og:site_name" content="Adrián Palomo | Tools"><meta property="og:locale" content="es_ES"><meta name="robots" content="noindex, nofollow, noimageindex"><link rel="icon" type="image/png" href="/images/Fav.webp"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/a11y-light.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script><style>body{font-family:Arial,sans-serif;background-color:#f4f6f9;margin:0;padding:20px}h1[data-astro-cid-glf6zozb]{color:#0070d2}.textarea-container[data-astro-cid-glf6zozb],.resultado-container[data-astro-cid-glf6zozb]{margin-bottom:20px}textarea[data-astro-cid-glf6zozb]{width:99%;padding:10px;margin-top:5px;border:1px solid #d9d9d9;border-radius:4px;height:150px;font-family:monospace;resize:vertical}button[data-astro-cid-glf6zozb]{background-color:#0070d2;color:#fff;border:none;padding:10px 20px;text-align:center;text-decoration:none;display:inline-block;font-size:16px;margin:4px .5em 4px 2px;cursor:pointer;border-radius:4px}button[data-astro-cid-glf6zozb]:hover{background-color:#005fb2}#textoSalida[data-astro-cid-glf6zozb]{padding:10px;background-color:#fff;border:1px solid #d9d9d9;border-radius:4px;white-space:pre-wrap;word-wrap:break-word}.panelControl[data-astro-cid-glf6zozb]{display:flex;align-items:center}.panelControl[data-astro-cid-glf6zozb] p[data-astro-cid-glf6zozb]{margin-right:2em;font-weight:700}.panelControl[data-astro-cid-glf6zozb] label[data-astro-cid-glf6zozb]{margin-right:.5em}
+</style></head> <body>  <h1 data-astro-cid-glf6zozb>Salesforce IDs formateador a SOQL</h1> <div class="textarea-container" data-astro-cid-glf6zozb> <label for="textoEntrada" data-astro-cid-glf6zozb>Pega los IDs aquí:</label> <textarea id="textoEntrada" data-astro-cid-glf6zozb></textarea> </div> <div class="panelControl" data-astro-cid-glf6zozb> <p data-astro-cid-glf6zozb>Resultado</p> <button onclick="copiarAlPortapapeles()" data-astro-cid-glf6zozb>Copiar</button> <button onclick="limpiarTexto()" data-astro-cid-glf6zozb>Limpiar</button> <input type="checkbox" id="separarPorComas" checked data-astro-cid-glf6zozb> <label for="separarPorComas" data-astro-cid-glf6zozb>Separar por comas</label> <input type="checkbox" id="anadirComillaSimple" checked data-astro-cid-glf6zozb> <label for="anadirComillaSimple" data-astro-cid-glf6zozb>Añadir comilla simple</label> <input type="checkbox" id="anadirParentesis" checked data-astro-cid-glf6zozb> <label for="anadirParentesis" data-astro-cid-glf6zozb>Añadir paréntesis</label> <input type="checkbox" id="anadirIdIn" checked data-astro-cid-glf6zozb> <label for="anadirIdIn" data-astro-cid-glf6zozb>Añadir 'Id IN '</label> </div> <div class="resultado-container" data-astro-cid-glf6zozb> <p id="textoSalida" data-astro-cid-glf6zozb></p> </div>  </body></html>  <script type="module">
+  function procesarTexto() {
+    const input = document.getElementById("textoEntrada").value;
+    const separarPorComas = document.getElementById("separarPorComas").checked;
+    const anadirComillaSimple = document.getElementById(
+      "anadirComillaSimple"
+    ).checked;
+    const anadirParentesis =
+      document.getElementById("anadirParentesis").checked;
+    const anadirIdIn = document.getElementById("anadirIdIn").checked;
+    const separador = separarPorComas ? ", " : " ";
+
+    let lineas = input.trim().split("\n");
+    let ids = [];
+
+    lineas.forEach((linea) => {
+      let palabras = linea.split(/[\s,;"'`\t]+/);
+      palabras.forEach((palabra) => {
+        if (/^[a-zA-Z0-9]{15,18}$/.test(palabra)) {
+          ids.push(palabra);
+          localStorage.setItem("textoIds", input);
+        }
+      });
+    });
+
+    ids = [...new Set(ids)];
+
+    if (anadirComillaSimple) {
+      ids = ids.map((id) => `'${id}'`);
+    }
+
+    let resultado = ids.join(separador);
+    if (anadirParentesis) {
+      resultado = `(${resultado})`;
+    }
+    if (anadirIdIn) {
+      resultado = `Id IN ${resultado}`;
+    }
+
+    document.getElementById("textoSalida").textContent = resultado;
+  }
+
+  function copiarAlPortapapeles() {
+    const elemento = document.createElement("textarea");
+    elemento.value = document.getElementById("textoSalida").textContent;
+    document.body.appendChild(elemento);
+    elemento.select();
+    document.execCommand("copy");
+    document.body.removeChild(elemento);
+  }
+
+  function limpiarTexto() {
+    document.getElementById("textoEntrada").value = "";
+    document.getElementById("textoSalida").textContent = "";
+    localStorage.setItem("textoIds", "");
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document
+      .getElementById("textoEntrada")
+      .addEventListener("input", procesarTexto);
+    document
+      .getElementById("separarPorComas")
+      .addEventListener("change", procesarTexto);
+    document
+      .getElementById("anadirComillaSimple")
+      .addEventListener("change", procesarTexto);
+    document
+      .getElementById("anadirParentesis")
+      .addEventListener("change", procesarTexto);
+    document
+      .getElementById("anadirIdIn")
+      .addEventListener("change", procesarTexto);
+
+    var textoGuardado = localStorage.getItem("textoIds");
+    if (textoGuardado) {
+      document.getElementById("textoEntrada").value = textoGuardado;
+      procesarTexto();
+    }
+  });
+</script>
