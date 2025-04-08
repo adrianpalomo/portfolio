@@ -1,0 +1,394 @@
+---
+import BasicLayout from "@/layouts/BasicLayout.astro";
+---
+
+<BasicLayout title="Lines remover | Adrian Palomo">
+  <h1>Lines remover</h1>
+  <div class="textarea-container">
+    <label for="textoEntrada">Paste text here:</label>
+    <textarea id="textoEntrada"></textarea>
+
+    <div class="panelControl">
+      <button id="formatButton">Process</button>
+      <div class="buscador-container">
+        <input
+          type="text"
+          id="keywordInput"
+          placeholder="Keyword before processing..."
+          style="margin-left: 1em;"
+        />
+      </div>
+      <input type="checkbox" id="maintainOrRemove" />
+      <label for="maintainOrRemove">Maintain/Remove</label>
+      <input type="checkbox" id="caseSensitive" />
+      <label for="caseSensitive">Case Sensitive</label>
+      <input type="checkbox" id="wholeWord" />
+      <label for="wholeWord">Whole Word</label>
+      <span class="valid" id="valid"></span>
+      <span class="invalid" id="invalid"></span>
+    </div>
+  </div>
+  <div class="resultado-container">
+    <div class="panelControl">
+      <p>Result</p>
+      <button>Copy</button>
+      <button>Clear</button>
+      <div class="buscador-container">
+        <input type="text" id="buscador" placeholder="Keyword..." />
+        <span class="contadorCoincidencias" id="contadorCoincidencias"></span>
+      </div>
+      <select id="historyPicklist" onchange="loadFromHistory(this.value)"
+      ></select>
+      <button id="clearHistoryButton" title="Borrar historial">x</button>
+    </div>
+    <pre
+      style="background-color: white; padding: 0 10px; border: 1px solid #d9d9d9; border-radius: 4px; overflow-x: auto;">
+                <code id="textoSalida" class="json" style="white-space: pre-wrap; word-wrap: break-word;" />
+            </pre>
+  </div>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/a11y-light.css"
+  />
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"
+  ></script>
+</BasicLayout>
+
+<script type="module" is:inline>
+  document.addEventListener("DOMContentLoaded", function () {
+    var textoGuardado = localStorage.getItem("textoGuardado");
+    if (textoGuardado) {
+      document.getElementById("textoEntrada").value = textoGuardado;
+    }
+    updateHistoryPicklist();
+
+    if (document.getElementById("textoSalida").dataset.highlighted) {
+      delete document.getElementById("textoSalida").dataset.highlighted;
+    }
+
+    document.getElementById("buscador").addEventListener("input", function () {
+      buscarEnTexto();
+    });
+
+    document
+      .getElementById("formatButton")
+      .addEventListener("click", function () {
+        eliminarLineas();
+      });
+
+    document
+      .getElementById("clearHistoryButton")
+      .addEventListener("click", clearHistory);
+  });
+
+  function eliminarLineas() {
+    var input = document.getElementById("textoEntrada").value;
+    var mantenerOEliminar = document.getElementById("maintainOrRemove").checked;
+    var textoABuscar = document.getElementById("keywordInput").value;
+    var caseSensitive = document.getElementById("caseSensitive").checked;
+    var wholeWord = document.getElementById("wholeWord").checked;
+    var lineas = input.split("\n");
+    var textoProcesado = "";
+
+    var flags = caseSensitive ? "g" : "gi";
+    var pattern = wholeWord
+      ? "\\b" + escapeRegExp(textoABuscar) + "\\b"
+      : escapeRegExp(textoABuscar);
+    var regex = new RegExp(pattern, flags);
+
+    lineas.forEach(function (linea) {
+      var coincide = regex.test(linea);
+      if ((mantenerOEliminar && coincide) || (!mantenerOEliminar && coincide)) {
+        textoProcesado += linea + "\n";
+      }
+    });
+
+    document.getElementById("textoSalida").textContent = textoProcesado;
+    hljs.highlightElement(document.getElementById("textoSalida"));
+    localStorage.setItem("textoGuardado", input);
+  }
+
+  /*   function buscarEnTexto(mantenerOEliminar = false) {
+    var textoABuscar = document.getElementById("buscador").value;
+    var caseSensitive = document.getElementById("caseSensitive").checked;
+    var wholeWord = document.getElementById("wholeWord").checked;
+    var textoSalida = document.getElementById("textoSalida").textContent;
+    var lineas = textoSalida.split("\n");
+    var textoProcesado = "";
+
+    var flags = caseSensitive ? "g" : "gi";
+    var pattern = wholeWord
+      ? "\\b" + escapeRegExp(textoABuscar) + "\\b"
+      : escapeRegExp(textoABuscar);
+    var regex = new RegExp(pattern, flags);
+
+    lineas.forEach(function (linea) {
+      var coincide = regex.test(linea);
+      if (
+        (mantenerOEliminar && coincide) ||
+        (!mantenerOEliminar && !coincide)
+      ) {
+        textoProcesado += linea + "\n";
+      }
+    });
+
+    document.getElementById("textoSalida").textContent = textoProcesado;
+    hljs.highlightElement(document.getElementById("textoSalida"));
+    actualizarContadorCoincidencias(textoEntrada, regex);
+  } */
+
+  function buscarEnTexto() {
+    var textoABuscar = document.getElementById("buscador").value;
+    var caseSensitive = document.getElementById("caseSensitive").checked;
+    var wholeWord = document.getElementById("wholeWord").checked;
+
+    if (textoABuscar.length < 2) {
+      document.getElementById("contadorCoincidencias").innerText = "";
+      procesarTexto();
+      return;
+    }
+
+    var flags = caseSensitive ? "g" : "gi";
+    var pattern = wholeWord
+      ? "\\b" + escapeRegExp(textoABuscar) + "\\b"
+      : escapeRegExp(textoABuscar);
+
+    function escapeRegExp(string) {
+      return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    var originalText = document.querySelector("code").textContent;
+    var regex = new RegExp(pattern, flags);
+
+    var matches = originalText.match(regex);
+    var contador = matches ? matches.length : 0;
+    document.getElementById("contadorCoincidencias").innerText = contador;
+
+    var highlightedText = originalText.replace(regex, function (match) {
+      return "<mark>" + match + "</mark>";
+    });
+    document.querySelector("code").innerHTML = highlightedText;
+    hljs.highlightElement(document.querySelector("code"));
+  }
+
+  function actualizarContadorCoincidencias(texto, regex) {
+    var coincidencias = texto.match(regex);
+    var contador = coincidencias ? coincidencias.length : 0;
+    document.getElementById("contadorCoincidencias").innerText = contador;
+  }
+
+  function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  function copiarAlPortapapeles() {
+    const elemento = document.createElement("textarea");
+    elemento.value = document.querySelector("code").textContent;
+    document.body.appendChild(elemento);
+    elemento.select();
+    document.execCommand("copy");
+    document.body.removeChild(elemento);
+  }
+
+  function limpiarTexto() {
+    document.getElementById("textoEntrada").value = "";
+    document.getElementById("textoSalida").textContent = "";
+    procesarTexto();
+  }
+
+  function addToHistory(jsonText) {
+    var history = JSON.parse(localStorage.getItem("jsonHistory") || "[]");
+
+    var entry = {
+      timestamp: new Date().toISOString(),
+      text: jsonText,
+    };
+
+    history.unshift(entry);
+    history = history.slice(0, 50);
+    localStorage.setItem("jsonHistory", JSON.stringify(history));
+
+    updateHistoryPicklist();
+  }
+
+  function checkDuplicateInHistory(jsonText) {
+    var history = JSON.parse(localStorage.getItem("jsonHistory") || "[]");
+    for (var i = 0; i < history.length; i++) {
+      if (history[i].text === jsonText) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function clearHistory() {
+    localStorage.setItem("jsonHistory", JSON.stringify([]));
+    updateHistoryPicklist();
+  }
+
+  function updateHistoryPicklist() {
+    var history = JSON.parse(localStorage.getItem("jsonHistory") || "[]");
+    var picklist = document.getElementById("historyPicklist");
+
+    picklist.innerHTML = "<option disabled selected>Historial JSON</option>";
+
+    history.forEach(function (entry) {
+      var date = new Date(entry.timestamp);
+      var dateString = `[${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())} ${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()}]`;
+      var textPreview = entry.text ? entry.text.substring(0, 120) : "";
+      var option = new Option(
+        dateString + " " + textPreview,
+        JSON.stringify(entry)
+      );
+      picklist.add(option);
+    });
+  }
+
+  function pad(number) {
+    return number < 10 ? "0" + number : number;
+  }
+
+  function loadFromHistory(selectedValue) {
+    if (!selectedValue) return;
+
+    var entry = JSON.parse(selectedValue);
+    if (entry && entry.text) {
+      document.getElementById("textoEntrada").value = entry.text;
+      procesarTexto();
+    }
+  }
+</script>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f9;
+    margin: 0;
+    padding: 20px;
+  }
+
+  h1 {
+    color: #0070d2;
+  }
+
+  .textarea-container,
+  .resultado-container {
+    margin-bottom: 20px;
+  }
+
+  textarea {
+    width: 99%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    height: 150px;
+    font-family: monospace;
+    resize: vertical;
+  }
+
+  button {
+    background-color: #0070d2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-right: 0.5em;
+  }
+
+  button:hover {
+    background-color: #005fb2;
+  }
+
+  .panelControl label {
+    margin-right: 0.5em;
+  }
+
+  .panelControl {
+    display: flex;
+    align-items: center;
+  }
+
+  .panelControl p {
+    margin-right: 2em;
+    font-weight: bold;
+  }
+
+  .invalid {
+    color: rgb(255, 83, 83);
+    font-size: 10pt;
+  }
+
+  .valid {
+    color: rgb(0, 146, 0);
+    font-size: 10pt;
+  }
+
+  #historyPicklist {
+    height: 36px;
+    width: 200px;
+    margin-left: 1.5em;
+  }
+
+  #clearHistoryButton {
+    background-color: transparent;
+    color: gray;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+    margin-left: 10px;
+    transition:
+      background-color 0.3s,
+      color 0.3s;
+  }
+
+  #clearHistoryButton:hover {
+    background-color: #ffcccc;
+    color: #cc0000;
+  }
+
+  .buscador-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  #buscador {
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+    height: 30px;
+    width: 170px;
+    padding-right: 2.5em;
+    padding-left: 1em;
+  }
+
+  #keywordInput {
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+    height: 30px;
+    width: 170px;
+    padding-right: 2.5em;
+    padding-left: 1em;
+  }
+
+  .contadorCoincidencias {
+    position: absolute;
+    margin-left: 16.5em;
+    font-size: 0.8rem;
+    color: rgb(121, 121, 121);
+    font-weight: 1;
+  }
+</style>

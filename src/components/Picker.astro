@@ -1,0 +1,15 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title }: Props = Astro.props;
+---
+
+<div
+  class="flex h-24 w-42 items-center justify-center rounded-lg p-3 shadow-[0px_0px_32px_-3px_#080808] backdrop-blur-md transition-transform hover:scale-105"
+>
+  <span class="text-theme-text-light overflow-auto text-wrap font-bold text-center">
+    {title}
+  </span>
+</div>

@@ -1,0 +1,179 @@
+---
+import BasicLayout from "@/layouts/BasicLayout.astro";
+---
+
+<BasicLayout title="Formateador IDs | Adrian Palomo">
+  <h1>Salesforce IDs formateador a SOQL</h1>
+  <div class="textarea-container">
+    <label for="textoEntrada">Pega los IDs aquí:</label>
+    <textarea id="textoEntrada"></textarea>
+  </div>
+  <div class="panelControl">
+    <p>Resultado</p>
+    <button onclick="copiarAlPortapapeles()">Copiar</button>
+    <button onclick="limpiarTexto()">Limpiar</button>
+    <input type="checkbox" id="separarPorComas" checked />
+    <label for="separarPorComas">Separar por comas</label>
+    <input type="checkbox" id="anadirComillaSimple" checked />
+    <label for="anadirComillaSimple">Añadir comilla simple</label>
+    <input type="checkbox" id="anadirParentesis" checked />
+    <label for="anadirParentesis">Añadir paréntesis</label>
+    <input type="checkbox" id="anadirIdIn" checked />
+    <label for="anadirIdIn">Añadir 'Id IN '</label>
+  </div>
+  <div class="resultado-container">
+    <p id="textoSalida"></p>
+  </div>
+</BasicLayout>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f9;
+    margin: 0;
+    padding: 20px;
+  }
+
+  h1 {
+    color: #0070d2;
+  }
+
+  .textarea-container,
+  .resultado-container {
+    margin-bottom: 20px;
+  }
+
+  textarea {
+    width: 99%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    height: 150px;
+    font-family: monospace;
+    resize: vertical;
+  }
+
+  button {
+    background-color: #0070d2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-right: 0.5em;
+  }
+
+  button:hover {
+    background-color: #005fb2;
+  }
+
+  #textoSalida {
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .panelControl {
+    display: flex;
+    align-items: center;
+  }
+
+  .panelControl p {
+    margin-right: 2em;
+    font-weight: bold;
+  }
+
+  .panelControl label {
+    margin-right: 0.5em;
+  }
+</style>
+<script type="module" is:inline>
+  function procesarTexto() {
+    const input = document.getElementById("textoEntrada").value;
+    const separarPorComas = document.getElementById("separarPorComas").checked;
+    const anadirComillaSimple = document.getElementById(
+      "anadirComillaSimple"
+    ).checked;
+    const anadirParentesis =
+      document.getElementById("anadirParentesis").checked;
+    const anadirIdIn = document.getElementById("anadirIdIn").checked;
+    const separador = separarPorComas ? ", " : " ";
+
+    let lineas = input.trim().split("\n");
+    let ids = [];
+
+    lineas.forEach((linea) => {
+      let palabras = linea.split(/[\s,;"'`\t]+/);
+      palabras.forEach((palabra) => {
+        if (/^[a-zA-Z0-9]{15,18}$/.test(palabra)) {
+          ids.push(palabra);
+          localStorage.setItem("textoIds", input);
+        }
+      });
+    });
+
+    ids = [...new Set(ids)];
+
+    if (anadirComillaSimple) {
+      ids = ids.map((id) => `'${id}'`);
+    }
+
+    let resultado = ids.join(separador);
+    if (anadirParentesis) {
+      resultado = `(${resultado})`;
+    }
+    if (anadirIdIn) {
+      resultado = `Id IN ${resultado}`;
+    }
+
+    document.getElementById("textoSalida").textContent = resultado;
+  }
+
+  function copiarAlPortapapeles() {
+    const elemento = document.createElement("textarea");
+    elemento.value = document.getElementById("textoSalida").textContent;
+    document.body.appendChild(elemento);
+    elemento.select();
+    document.execCommand("copy");
+    document.body.removeChild(elemento);
+  }
+
+  function limpiarTexto() {
+    document.getElementById("textoEntrada").value = "";
+    document.getElementById("textoSalida").textContent = "";
+    localStorage.setItem("textoIds", "");
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document
+      .getElementById("textoEntrada")
+      .addEventListener("input", procesarTexto);
+    document
+      .getElementById("separarPorComas")
+      .addEventListener("change", procesarTexto);
+    document
+      .getElementById("anadirComillaSimple")
+      .addEventListener("change", procesarTexto);
+    document
+      .getElementById("anadirParentesis")
+      .addEventListener("change", procesarTexto);
+    document
+      .getElementById("anadirIdIn")
+      .addEventListener("change", procesarTexto);
+
+    var textoGuardado = localStorage.getItem("textoIds");
+    if (textoGuardado) {
+      document.getElementById("textoEntrada").value = textoGuardado;
+      procesarTexto();
+    }
+  });
+</script>
