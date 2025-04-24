@@ -17,5 +17,9 @@ export const tools: Tool[] = [
   {
     path: "/tools/soqlGeneratorByIds",
     title: "SOQL Generator by IDs",
+  },
+  {
+    path: "/tools/packageMerger",
+    title: "Salesforce Package Merger",
   }
 ];
