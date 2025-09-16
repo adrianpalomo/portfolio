@@ -1,32 +1,34 @@
 ---
+import '/src/styles/global.css';
+
 interface Props {
-  title: string;
+	title: string;
 }
 const { title }: Props = Astro.props;
 ---
 
 <html>
-  <head>
-    <title>{title}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta charset="UTF-8" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://adrianpalomo.com/" />
-    <meta property="og:title" content="Adrián Palomo | Tools" />
-    <meta property="og:site_name" content="Adrián Palomo | Tools" />
-    <meta property="og:locale" content="es_ES" />
-    <meta name="robots" content="noindex, nofollow, noimageindex" />
-    <link rel="icon" type="image/png" href="/images/Fav.webp" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/a11y-light.css"
-    />
-    <script
-      is:inline
-      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"
-    ></script>
-  </head>
-  <body>
-    <slot />
-  </body>
+	<head>
+		<title>{title}</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta charset="UTF-8" />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://adrianpalomo.com/" />
+		<meta property="og:title" content="Adrián Palomo | Tools" />
+		<meta property="og:site_name" content="Adrián Palomo | Tools" />
+		<meta property="og:locale" content="es_ES" />
+		<meta name="robots" content="noindex, nofollow, noimageindex" />
+		<link rel="icon" type="image/png" href="/images/Fav.webp" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/a11y-light.css"
+		/>
+		<script
+			is:inline
+			src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"
+		></script>
+	</head>
+	<body>
+		<slot />
+	</body>
 </html>

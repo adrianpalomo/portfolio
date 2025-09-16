@@ -1,396 +1,921 @@
 ---
-import BasicLayout from "@/layouts/BasicLayout.astro";
+import BasicLayout from '@/layouts/BasicLayout.astro';
+import Copy from '@/components/icons/Copy2.astro';
+import Trash from '@/components/icons/Trash.astro';
+import Undo from '@/components/icons/Undo.astro';
+import Redo from '@/components/icons/Redo.astro';
 ---
 
 <BasicLayout title="JSON Formatter | Adrian Palomo">
-  <h1>JSON Formatter</h1>
-  <div class="textarea-container">
-    <label for="textoEntrada">Paste JSON here:</label>
-    <textarea id="textoEntrada"></textarea>
-    <button id="formatButton">Format</button>
-    <button id="compressButton">Compress</button>
-    <span class="valid" id="valid"></span>
-    <span class="invalid" id="invalid"></span>
-  </div>
-  <div class="resultado-container">
-    <div class="panelControl">
-      <p>Result</p>
-      <button onclick="copiarAlPortapapeles()">Copy</button>
-      <button onclick="limpiarTexto()">Clear</button>
-      <div class="buscador-container">
-        <input type="text" id="buscador" placeholder="Search..." />
-        <span class="contadorCoincidencias" id="contadorCoincidencias"></span>
-      </div>
-      <input type="checkbox" id="select2search" />
-      <label for="select2search">Select to Search</label>
-      <input type="checkbox" id="caseSensitive" />
-      <label for="caseSensitive">Case Sensitive</label>
-      <input type="checkbox" id="wholeWord" />
-      <label for="wholeWord">Whole Word</label>
-      <select id="historyPicklist" onchange="loadFromHistory(this.value)"
-      ></select>
-      <span id="clearHistoryButton" title="Clear history">Clear</span>
-    </div>
-    <pre
-      style="background-color: white; padding: 0 10px; border: 1px solid #d9d9d9; border-radius: 4px; overflow-x: auto;">
-      <code id="textoSalida" contenteditable class="json" style="white-space: pre-wrap; word-wrap: break-word; outline: none;" />
-    </pre>
-  </div>
+	<!-- CodeMirror CSS and JS -->
+	<link
+		rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css"
+	/>
+	<link
+		rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldgutter.min.css"
+	/>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"
+	></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"
+	></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldcode.min.js"
+	></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldgutter.min.js"
+	></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/brace-fold.min.js"
+	></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/comment-fold.min.js"
+	></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"
+	></script>
+
+	<div class="min-h-screen bg-gray-900 p-4 font-sans text-gray-100">
+		<!-- Control Panel -->
+		<div
+			class="mb-4 rounded-lg border border-gray-700 bg-gray-800 p-4 shadow-lg"
+		>
+			<!-- Search & Replace Section -->
+			<div class="mb-6 flex flex-col gap-3">
+				<div class="flex flex-wrap items-center gap-3">
+					<input
+						type="text"
+						id="searchInput"
+						placeholder="Search..."
+						class="min-w-48 flex-1 rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-gray-100 placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+					/>
+					<input
+						type="text"
+						id="replaceInput"
+						placeholder="Replace with..."
+						class="min-w-48 flex-1 rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-gray-100 placeholder-gray-400 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+					/>
+					<button
+						id="replaceAllButton"
+						class="rounded-md bg-blue-600 px-6 py-2 font-medium text-white transition-colors hover:bg-blue-700"
+						>Replace All</button
+					>
+				</div>
+				<div class="hidden" id="searchCounterContainer">
+					<span
+						id="searchCounter"
+						class="rounded border border-gray-600 bg-gray-700 px-2 py-1 text-xs text-gray-400"
+					></span>
+				</div>
+			</div>
+
+			<!-- Actions & Options -->
+			<div class="flex flex-col justify-between gap-4 lg:flex-row">
+				<div class="flex flex-wrap gap-3">
+					<button
+						id="formatButton"
+						class="rounded-md bg-blue-600 px-6 py-2 font-medium text-white transition-colors hover:bg-blue-700"
+						>Format</button
+					>
+					<button
+						id="compressButton"
+						class="rounded-md bg-blue-600 px-6 py-2 font-medium text-white transition-colors hover:bg-blue-700"
+						>Compress</button
+					>
+				</div>
+				<div class="flex flex-wrap gap-2">
+					<button
+						id="cleanEscapesBtn"
+						class="rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-xs font-medium text-gray-300 transition-all hover:bg-gray-600"
+						data-active="false">Clean Escapes</button
+					>
+					<button
+						id="autoFormatBtn"
+						class="rounded-md border border-blue-600 bg-blue-600 px-4 py-2 text-xs font-medium text-white transition-all"
+						data-active="true">Auto Format</button
+					>
+					<button
+						id="select2searchBtn"
+						class="rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-xs font-medium text-gray-300 transition-all hover:bg-gray-600"
+						data-active="false">Select to Search</button
+					>
+					<button
+						id="caseSensitiveBtn"
+						class="rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-xs font-medium text-gray-300 transition-all hover:bg-gray-600"
+						data-active="false">Case Sensitive</button
+					>
+					<button
+						id="wholeWordBtn"
+						class="rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-xs font-medium text-gray-300 transition-all hover:bg-gray-600"
+						data-active="false">Whole Word</button
+					>
+				</div>
+			</div>
+		</div>
+
+		<!-- Status -->
+		<div class="mb-4 flex items-center gap-4">
+			<span id="statusValid" class="text-sm font-medium text-green-500"
+			></span>
+			<span id="statusError" class="text-sm font-medium text-red-500"
+			></span>
+		</div>
+
+		<!-- Editor Toolbar -->
+		<div
+			class="flex flex-wrap items-center justify-between gap-4 border-b border-gray-700 bg-gray-800 px-5 py-4"
+		>
+			<div class="flex items-center gap-3">
+				<button
+					id="copyButton"
+					class="rounded-md bg-gray-600 p-2 text-gray-100 transition-colors hover:bg-gray-500"
+					title="Copy"
+				>
+					<Copy />
+				</button>
+				<button
+					id="clearButton"
+					class="rounded-md bg-gray-600 p-2 text-gray-100 transition-colors hover:bg-gray-500"
+					title="Clear"
+				>
+					<Trash />
+				</button>
+				<button
+					id="undoButton"
+					class="rounded-md bg-gray-600 p-2 text-gray-100 transition-colors hover:bg-gray-500"
+					title="Undo"
+				>
+					<Undo />
+				</button>
+				<button
+					id="redoButton"
+					class="rounded-md bg-gray-600 p-2 text-gray-100 transition-colors hover:bg-gray-500"
+					title="Redo"
+				>
+					<Redo />
+				</button>
+			</div>
+
+			<div class="flex items-center gap-3">
+				<select
+					id="historyPicklist"
+					class="max-w-72 min-w-48 rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-sm text-gray-100"
+				>
+					<option disabled selected>JSON History</option>
+				</select>
+				<button
+					id="clearHistoryButton"
+					class="rounded-md bg-red-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700"
+					>Clear</button
+				>
+			</div>
+		</div>
+
+		<!-- JSON Editor (CodeMirror will be initialized here) -->
+		<div
+			id="jsonEditor"
+			class="mt-4 overflow-visible rounded-lg border border-gray-700 bg-gray-800"
+		>
+		</div>
+	</div>
 </BasicLayout>
 
 <script is:inline>
-  document.addEventListener("DOMContentLoaded", function () {
-    var textoGuardado = localStorage.getItem("textoJSON");
-    var isEdited = false;
+	// Global variables
+	let codeMirrorEditor;
+	let undoStack = [];
+	let redoStack = [];
+	let currentValue = '';
 
-    if (textoGuardado) {
-      document.getElementById("textoEntrada").value = textoGuardado;
-    }
-    updateHistoryPicklist();
+	// Toggle button states - CORRECT DEFAULTS
+	let toggleStates = {
+		cleanEscapes: false, // INACTIVO por defecto
+		autoFormat: true, // ACTIVO por defecto
+		select2search: false, // INACTIVO por defecto
+		caseSensitive: false, // INACTIVO por defecto
+		wholeWord: false, // INACTIVO por defecto
+	};
 
-    document
-      .getElementById("textoSalida")
-      .addEventListener("input", function () {
-        isEdited = true;
-      });
+	document.addEventListener('DOMContentLoaded', function () {
+		// Wait for CodeMirror to load
+		if (typeof CodeMirror === 'undefined') {
+			setTimeout(
+				() => document.dispatchEvent(new Event('DOMContentLoaded')),
+				100
+			);
+			return;
+		}
 
-    document
-      .getElementById("formatButton")
-      .addEventListener("click", function () {
-        if (isEdited) {
-          var confirmOverwrite = confirm(
-            "El contenido ha sido editado. ¿Seguro que quieres sobrescribirlo?"
-          );
-          if (!confirmOverwrite) {
-            return;
-          }
-        }
-        procesarTexto();
-        isEdited = false;
-      });
+		initializeCodeMirror();
+		const savedText = localStorage.getItem('textoJSON');
 
-    document.getElementById("buscador").addEventListener("input", function () {
-      buscarEnTexto();
-    });
-    document
-      .getElementById("caseSensitive")
-      .addEventListener("input", function () {
-        buscarEnTexto();
-      });
-    document.getElementById("wholeWord").addEventListener("input", function () {
-      buscarEnTexto();
-    });
+		// Load saved text
+		if (savedText) {
+			setEditorContent(savedText);
+			currentValue = savedText;
+		}
 
-    document
-      .getElementById("select2search")
-      .addEventListener("input", function () {
-        buscarEnTexto();
-      });
+		updateHistoryPicklist();
+		initializeEventListeners();
+		loadToggleStates();
+	});
 
-    document
-      .getElementById("clearHistoryButton")
-      .addEventListener("click", clearHistory);
+	function initializeCodeMirror() {
+		const editorContainer = document.getElementById('jsonEditor');
 
-    document
-      .getElementById("compressButton")
-      .addEventListener("click", function () {
-        if (isEdited) {
-          var confirmOverwrite = confirm(
-            "El contenido ha sido editado. ¿Seguro que quieres sobrescribirlo?"
-          );
-          if (!confirmOverwrite) {
-            return;
-          }
-        }
-        comprimirTexto();
-        isEdited = false;
-      });
+		codeMirrorEditor = CodeMirror(editorContainer, {
+			mode: 'application/json',
+			theme: 'default',
+			lineNumbers: true,
+			lineWrapping: true,
+			foldGutter: true,
+			gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+			indentUnit: 2,
+			tabSize: 2,
+			matchBrackets: true,
+			autoCloseBrackets: true,
+			showCursorWhenSelecting: true,
+			viewportMargin: Infinity, // CRITICAL: This removes internal scroll and makes it auto-size
+			scrollbarStyle: null, // Remove all scrollbars
+			extraKeys: {
+				'Ctrl-Q': function (cm) {
+					cm.foldCode(cm.getCursor());
+				},
+				'Alt-F': function (cm) {
+					cm.foldCode(cm.getCursor());
+				},
+				'Ctrl-F': function (cm) {
+					document.getElementById('searchInput').focus();
+					return false;
+				},
+				'Ctrl-H': function (cm) {
+					document.getElementById('replaceInput').focus();
+					return false;
+				},
+				'Ctrl-Z': function (cm) {
+					undo();
+					return false;
+				},
+				'Ctrl-Y': function (cm) {
+					redo();
+					return false;
+				},
+				'Shift-Ctrl-Z': function (cm) {
+					redo();
+					return false;
+				},
+			},
+		});
 
-    document.addEventListener("mouseup", function () {
-      if (document.getElementById("select2search").checked) {
-        var selectedText = window.getSelection().toString().trim();
-        if (selectedText.length > 0) {
-          document.getElementById("buscador").value = selectedText;
-          buscarEnTexto();
-        }
-      }
-    });
-  });
+		// Force the editor to have no fixed height and auto-resize
+		setTimeout(() => {
+			if (codeMirrorEditor) {
+				codeMirrorEditor.setSize(null, 'auto');
+				codeMirrorEditor.refresh();
+			}
+		}, 100);
 
-  function comprimirTexto() {
-    var input = document.getElementById("textoEntrada").value;
-    if (input !== "") {
-      localStorage.setItem("textoJSON", input);
-      try {
-        var obj = JSON.parse(input);
-        var codeElement = document.querySelector("code");
-        codeElement.textContent = JSON.stringify(obj);
-        hljs.highlightElement(codeElement);
+		// Set up change listener
+		codeMirrorEditor.on('change', function (cm, change) {
+			if (change.origin !== 'setValue') {
+				saveToUndoStack();
+				const text = cm.getValue();
+				localStorage.setItem('textoJSON', text);
 
-        document.getElementById("valid").innerText = "Valid JSON";
-        document.getElementById("invalid").innerText = "";
-      } catch (e) {
-        document.getElementById("valid").innerText = "";
-        document.getElementById("invalid").innerText = e.message;
-      }
-    } else {
-      document.getElementById("invalid").innerText = "";
-      document.getElementById("valid").innerText = "";
-      document.querySelector("code").textContent = "";
-    }
-  }
+				if (toggleStates.autoFormat) {
+					debounce(formatJSON, 500)();
+				}
 
-  function procesarTexto() {
-    var input = document.getElementById("textoEntrada").value;
-    if (input !== "") {
-      localStorage.setItem("textoJSON", input);
-      try {
-        var obj = JSON.parse(input);
-        var codeElement = document.querySelector("code");
-        if (codeElement.dataset.highlighted) {
-          delete codeElement.dataset.highlighted;
-        }
-        codeElement.textContent = JSON.stringify(obj, null, "  ");
-        hljs.highlightElement(codeElement);
+				validateJSON();
+			}
+		});
 
-        document.getElementById("valid").innerText = "Valid JSON";
-        document.getElementById("invalid").innerText = "";
+		// Set up selection listener for select to search
+		codeMirrorEditor.on('cursorActivity', function (cm) {
+			if (toggleStates.select2search && cm.somethingSelected()) {
+				const selectedText = cm.getSelection().trim();
+				if (selectedText.length > 0) {
+					document.getElementById('searchInput').value = selectedText;
+					performSearch();
+				}
+			}
+		});
+	}
 
-        if (!checkDuplicateInHistory(input)) {
-          addToHistory(input);
-        }
-      } catch (e) {
-        document.getElementById("valid").innerText = "";
-        document.getElementById("invalid").innerText = e.message;
-      }
-    } else {
-      document.getElementById("invalid").innerText = "";
-      document.getElementById("valid").innerText = "";
-      document.querySelector("code").textContent = "";
-    }
-  }
+	function updateEditorSize() {
+		if (!codeMirrorEditor) return;
+		// Just refresh the editor since viewportMargin: Infinity handles the auto-sizing
+		codeMirrorEditor.refresh();
+	}
 
-  function buscarEnTexto() {
-    var textoABuscar = document.getElementById("buscador").value;
-    var caseSensitive = document.getElementById("caseSensitive").checked;
-    var wholeWord = document.getElementById("wholeWord").checked;
+	function initializeEventListeners() {
+		// Main action buttons
+		document
+			.getElementById('formatButton')
+			.addEventListener('click', formatJSON);
+		document
+			.getElementById('compressButton')
+			.addEventListener('click', compressJSON);
 
-    if (textoABuscar.length < 2) {
-      document.getElementById("contadorCoincidencias").innerText = "";
-      procesarTexto();
-      return;
-    }
+		// Search and replace
+		document
+			.getElementById('searchInput')
+			.addEventListener('input', performSearch);
+		document
+			.getElementById('replaceAllButton')
+			.addEventListener('click', replaceAll);
 
-    var flags = caseSensitive ? "g" : "gi";
-    var pattern = wholeWord
-      ? "\\b" + escapeRegExp(textoABuscar) + "\\b"
-      : escapeRegExp(textoABuscar);
+		// History buttons
+		document.getElementById('undoButton').addEventListener('click', undo);
+		document.getElementById('redoButton').addEventListener('click', redo);
+		document
+			.getElementById('clearHistoryButton')
+			.addEventListener('click', clearHistory);
 
-    function escapeRegExp(string) {
-      return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    }
+		// Utility buttons
+		document
+			.getElementById('copyButton')
+			.addEventListener('click', copyToClipboard);
+		document
+			.getElementById('clearButton')
+			.addEventListener('click', clearEditor);
 
-    var originalText = document.querySelector("code").textContent;
-    var regex = new RegExp(pattern, flags);
+		// Toggle buttons
+		setupToggleButtons();
+	}
 
-    var matches = originalText.match(regex);
-    var contador = matches ? matches.length : 0;
-    document.getElementById("contadorCoincidencias").innerText = contador;
+	function setupToggleButtons() {
+		const toggleButtons = [
+			'cleanEscapesBtn',
+			'autoFormatBtn',
+			'select2searchBtn',
+			'caseSensitiveBtn',
+			'wholeWordBtn',
+		];
 
-    var highlightedText = originalText.replace(regex, function (match) {
-      return "<mark>" + match + "</mark>";
-    });
-    document.querySelector("code").innerHTML = highlightedText;
-    hljs.highlightElement(document.querySelector("code"));
-  }
+		toggleButtons.forEach((buttonId) => {
+			const button = document.getElementById(buttonId);
+			const key = buttonId.replace('Btn', '');
 
-  function copiarAlPortapapeles() {
-    const elemento = document.createElement("textarea");
-    elemento.value = document.querySelector("code").textContent;
-    document.body.appendChild(elemento);
-    elemento.select();
-    document.execCommand("copy");
-    document.body.removeChild(elemento);
-  }
+			button.addEventListener('click', function () {
+				toggleStates[key] = !toggleStates[key];
+				updateToggleButton(button, toggleStates[key]);
+				saveToggleStates();
 
-  function limpiarTexto() {
-    document.getElementById("textoEntrada").value = "";
-    procesarTexto();
-  }
+				// Trigger search update for search-related toggles
+				if (key === 'caseSensitive' || key === 'wholeWord') {
+					performSearch();
+				}
+			});
+		});
+	}
 
-  function addToHistory(jsonText) {
-    var history = JSON.parse(localStorage.getItem("jsonHistory") || "[]");
+	function updateToggleButton(button, active) {
+		button.setAttribute('data-active', active.toString());
+		if (active) {
+			// Active state - blue background
+			button.className =
+				'px-4 py-2 bg-blue-600 text-white border border-blue-600 rounded-md text-xs font-medium transition-all';
+		} else {
+			// Inactive state - gray background
+			button.className =
+				'px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-300 border border-gray-600 rounded-md text-xs font-medium transition-all';
+		}
+	}
 
-    var entry = {
-      timestamp: new Date().toISOString(),
-      text: jsonText,
-    };
+	function saveToggleStates() {
+		localStorage.setItem(
+			'jsonFormatterToggles',
+			JSON.stringify(toggleStates)
+		);
+	}
 
-    history.unshift(entry);
-    history = history.slice(0, 50);
-    localStorage.setItem("jsonHistory", JSON.stringify(history));
+	function loadToggleStates() {
+		// FORCE correct default states - ignore localStorage for now to fix the issue
+		toggleStates = {
+			cleanEscapes: true, // INACTIVO por defecto
+			autoFormat: true, // ACTIVO por defecto
+			select2search: false, // INACTIVO por defecto
+			caseSensitive: false, // INACTIVO por defecto
+			wholeWord: false, // INACTIVO por defecto
+		};
 
-    updateHistoryPicklist();
-  }
+		// Clear incorrect localStorage data
+		localStorage.removeItem('jsonFormatterToggles');
 
-  function checkDuplicateInHistory(jsonText) {
-    var history = JSON.parse(localStorage.getItem("jsonHistory") || "[]");
-    for (var i = 0; i < history.length; i++) {
-      if (history[i].text === jsonText) {
-        return true;
-      }
-    }
-    return false;
-  }
+		// Save correct defaults
+		saveToggleStates();
 
-  function clearHistory() {
-    localStorage.setItem("jsonHistory", JSON.stringify([]));
-    updateHistoryPicklist();
-  }
+		// Update UI with correct states
+		Object.keys(toggleStates).forEach((key) => {
+			const button = document.getElementById(key + 'Btn');
+			if (button) {
+				updateToggleButton(button, toggleStates[key]);
+			}
+		});
+	}
 
-  function updateHistoryPicklist() {
-    var history = JSON.parse(localStorage.getItem("jsonHistory") || "[]");
-    var picklist = document.getElementById("historyPicklist");
+	function setEditorContent(text) {
+		if (codeMirrorEditor) {
+			codeMirrorEditor.setValue(text);
+		}
+	}
 
-    picklist.innerHTML = "<option disabled selected>Historial JSON</option>";
+	function getEditorContent() {
+		if (codeMirrorEditor) {
+			return codeMirrorEditor.getValue();
+		}
+		return '';
+	}
 
-    history.forEach(function (entry) {
-      var date = new Date(entry.timestamp);
-      var dateString = `[${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())} ${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()}]`;
-      var textPreview = entry.text ? entry.text.substring(0, 120) : "";
-      var option = new Option(
-        dateString + " " + textPreview,
-        JSON.stringify(entry)
-      );
-      picklist.add(option);
-    });
-  }
+	// ===== SEARCH AND REPLACE =====
+	function performSearch() {
+		const searchText = document.getElementById('searchInput').value;
+		const counterElement = document.getElementById('searchCounter');
+		const counterContainer = document.getElementById(
+			'searchCounterContainer'
+		);
 
-  function pad(number) {
-    return number < 10 ? "0" + number : number;
-  }
+		if (searchText.length < 1) {
+			clearHighlights();
+			counterElement.innerText = '';
+			counterContainer.classList.add('hidden');
+			return;
+		}
 
-  function loadFromHistory(selectedValue) {
-    if (!selectedValue) return;
+		const flags = toggleStates.caseSensitive ? 'g' : 'gi';
+		let pattern = escapeRegExp(searchText);
+		if (toggleStates.wholeWord) {
+			pattern = '\\b' + pattern + '\\b';
+		}
 
-    var entry = JSON.parse(selectedValue);
-    if (entry && entry.text) {
-      document.getElementById("textoEntrada").value = entry.text;
-      procesarTexto();
-    }
-  }
+		const regex = new RegExp(pattern, flags);
+		const text = getEditorContent();
+		const matches = text.match(regex);
+		const count = matches ? matches.length : 0;
+
+		if (count > 0) {
+			counterElement.innerText = `${count} matches`;
+			counterContainer.classList.remove('hidden');
+			counterContainer.classList.add('flex');
+			highlightSearchInCodeMirror(searchText);
+		} else {
+			counterElement.innerText = '';
+			counterContainer.classList.add('hidden');
+			clearHighlights();
+		}
+	}
+
+	function replaceAll() {
+		const searchText = document.getElementById('searchInput').value;
+		const replaceText = document.getElementById('replaceInput').value;
+
+		if (!searchText || !codeMirrorEditor) return;
+
+		const flags = toggleStates.caseSensitive ? 'g' : 'gi';
+		let pattern = escapeRegExp(searchText);
+		if (toggleStates.wholeWord) {
+			pattern = '\\b' + pattern + '\\b';
+		}
+
+		const regex = new RegExp(pattern, flags);
+		const originalText = getEditorContent();
+		const newText = originalText.replace(regex, replaceText);
+
+		if (originalText !== newText) {
+			saveToUndoStack();
+			setEditorContent(newText);
+			localStorage.setItem('textoJSON', newText);
+			performSearch();
+			validateJSON();
+		}
+	}
+
+	function highlightSearchInCodeMirror(searchText) {
+		if (!codeMirrorEditor) return;
+
+		// Clear previous highlights
+		clearHighlights();
+
+		const flags = toggleStates.caseSensitive ? 'g' : 'gi';
+		let pattern = escapeRegExp(searchText);
+		if (toggleStates.wholeWord) {
+			pattern = '\\b' + pattern + '\\b';
+		}
+
+		const regex = new RegExp(pattern, flags);
+		const text = codeMirrorEditor.getValue();
+		const doc = codeMirrorEditor.getDoc();
+
+		// Find and mark all matches
+		let match;
+		while ((match = regex.exec(text)) !== null) {
+			const start = doc.posFromIndex(match.index);
+			const end = doc.posFromIndex(match.index + match[0].length);
+
+			doc.markText(start, end, {
+				className: 'search-highlight',
+			});
+
+			if (!regex.global) break;
+		}
+	}
+
+	function clearHighlights() {
+		if (!codeMirrorEditor) return;
+
+		const doc = codeMirrorEditor.getDoc();
+		const marks = doc.getAllMarks();
+		marks.forEach((mark) => {
+			if (mark.className === 'search-highlight') {
+				mark.clear();
+			}
+		});
+	}
+
+	// ===== FORMATTING AND COMPRESSION =====
+	function formatJSON() {
+		let text = getEditorContent().trim();
+
+		if (!text) return;
+
+		if (toggleStates.cleanEscapes) {
+			text = cleanEscapes(text);
+		}
+
+		try {
+			const parsed = JSON.parse(text);
+			saveToUndoStack();
+			setEditorContent(JSON.stringify(parsed, null, 2));
+			showStatus('JSON formatted successfully', 'valid');
+			addToHistory(getEditorContent());
+		} catch (e) {
+			showStatus('Error: ' + e.message, 'error');
+		}
+	}
+
+	function compressJSON() {
+		const text = getEditorContent().trim();
+
+		if (!text) return;
+
+		try {
+			const parsed = JSON.parse(text);
+			saveToUndoStack();
+			setEditorContent(JSON.stringify(parsed));
+			showStatus('JSON compressed successfully', 'valid');
+			addToHistory(getEditorContent());
+		} catch (e) {
+			showStatus('Error: ' + e.message, 'error');
+		}
+	}
+
+	function cleanEscapes(text) {
+		return text
+			.replace(/\\n/g, '')
+			.replace(/\\\\/g, '\\')
+			.replace(/\\t/g, '')
+			.replace(/\\r/g, '')
+			.replace(/\s+/g, ' ')
+			.trim();
+	}
+
+	// ===== UNDO/REDO =====
+	function saveToUndoStack() {
+		const currentText = getEditorContent();
+		if (currentValue !== currentText) {
+			undoStack.push(currentValue);
+			if (undoStack.length > 50) {
+				undoStack.shift();
+			}
+			redoStack = [];
+			currentValue = currentText;
+		}
+	}
+
+	function undo() {
+		if (undoStack.length > 0) {
+			redoStack.push(currentValue);
+			const previousValue = undoStack.pop();
+			setEditorContent(previousValue);
+			currentValue = previousValue;
+			localStorage.setItem('textoJSON', previousValue);
+			validateJSON();
+		}
+	}
+
+	function redo() {
+		if (redoStack.length > 0) {
+			undoStack.push(currentValue);
+			const nextValue = redoStack.pop();
+			setEditorContent(nextValue);
+			currentValue = nextValue;
+			localStorage.setItem('textoJSON', nextValue);
+			validateJSON();
+		}
+	}
+
+	// ===== VALIDATION AND STATUS =====
+	function validateJSON() {
+		const text = getEditorContent().trim();
+
+		if (!text) {
+			showStatus('', '');
+			return;
+		}
+
+		try {
+			JSON.parse(text);
+			showStatus('Valid JSON', 'valid');
+		} catch (e) {
+			showStatus('Error: ' + e.message, 'error');
+		}
+	}
+
+	function showStatus(message, type) {
+		document.getElementById('statusValid').innerText =
+			type === 'valid' ? message : '';
+		document.getElementById('statusError').innerText =
+			type === 'error' ? message : '';
+	}
+
+	// ===== UTILITY FUNCTIONS =====
+	function debounce(func, wait) {
+		let timeout;
+		return function executedFunction(...args) {
+			const later = () => {
+				clearTimeout(timeout);
+				func(...args);
+			};
+			clearTimeout(timeout);
+			timeout = setTimeout(later, wait);
+		};
+	}
+
+	function escapeRegExp(string) {
+		return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+	}
+
+	function copyToClipboard() {
+		if (!codeMirrorEditor) return;
+
+		const text = getEditorContent();
+		if (navigator.clipboard) {
+			navigator.clipboard.writeText(text).then(() => {
+				showStatus('Copied to clipboard', 'valid');
+				setTimeout(() => showStatus('', ''), 2000);
+			});
+		} else {
+			// Fallback for older browsers
+			const textArea = document.createElement('textarea');
+			textArea.value = text;
+			document.body.appendChild(textArea);
+			textArea.select();
+			document.execCommand('copy');
+			document.body.removeChild(textArea);
+			showStatus('Copied to clipboard', 'valid');
+			setTimeout(() => showStatus('', ''), 2000);
+		}
+	}
+
+	function clearEditor() {
+		if (!codeMirrorEditor) return;
+
+		saveToUndoStack();
+		setEditorContent('');
+		currentValue = '';
+		localStorage.removeItem('textoJSON');
+		showStatus('', '');
+	}
+
+	// ===== HISTORY MANAGEMENT =====
+	function addToHistory(jsonText) {
+		if (!jsonText.trim()) return;
+
+		const history = JSON.parse(localStorage.getItem('jsonHistory') || '[]');
+
+		if (checkDuplicateInHistory(jsonText)) return;
+
+		const entry = {
+			timestamp: new Date().toISOString(),
+			text: jsonText,
+		};
+
+		history.unshift(entry);
+		const trimmedHistory = history.slice(0, 50);
+		localStorage.setItem('jsonHistory', JSON.stringify(trimmedHistory));
+		updateHistoryPicklist();
+	}
+
+	function checkDuplicateInHistory(jsonText) {
+		const history = JSON.parse(localStorage.getItem('jsonHistory') || '[]');
+		return history.some((entry) => entry.text === jsonText);
+	}
+
+	function clearHistory() {
+		localStorage.setItem('jsonHistory', JSON.stringify([]));
+		updateHistoryPicklist();
+	}
+
+	function updateHistoryPicklist() {
+		const history = JSON.parse(localStorage.getItem('jsonHistory') || '[]');
+		const picklist = document.getElementById('historyPicklist');
+
+		picklist.innerHTML = '<option disabled selected>JSON History</option>';
+
+		history.forEach((entry) => {
+			const date = new Date(entry.timestamp);
+			const dateString = `[${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())} ${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()}]`;
+			const textPreview = entry.text
+				? entry.text.substring(0, 80) + '...'
+				: '';
+			const option = new Option(
+				dateString + ' ' + textPreview,
+				JSON.stringify(entry)
+			);
+			picklist.add(option);
+		});
+	}
+
+	function pad(number) {
+		return number < 10 ? '0' + number : number;
+	}
+
+	function loadFromHistory(selectedValue) {
+		if (!selectedValue) return;
+
+		const entry = JSON.parse(selectedValue);
+		if (entry && entry.text) {
+			saveToUndoStack();
+			setEditorContent(entry.text);
+			currentValue = entry.text;
+			localStorage.setItem('textoJSON', entry.text);
+			validateJSON();
+		}
+	}
 </script>
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f6f9;
-    margin: 0;
-    padding: 20px;
-  }
+	button {
+		cursor: pointer;
+	}
 
-  h1 {
-    color: #0070d2;
-  }
+	button:active {
+		transform: scale(0.95);
+		transition: transform 0.2s ease-in-out;
+	}
 
-  .textarea-container,
-  .resultado-container {
-    margin-bottom: 20px;
-  }
+	/* ===== CODEMIRROR DARK THEME OVERRIDES ===== */
+	#jsonEditor .CodeMirror {
+		width: 100% !important;
+		height: auto !important;
+		background-color: #1f2937 !important;
+		color: #f3f4f6 !important;
+		font-family:
+			'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro',
+			monospace !important;
+		font-size: 14px !important;
+		line-height: 1.6 !important;
+		border: none;
+		border-radius: 8px;
+	}
 
-  textarea {
-    width: 99%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #d9d9d9;
-    border-radius: 4px;
-    height: 150px;
-    font-family: monospace;
-    resize: vertical;
-  }
+	#jsonEditor .CodeMirror-lines {
+		padding: 12px 0 !important;
+	}
 
-  button {
-    background-color: #0070d2;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 4px;
-    margin-right: 0.5em;
-  }
+	/* Ensure dark background for all CodeMirror elements */
+	#jsonEditor .CodeMirror,
+	#jsonEditor .CodeMirror-code,
+	#jsonEditor .CodeMirror-lines,
+	#jsonEditor .CodeMirror-wrap,
+	#jsonEditor .CodeMirror-scroll {
+		background-color: #1f2937 !important;
+	}
 
-  button:hover {
-    background-color: #005fb2;
-  }
+	#jsonEditor .CodeMirror-gutters {
+		background-color: #374151 !important;
+		border-right: 1px solid #4b5563 !important;
+	}
 
-  .panelControl label {
-    margin-right: 0.5em;
-  }
+	#jsonEditor .CodeMirror-linenumber {
+		color: #9ca3af !important;
+	}
 
-  .panelControl {
-    display: flex;
-    align-items: center;
-  }
+	#jsonEditor .CodeMirror-cursor {
+		border-left: 1px solid #f3f4f6 !important;
+	}
 
-  .panelControl p {
-    margin-right: 2em;
-    font-weight: bold;
-  }
+	#jsonEditor .CodeMirror-selected {
+		background-color: #2563eb !important;
+		opacity: 0.3;
+	}
 
-  .invalid {
-    color: rgb(255, 83, 83);
-    font-size: 10pt;
-  }
+	#jsonEditor .CodeMirror-focused .CodeMirror-selected {
+		background-color: #2563eb !important;
+		opacity: 0.4;
+	}
 
-  .valid {
-    color: rgb(0, 146, 0);
-    font-size: 10pt;
-  }
+	/* ===== JSON SYNTAX HIGHLIGHTING ===== */
+	.json-key {
+		color: #9cdcfe;
+	}
 
-  #historyPicklist {
-    height: 36px;
-    width: 200px;
-    margin-left: 1.5em;
-  }
+	.json-string {
+		color: #ce9178;
+	}
 
-  #clearHistoryButton {
-    color: gray;
-    cursor: pointer;
-    border-radius: 20%;
-    font-size: 0.85em;
-    padding: 0.3em;
-    margin-left: 0.7em;
-  }
+	.json-number {
+		color: #b5cea8;
+	}
 
-  #clearHistoryButton:hover {
-    background-color: #fbdada;
-    color: #ba0000;
-  }
+	.json-literal {
+		color: #569cd6;
+	}
 
-  .buscador-container {
-    display: flex;
-    align-items: center;
-    position: relative;
-  }
+	.search-highlight {
+		background-color: #fbbf24 !important;
+		color: #000 !important;
+		padding: 0 2px;
+		border-radius: 2px;
+	}
 
-  #buscador {
-    margin-left: 1.5em;
-    margin-right: 1.5em;
-    height: 30px;
-    width: 170px;
-    padding-right: 2.5em;
-    padding-left: 1em;
-  }
+	/* ===== CODEMIRROR FOLD FUNCTIONALITY ===== */
+	#jsonEditor .CodeMirror-foldmarker {
+		background-color: #2563eb !important;
+		color: white !important;
+		border: 1px solid #2563eb !important;
+		border-radius: 3px;
+		padding: 0 3px;
+		font-size: 11px;
+		margin: 0 2px;
+		cursor: pointer;
+	}
 
-  .contadorCoincidencias {
-    position: absolute;
-    margin-left: 16.5em;
-    font-size: 0.8rem;
-    color: rgb(121, 121, 121);
-    font-weight: 1;
-  }
+	#jsonEditor .CodeMirror-foldgutter {
+		width: 16px !important;
+	}
+
+	#jsonEditor .CodeMirror-foldgutter-open,
+	#jsonEditor .CodeMirror-foldgutter-folded {
+		cursor: pointer;
+		color: #9ca3af !important;
+		font-size: 14px !important;
+		text-align: center;
+		line-height: 1 !important;
+	}
+
+	#jsonEditor .CodeMirror-foldgutter-open:hover,
+	#jsonEditor .CodeMirror-foldgutter-folded:hover {
+		color: #f3f4f6 !important;
+		background-color: #4b5563 !important;
+	}
+
+	#jsonEditor .CodeMirror-foldgutter-open::after {
+		content: '▼';
+	}
+
+	#jsonEditor .CodeMirror-foldgutter-folded::after {
+		content: '▶';
+	}
+
+	/* ===== REMOVE SCROLLBARS ===== */
+	#jsonEditor .CodeMirror-scroll {
+		overflow: visible !important;
+		background-color: #1f2937 !important;
+	}
+
+	#jsonEditor .CodeMirror-vscrollbar,
+	#jsonEditor .CodeMirror-hscrollbar {
+		display: none !important;
+	}
+
+	#jsonEditor .CodeMirror-scrollbar-filler {
+		display: none !important;
+	}
+
+	/* ===== SVG ICON SIZING ===== */
+	svg {
+		width: 20px;
+		height: 20px;
+	}
+
+	/* ===== ANIMATION ===== */
+	@keyframes fadeInUp {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	.bg-gray-800,
+	#jsonEditor {
+		animation: fadeInUp 0.3s ease-out;
+	}
 </style>
