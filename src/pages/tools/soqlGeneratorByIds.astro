@@ -1,179 +1,272 @@
 ---
-import BasicLayout from "@/layouts/BasicLayout.astro";
+import BasicLayout from '@/layouts/BasicLayout.astro';
+import Copy from '@/components/icons/Copy2.astro';
+import Trash from '@/components/icons/Trash.astro';
 ---
 
 <BasicLayout title="Formateador IDs | Adrian Palomo">
-  <h1>Salesforce IDs formateador a SOQL</h1>
-  <div class="textarea-container">
-    <label for="textoEntrada">Pega los IDs aquí:</label>
-    <textarea id="textoEntrada"></textarea>
-  </div>
-  <div class="panelControl">
-    <p>Resultado</p>
-    <button onclick="copiarAlPortapapeles()">Copiar</button>
-    <button onclick="limpiarTexto()">Limpiar</button>
-    <input type="checkbox" id="separarPorComas" checked />
-    <label for="separarPorComas">Separar por comas</label>
-    <input type="checkbox" id="anadirComillaSimple" checked />
-    <label for="anadirComillaSimple">Añadir comilla simple</label>
-    <input type="checkbox" id="anadirParentesis" checked />
-    <label for="anadirParentesis">Añadir paréntesis</label>
-    <input type="checkbox" id="anadirIdIn" checked />
-    <label for="anadirIdIn">Añadir 'Id IN '</label>
-  </div>
-  <div class="resultado-container">
-    <p id="textoSalida"></p>
-  </div>
+	<div class="min-h-screen bg-gray-900 p-4 font-sans text-gray-100">
+		<!-- Header -->
+		<h1 class="mb-6 text-3xl font-bold text-blue-500">
+			Salesforce IDs Formateador a SOQL
+		</h1>
+
+		<!-- Control Panel -->
+		<div
+			class="mb-4 rounded-lg border border-gray-700 bg-gray-800 p-4 shadow-lg"
+		>
+			<!-- Input Section -->
+			<div class="mb-4">
+				<label
+					for="textoEntrada"
+					class="mb-2 block text-sm font-medium text-gray-300"
+					>Pega los IDs aquí:</label
+				>
+				<textarea
+					id="textoEntrada"
+					class="w-full rounded-md border border-gray-600 bg-gray-700 p-3 font-mono text-sm text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+					rows="8"
+					placeholder="Pega aquí tus IDs de Salesforce..."></textarea>
+			</div>
+
+			<!-- Toggle Options -->
+			<div class="flex flex-wrap items-center gap-4">
+				<label class="flex cursor-pointer items-center gap-2">
+					<input
+						type="checkbox"
+						id="separarPorComas"
+						checked
+						class="h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-600 focus:ring-2 focus:ring-blue-500"
+					/>
+					<span class="text-sm text-gray-300">Separar por comas</span>
+				</label>
+				<label class="flex cursor-pointer items-center gap-2">
+					<input
+						type="checkbox"
+						id="anadirComillaSimple"
+						checked
+						class="h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-600 focus:ring-2 focus:ring-blue-500"
+					/>
+					<span class="text-sm text-gray-300"
+						>Añadir comilla simple</span
+					>
+				</label>
+				<label class="flex cursor-pointer items-center gap-2">
+					<input
+						type="checkbox"
+						id="anadirParentesis"
+						checked
+						class="h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-600 focus:ring-2 focus:ring-blue-500"
+					/>
+					<span class="text-sm text-gray-300">Añadir paréntesis</span>
+				</label>
+				<label class="flex cursor-pointer items-center gap-2">
+					<input
+						type="checkbox"
+						id="anadirIdIn"
+						checked
+						class="h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-600 focus:ring-2 focus:ring-blue-500"
+					/>
+					<span class="text-sm text-gray-300">Añadir 'Id IN '</span>
+				</label>
+			</div>
+		</div>
+
+		<!-- Result Toolbar -->
+		<div
+			class="flex flex-wrap items-center justify-between gap-4 border-b border-gray-700 bg-gray-800 px-5 py-4"
+		>
+			<div class="flex items-center gap-3">
+				<p class="font-bold text-gray-300">Resultado</p>
+				<button
+					id="copyButton"
+					class="rounded-md bg-gray-600 p-2 text-gray-100 transition-colors hover:bg-gray-500"
+					title="Copiar"
+				>
+					<Copy />
+				</button>
+				<button
+					id="clearButton"
+					class="rounded-md bg-gray-600 p-2 text-gray-100 transition-colors hover:bg-gray-500"
+					title="Limpiar"
+				>
+					<Trash />
+				</button>
+			</div>
+		</div>
+
+		<!-- Result Output -->
+		<div class="mt-4 rounded-lg border border-gray-700 bg-gray-800">
+			<pre
+				class="overflow-x-auto rounded-lg bg-gray-800 p-4">
+				<code id="textoSalida" class="block font-mono text-sm text-gray-100" style="white-space: pre-wrap; word-wrap: break-word;" />
+			</pre>
+		</div>
+	</div>
 </BasicLayout>
 
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f6f9;
-    margin: 0;
-    padding: 20px;
-  }
+	/* General Styles */
+	button {
+		cursor: pointer;
+	}
 
-  h1 {
-    color: #0070d2;
-  }
+	button:active {
+		transform: scale(0.95);
+		transition: transform 0.2s ease-in-out;
+	}
 
-  .textarea-container,
-  .resultado-container {
-    margin-bottom: 20px;
-  }
+	/* SVG Icon Sizing */
+	svg {
+		width: 20px;
+		height: 20px;
+	}
 
-  textarea {
-    width: 99%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #d9d9d9;
-    border-radius: 4px;
-    height: 150px;
-    font-family: monospace;
-    resize: vertical;
-  }
+	/* Code Styling */
+	code {
+		display: block;
+		width: 100%;
+		min-height: 60px;
+	}
 
-  button {
-    background-color: #0070d2;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 4px;
-    margin-right: 0.5em;
-  }
+	pre {
+		margin: 0;
+		background-color: #1f2937 !important;
+	}
 
-  button:hover {
-    background-color: #005fb2;
-  }
+	/* Animation */
+	@keyframes fadeInUp {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
 
-  #textoSalida {
-    padding: 10px;
-    background-color: white;
-    border: 1px solid #d9d9d9;
-    border-radius: 4px;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-  }
+	.bg-gray-800 {
+		animation: fadeInUp 0.3s ease-out;
+	}
 
-  .panelControl {
-    display: flex;
-    align-items: center;
-  }
+	/* Custom Scrollbar */
+	pre::-webkit-scrollbar {
+		height: 8px;
+		width: 8px;
+	}
 
-  .panelControl p {
-    margin-right: 2em;
-    font-weight: bold;
-  }
+	pre::-webkit-scrollbar-track {
+		background: #374151;
+		border-radius: 4px;
+	}
 
-  .panelControl label {
-    margin-right: 0.5em;
-  }
+	pre::-webkit-scrollbar-thumb {
+		background: #4b5563;
+		border-radius: 4px;
+	}
+
+	pre::-webkit-scrollbar-thumb:hover {
+		background: #6b7280;
+	}
 </style>
 <script type="module" is:inline>
-  function procesarTexto() {
-    const input = document.getElementById("textoEntrada").value;
-    const separarPorComas = document.getElementById("separarPorComas").checked;
-    const anadirComillaSimple = document.getElementById(
-      "anadirComillaSimple"
-    ).checked;
-    const anadirParentesis =
-      document.getElementById("anadirParentesis").checked;
-    const anadirIdIn = document.getElementById("anadirIdIn").checked;
-    const separador = separarPorComas ? ", " : " ";
+	function procesarTexto() {
+		const input = document.getElementById('textoEntrada').value;
+		const separarPorComas =
+			document.getElementById('separarPorComas').checked;
+		const anadirComillaSimple = document.getElementById(
+			'anadirComillaSimple'
+		).checked;
+		const anadirParentesis =
+			document.getElementById('anadirParentesis').checked;
+		const anadirIdIn = document.getElementById('anadirIdIn').checked;
+		const separador = separarPorComas ? ', ' : ' ';
 
-    let lineas = input.trim().split("\n");
-    let ids = [];
+		let lineas = input.trim().split('\n');
+		let ids = [];
 
-    lineas.forEach((linea) => {
-      let palabras = linea.split(/[\s,;"'`\t]+/);
-      palabras.forEach((palabra) => {
-        if (/^[a-zA-Z0-9]{15,18}$/.test(palabra)) {
-          ids.push(palabra);
-          localStorage.setItem("textoIds", input);
-        }
-      });
-    });
+		lineas.forEach((linea) => {
+			let palabras = linea.split(/[\s,;"'`\t]+/);
+			palabras.forEach((palabra) => {
+				if (/^[a-zA-Z0-9]{15,18}$/.test(palabra)) {
+					ids.push(palabra);
+					localStorage.setItem('textoIds', input);
+				}
+			});
+		});
 
-    ids = [...new Set(ids)];
+		ids = [...new Set(ids)];
 
-    if (anadirComillaSimple) {
-      ids = ids.map((id) => `'${id}'`);
-    }
+		if (anadirComillaSimple) {
+			ids = ids.map((id) => `'${id}'`);
+		}
 
-    let resultado = ids.join(separador);
-    if (anadirParentesis) {
-      resultado = `(${resultado})`;
-    }
-    if (anadirIdIn) {
-      resultado = `Id IN ${resultado}`;
-    }
+		let resultado = ids.join(separador);
+		if (anadirParentesis) {
+			resultado = `(${resultado})`;
+		}
+		if (anadirIdIn) {
+			resultado = `Id IN ${resultado}`;
+		}
 
-    document.getElementById("textoSalida").textContent = resultado;
-  }
+		document.getElementById('textoSalida').textContent = resultado;
+	}
 
-  function copiarAlPortapapeles() {
-    const elemento = document.createElement("textarea");
-    elemento.value = document.getElementById("textoSalida").textContent;
-    document.body.appendChild(elemento);
-    elemento.select();
-    document.execCommand("copy");
-    document.body.removeChild(elemento);
-  }
+	function copiarAlPortapapeles() {
+		const texto = document.getElementById('textoSalida').textContent;
 
-  function limpiarTexto() {
-    document.getElementById("textoEntrada").value = "";
-    document.getElementById("textoSalida").textContent = "";
-    localStorage.setItem("textoIds", "");
-  }
+		if (navigator.clipboard) {
+			navigator.clipboard.writeText(texto).then(() => {
+				// Feedback visual temporal
+				console.log('Copiado al portapapeles');
+			});
+		} else {
+			// Fallback para navegadores antiguos
+			const elemento = document.createElement('textarea');
+			elemento.value = texto;
+			document.body.appendChild(elemento);
+			elemento.select();
+			document.execCommand('copy');
+			document.body.removeChild(elemento);
+		}
+	}
 
-  document.addEventListener("DOMContentLoaded", function () {
-    document
-      .getElementById("textoEntrada")
-      .addEventListener("input", procesarTexto);
-    document
-      .getElementById("separarPorComas")
-      .addEventListener("change", procesarTexto);
-    document
-      .getElementById("anadirComillaSimple")
-      .addEventListener("change", procesarTexto);
-    document
-      .getElementById("anadirParentesis")
-      .addEventListener("change", procesarTexto);
-    document
-      .getElementById("anadirIdIn")
-      .addEventListener("change", procesarTexto);
+	function limpiarTexto() {
+		document.getElementById('textoEntrada').value = '';
+		document.getElementById('textoSalida').textContent = '';
+		localStorage.setItem('textoIds', '');
+	}
 
-    var textoGuardado = localStorage.getItem("textoIds");
-    if (textoGuardado) {
-      document.getElementById("textoEntrada").value = textoGuardado;
-      procesarTexto();
-    }
-  });
+	document.addEventListener('DOMContentLoaded', function () {
+		document
+			.getElementById('textoEntrada')
+			.addEventListener('input', procesarTexto);
+		document
+			.getElementById('separarPorComas')
+			.addEventListener('change', procesarTexto);
+		document
+			.getElementById('anadirComillaSimple')
+			.addEventListener('change', procesarTexto);
+		document
+			.getElementById('anadirParentesis')
+			.addEventListener('change', procesarTexto);
+		document
+			.getElementById('anadirIdIn')
+			.addEventListener('change', procesarTexto);
+
+		// Event listeners para los botones
+		document
+			.getElementById('copyButton')
+			.addEventListener('click', copiarAlPortapapeles);
+		document
+			.getElementById('clearButton')
+			.addEventListener('click', limpiarTexto);
+
+		var textoGuardado = localStorage.getItem('textoIds');
+		if (textoGuardado) {
+			document.getElementById('textoEntrada').value = textoGuardado;
+			procesarTexto();
+		}
+	});
 </script>
