@@ -147,9 +147,28 @@ const defaultAssets = [
 						{
 							defaultAssets.map((asset) => (
 								<div
-									class="rounded-lg border border-gray-700 bg-gray-800 p-3 shadow-md sm:p-4"
+									class="relative rounded-lg border border-gray-700 bg-gray-800 p-3 shadow-md sm:p-4"
 									data-row
 								>
+									<button
+										type="button"
+										data-action="delete-row"
+										class="absolute top-2 right-2 rounded-md p-1.5 text-gray-400 transition-colors hover:bg-red-600/20 hover:text-red-400 focus:ring-2 focus:ring-red-500 focus:outline-none"
+										title="Eliminar activo"
+									>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											class="h-5 w-5"
+											viewBox="0 0 20 20"
+											fill="currentColor"
+										>
+											<path
+												fill-rule="evenodd"
+												d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+												clip-rule="evenodd"
+											/>
+										</svg>
+									</button>
 									<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-5">
 										<div class="flex flex-col gap-2">
 											<label class="text-sm font-medium text-gray-300">
@@ -267,9 +286,27 @@ const defaultAssets = [
 
 					<template id="row-template">
 						<div
-							class="rounded-lg border border-gray-700 bg-gray-800 p-3 shadow-md sm:p-4"
+							class="relative rounded-lg border border-gray-700 bg-gray-800 p-3 shadow-md sm:p-4"
 							data-row
 						>
+							<button
+								type="button"
+								data-action="delete-row"
+								class="absolute top-2 right-2 rounded-md p-1.5 text-gray-400 transition-colors hover:bg-red-600/20 hover:text-red-400 focus:ring-2 focus:ring-red-500 focus:outline-none"
+								title="Eliminar activo"
+							>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="h-5 w-5"
+									viewBox="0 0 20 20"
+									fill="currentColor"
+								>
+									<path
+										fill-rule="evenodd"
+										d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+										clip-rule="evenodd"></path>
+								</svg>
+							</button>
 							<div
 								class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-5"
 							>
@@ -568,6 +605,14 @@ const defaultAssets = [
 					autoCalculate();
 				});
 			});
+
+			// Manejar el botón de eliminar
+			const deleteBtn = row.querySelector('[data-action="delete-row"]');
+			if (deleteBtn) {
+				deleteBtn.addEventListener('click', () => {
+					deleteRow(row);
+				});
+			}
 		};
 
 		const initialRows = rowsContainer.querySelectorAll('[data-row]');
@@ -581,6 +626,24 @@ const defaultAssets = [
 			rowsContainer.appendChild(fragment);
 			initializeRow(row);
 			updateCurrentDistribution();
+			saveFormState();
+		};
+
+		const deleteRow = (row) => {
+			const allRows = rowsContainer.querySelectorAll('[data-row]');
+
+			// Si es la única fila, eliminarla y crear una vacía
+			if (allRows.length === 1) {
+				row.remove();
+				createRow();
+			} else {
+				// Si hay más filas, simplemente eliminar
+				row.remove();
+			}
+
+			updateCurrentDistribution();
+			saveFormState();
+			autoCalculate();
 		};
 
 		addRowBtn.addEventListener('click', createRow);
