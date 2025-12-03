@@ -1,0 +1,1229 @@
+---
+import BasicLayout from '@/layouts/BasicLayout.astro';
+
+const defaultAssets = [
+	{
+		id: 'msci',
+		name: 'MSCI World',
+		current: null,
+		price: null,
+		target: 60,
+		wholeUnits: false,
+	},
+	{
+		id: 'emergentes',
+		name: 'Mercados emergentes',
+		current: null,
+		price: null,
+		target: 10,
+		wholeUnits: false,
+	},
+	{
+		id: 'btc',
+		name: 'BTC',
+		current: null,
+		price: null,
+		target: 15,
+		wholeUnits: true,
+	},
+	{
+		id: 'oro',
+		name: 'Oro',
+		current: null,
+		price: null,
+		target: 15,
+		wholeUnits: true,
+	},
+];
+---
+
+<BasicLayout title="Calculadora de Inversión | Adrian Palomo">
+	<div
+		class="min-h-screen bg-gray-900 px-3 py-4 font-sans text-gray-100 sm:px-4 md:px-6 lg:px-8"
+	>
+		<h1 class="mb-4 text-2xl font-bold text-blue-500 sm:mb-6 sm:text-3xl">
+			Calculadora de Inversión
+		</h1>
+
+		<div class="mx-auto w-full">
+			<div
+				class="mb-4 rounded-lg border border-gray-700 bg-gray-800 p-4 shadow-lg sm:mb-6 sm:p-6"
+			>
+				<div class="mb-4">
+					<p class="text-sm text-gray-300 sm:text-base">
+						Ajusta los pesos objetivo, define si puedes comprar
+						fracciones y establece un presupuesto y un margen de
+						tolerancia para evitar rebalanceos excesivos.
+					</p>
+				</div>
+
+				<form id="allocation-form" novalidate>
+					<div
+						class="mb-4 grid grid-cols-1 gap-3 sm:mb-6 sm:gap-4 md:grid-cols-2"
+					>
+						<div
+							class="rounded-lg border border-blue-500/30 bg-blue-950/30 p-4"
+						>
+							<label
+								for="budget"
+								class="mb-2 block text-sm font-medium text-gray-300"
+							>
+								Dinero disponible (&euro;)
+							</label>
+							<input
+								id="budget"
+								name="budget"
+								type="number"
+								min="0"
+								step="0.01"
+								placeholder="Ej. 500"
+								class="w-full rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+							/>
+							<small class="mt-2 block text-xs text-blue-400">
+								Déjalo vacío para obtener la aportación mínima
+								sin límite.
+							</small>
+						</div>
+						<div
+							class="rounded-lg border border-blue-500/30 bg-blue-950/30 p-4"
+						>
+							<label
+								for="margin"
+								class="mb-2 block text-sm font-medium text-gray-300"
+							>
+								Margen de error (+/- %)
+							</label>
+							<input
+								id="margin"
+								name="margin"
+								type="number"
+								min="0"
+								max="20"
+								step="0.1"
+								value="1"
+								class="w-full rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+							/>
+							<small class="mt-2 block text-xs text-blue-400">
+								Evita perseguir el porcentaje exacto; permite
+								una banda segura.
+							</small>
+						</div>
+					</div>
+
+					<div
+						class="mb-4 rounded-lg border border-gray-700 bg-gray-800/50 p-4 sm:mb-6 sm:p-5"
+					>
+						<div
+							class="mb-3 flex flex-col gap-2 sm:mb-4 sm:flex-row sm:items-center sm:justify-between"
+						>
+							<h2
+								class="text-lg font-semibold text-gray-100 sm:text-xl"
+							>
+								Reparto actual
+							</h2>
+							<span
+								id="current-total-label"
+								class="text-base font-bold text-blue-400 sm:text-lg"
+								>-</span
+							>
+						</div>
+						<ul
+							id="current-distribution"
+							class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3"
+						>
+							<li
+								class="rounded-lg border border-dashed border-gray-600 bg-gray-700/30 px-3 py-2 text-sm text-gray-400"
+							>
+								Introduce los valores actuales para ver el
+								reparto porcentual.
+							</li>
+						</ul>
+					</div>
+
+					<div
+						class="mb-4 space-y-3 sm:mb-6 sm:space-y-4"
+						id="rows-container"
+					>
+						{
+							defaultAssets.map((asset) => (
+								<div
+									class="rounded-lg border border-gray-700 bg-gray-800 p-3 shadow-md sm:p-4"
+									data-row
+								>
+									<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-5">
+										<div class="flex flex-col gap-2">
+											<label class="text-sm font-medium text-gray-300">
+												Activo
+											</label>
+											<input
+												data-field="name"
+												type="text"
+												required
+												value={asset.name}
+												class="rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-sm text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+											/>
+										</div>
+
+										<div class="flex flex-col gap-2">
+											<label class="text-sm font-medium text-gray-300">
+												Valor actual (&euro;)
+											</label>
+											<input
+												data-field="current"
+												type="number"
+												min="0"
+												step="0.01"
+												required
+												value={asset.current}
+												class="rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-sm text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+											/>
+										</div>
+
+										<div
+											class="flex flex-col gap-2"
+											data-price-wrapper
+										>
+											<label class="text-sm font-medium text-gray-300">
+												Precio unidad (&euro;)
+											</label>
+											<input
+												data-field="price"
+												type="number"
+												min="0"
+												step="0.01"
+												value={asset.price || ''}
+												disabled={!asset.wholeUnits}
+												class="rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-sm text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+											/>
+										</div>
+
+										<div class="flex flex-col gap-2">
+											<label class="text-sm font-medium text-gray-300">
+												¿Solo unidades completas?
+											</label>
+											<button
+												type="button"
+												role="switch"
+												data-field="whole"
+												aria-checked={
+													asset.wholeUnits
+														? 'true'
+														: 'false'
+												}
+												aria-label={`Activar unidades completas para ${asset.name}`}
+												class={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-none ${asset.wholeUnits ? 'bg-blue-600' : 'bg-gray-600'}`}
+											>
+												<span
+													class={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${asset.wholeUnits ? 'translate-x-7' : 'translate-x-1'}`}
+												/>
+											</button>
+										</div>
+
+										<div class="flex flex-col gap-2">
+											<label class="text-sm font-medium text-gray-300">
+												Objetivo (%)
+											</label>
+											<input
+												data-field="target"
+												type="number"
+												min="0"
+												max="100"
+												step="0.1"
+												required
+												value={asset.target}
+												class="rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-sm text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+											/>
+										</div>
+									</div>
+								</div>
+							))
+						}
+					</div>
+
+					<button
+						type="button"
+						id="add-row-btn"
+						class="mb-3 rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-600 sm:mb-4 sm:px-6"
+					>
+						+ Añadir activo
+					</button>
+
+					<p class="mb-4 text-sm text-gray-400">
+						Activa el toggle cuando solo puedas comprar unidades
+						completas; el campo de precio se habilitará
+						automáticamente. Los cálculos se actualizan en tiempo
+						real.
+					</p>
+
+					<div class="flex flex-wrap gap-3">
+						<button
+							id="reset-btn"
+							type="button"
+							class="rounded-md border border-gray-600 bg-gray-700 px-6 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-600 sm:px-8 sm:py-3"
+						>
+							Restablecer
+						</button>
+					</div>
+
+					<template id="row-template">
+						<div
+							class="rounded-lg border border-gray-700 bg-gray-800 p-3 shadow-md sm:p-4"
+							data-row
+						>
+							<div
+								class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-5"
+							>
+								<div class="flex flex-col gap-2">
+									<label
+										class="text-sm font-medium text-gray-300"
+									>
+										Activo
+									</label>
+									<input
+										data-field="name"
+										type="text"
+										required
+										class="rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-sm text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+									/>
+								</div>
+
+								<div class="flex flex-col gap-2">
+									<label
+										class="text-sm font-medium text-gray-300"
+									>
+										Valor actual (&euro;)
+									</label>
+									<input
+										data-field="current"
+										type="number"
+										min="0"
+										step="0.01"
+										required
+										class="rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-sm text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+									/>
+								</div>
+
+								<div
+									class="flex flex-col gap-2"
+									data-price-wrapper
+								>
+									<label
+										class="text-sm font-medium text-gray-300"
+									>
+										Precio unidad (&euro;)
+									</label>
+									<input
+										data-field="price"
+										type="number"
+										min="0"
+										step="0.01"
+										disabled
+										class="rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-sm text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+									/>
+								</div>
+
+								<div class="flex flex-col gap-2">
+									<label
+										class="text-sm font-medium text-gray-300"
+									>
+										¿Solo unidades completas?
+									</label>
+									<button
+										type="button"
+										role="switch"
+										data-field="whole"
+										aria-checked="false"
+										aria-label="Activar unidades completas"
+										class="relative inline-flex h-8 w-14 items-center rounded-full bg-gray-600 transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-none"
+									>
+										<span
+											class="inline-block h-6 w-6 translate-x-1 transform rounded-full bg-white transition-transform"
+										></span>
+									</button>
+								</div>
+
+								<div class="flex flex-col gap-2">
+									<label
+										class="text-sm font-medium text-gray-300"
+									>
+										Objetivo (%)
+									</label>
+									<input
+										data-field="target"
+										type="number"
+										min="0"
+										max="100"
+										step="0.1"
+										required
+										class="rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-sm text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+									/>
+								</div>
+							</div>
+						</div>
+					</template>
+				</form>
+
+				<div
+					id="results"
+					class="mt-4 space-y-4 sm:mt-6 sm:space-y-6"
+					hidden
+				>
+					<div
+						id="summary"
+						class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3"
+					>
+					</div>
+
+					<p
+						id="advice"
+						class="rounded-lg border border-blue-500/30 bg-blue-950/30 p-3 text-sm text-gray-200 sm:p-4 sm:text-base"
+					>
+					</p>
+
+					<div
+						class="overflow-x-auto rounded-lg border border-gray-700 bg-gray-800"
+					>
+						<table class="w-full">
+							<thead class="border-b border-gray-700 bg-gray-900">
+								<tr>
+									<th
+										class="px-3 py-2 text-left text-xs font-medium text-gray-300 sm:px-4 sm:py-3 sm:text-sm"
+										>Activo</th
+									>
+									<th
+										class="px-3 py-2 text-left text-xs font-medium text-gray-300 sm:px-4 sm:py-3 sm:text-sm"
+										>Actual</th
+									>
+									<th
+										class="px-3 py-2 text-left text-xs font-medium text-gray-300 sm:px-4 sm:py-3 sm:text-sm"
+										>Objetivo</th
+									>
+									<th
+										class="px-3 py-2 text-left text-xs font-medium text-gray-300 sm:px-4 sm:py-3 sm:text-sm"
+										>Aportar</th
+									>
+									<th
+										class="px-3 py-2 text-left text-xs font-medium text-gray-300 sm:px-4 sm:py-3 sm:text-sm"
+										>Unid.</th
+									>
+									<th
+										class="px-3 py-2 text-left text-xs font-medium text-gray-300 sm:px-4 sm:py-3 sm:text-sm"
+										>% final</th
+									>
+								</tr>
+							</thead>
+							<tbody
+								id="results-body"
+								class="divide-y divide-gray-700"></tbody>
+						</table>
+					</div>
+				</div>
+
+				<p
+					id="error"
+					class="mt-4 rounded-lg border border-red-500/50 bg-red-950/30 p-3 text-sm text-red-400 sm:mt-6 sm:p-4"
+					role="alert"
+					hidden
+				>
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<script type="module" define:vars={{ defaultAssets }}>
+		const initialAssets = defaultAssets;
+		const form = document.querySelector('#allocation-form');
+		const rowsContainer = document.querySelector('#rows-container');
+		const rowTemplate = document.querySelector('#row-template');
+		const addRowBtn = document.querySelector('#add-row-btn');
+		const budgetInput = document.querySelector('#budget');
+		const marginInput = document.querySelector('#margin');
+		const distributionList = document.querySelector(
+			'#current-distribution'
+		);
+		const currentTotalLabel = document.querySelector(
+			'#current-total-label'
+		);
+		const resultsSection = document.querySelector('#results');
+		const summaryEl = document.querySelector('#summary');
+		const adviceEl = document.querySelector('#advice');
+		const tbody = document.querySelector('#results-body');
+		const errorBox = document.querySelector('#error');
+		const resetBtn = document.querySelector('#reset-btn');
+
+		const numberFormatter = new Intl.NumberFormat('es-ES', {
+			style: 'currency',
+			currency: 'EUR',
+			minimumFractionDigits: 2,
+		});
+
+		const percentFormatter = new Intl.NumberFormat('es-ES', {
+			style: 'percent',
+			minimumFractionDigits: 2,
+			maximumFractionDigits: 2,
+		});
+
+		const unitFormatter = new Intl.NumberFormat('es-ES', {
+			minimumFractionDigits: 2,
+			maximumFractionDigits: 4,
+		});
+
+		const marginNumberFormatter = new Intl.NumberFormat('es-ES', {
+			minimumFractionDigits: 0,
+			maximumFractionDigits: 2,
+		});
+
+		const clamp = (value, min = 0, max = 1) =>
+			Math.min(Math.max(value, min), max);
+
+		const sanitize = (value) => {
+			if (typeof value !== 'string') return 0;
+			return Number(value.replace(',', '.')) || 0;
+		};
+
+		const getMarginValue = () => {
+			const raw = marginInput.value.trim();
+			const fallback = raw === '' ? 1 : sanitize(raw);
+			return Math.max(0, fallback);
+		};
+
+		const getMarginFraction = () => getMarginValue() / 100;
+
+		const initializeRow = (row, data = {}) => {
+			const inputMap = {
+				name: row.querySelector('[data-field="name"]'),
+				current: row.querySelector('[data-field="current"]'),
+				price: row.querySelector('[data-field="price"]'),
+				target: row.querySelector('[data-field="target"]'),
+				whole: row.querySelector('[data-field="whole"]'),
+			};
+
+			if (data.name) inputMap.name.value = data.name;
+			if (typeof data.current !== 'undefined')
+				inputMap.current.value = data.current;
+			if (typeof data.price !== 'undefined' && data.price !== 0)
+				inputMap.price.value = data.price;
+			if (typeof data.target !== 'undefined')
+				inputMap.target.value = data.target;
+
+			// Inicializar estado del toggle
+			const isChecked = Boolean(data.wholeUnits);
+			inputMap.whole.setAttribute('aria-checked', isChecked);
+			if (isChecked) {
+				inputMap.whole.classList.remove('bg-gray-600');
+				inputMap.whole.classList.add('bg-blue-600');
+				inputMap.whole
+					.querySelector('span')
+					.classList.remove('translate-x-1');
+				inputMap.whole
+					.querySelector('span')
+					.classList.add('translate-x-7');
+			}
+
+			const updatePriceState = () => {
+				const enabled =
+					inputMap.whole.getAttribute('aria-checked') === 'true';
+				inputMap.price.disabled = !enabled;
+				inputMap.price.required = enabled;
+			};
+
+			// Manejar click en el toggle
+			inputMap.whole.addEventListener('click', () => {
+				const isChecked =
+					inputMap.whole.getAttribute('aria-checked') === 'true';
+				const newState = !isChecked;
+
+				inputMap.whole.setAttribute('aria-checked', newState);
+				if (newState) {
+					inputMap.whole.classList.remove('bg-gray-600');
+					inputMap.whole.classList.add('bg-blue-600');
+					inputMap.whole
+						.querySelector('span')
+						.classList.remove('translate-x-1');
+					inputMap.whole
+						.querySelector('span')
+						.classList.add('translate-x-7');
+				} else {
+					inputMap.whole.classList.remove('bg-blue-600');
+					inputMap.whole.classList.add('bg-gray-600');
+					inputMap.whole
+						.querySelector('span')
+						.classList.remove('translate-x-7');
+					inputMap.whole
+						.querySelector('span')
+						.classList.add('translate-x-1');
+				}
+
+				updatePriceState();
+				saveFormState();
+				autoCalculate();
+			});
+
+			updatePriceState();
+
+			row.querySelectorAll('input').forEach((input) => {
+				input.addEventListener('input', () => {
+					window.requestAnimationFrame(updateCurrentDistribution);
+					saveFormState();
+					autoCalculate();
+				});
+			});
+		};
+
+		const initialRows = rowsContainer.querySelectorAll('[data-row]');
+		initialRows.forEach((row, index) =>
+			initializeRow(row, initialAssets[index] ?? {})
+		);
+
+		const createRow = () => {
+			const fragment = rowTemplate.content.cloneNode(true);
+			const row = fragment.querySelector('[data-row]');
+			rowsContainer.appendChild(fragment);
+			initializeRow(row);
+			updateCurrentDistribution();
+		};
+
+		addRowBtn.addEventListener('click', createRow);
+
+		const getRows = ({ strict = true } = {}) =>
+			[...rowsContainer.querySelectorAll('[data-row]')].map(
+				(row, index) => {
+					const nameField = row.querySelector('[data-field="name"]');
+					const currentField = row.querySelector(
+						'[data-field="current"]'
+					);
+					const priceField = row.querySelector(
+						'[data-field="price"]'
+					);
+					const targetField = row.querySelector(
+						'[data-field="target"]'
+					);
+					const wholeToggle = row.querySelector(
+						'[data-field="whole"]'
+					);
+
+					const name =
+						nameField.value.trim() || `Activo ${index + 1}`;
+					const current = sanitize(currentField.value);
+					const target = sanitize(targetField.value);
+					const wholeUnits =
+						wholeToggle.getAttribute('aria-checked') === 'true';
+					const price = wholeUnits
+						? sanitize(priceField.value)
+						: sanitize(priceField.value) || 0;
+
+					if (strict) {
+						if (current < 0 || target < 0) {
+							throw new Error(
+								'Los importes y objetivos deben ser iguales o mayores que 0.'
+							);
+						}
+
+						if (wholeUnits && price <= 0) {
+							throw new Error(
+								`Define un precio por unidad válido para ${name}.`
+							);
+						}
+					}
+
+					return {
+						name,
+						current,
+						price: price > 0 ? price : 0,
+						target,
+						wholeUnits,
+					};
+				}
+			);
+
+		const updateCurrentDistribution = () => {
+			try {
+				const rows = getRows({ strict: false });
+				const total = rows.reduce(
+					(sum, asset) => sum + asset.current,
+					0
+				);
+				if (total <= 0) {
+					currentTotalLabel.textContent = '-';
+					distributionList.innerHTML =
+						'<li class="rounded-lg border border-dashed border-gray-600 bg-gray-700/30 px-3 py-2 text-sm text-gray-400">Introduce los importes para ver el reparto.</li>';
+					return;
+				}
+
+				currentTotalLabel.textContent = numberFormatter.format(total);
+				distributionList.innerHTML = rows
+					.map(
+						(asset) => `
+						<li class="flex items-center justify-between rounded-lg border border-gray-700 bg-gray-700/50 px-3 py-2 text-sm">
+							<strong class="text-gray-200">${asset.name}</strong>
+							<span class="font-medium text-blue-400">${percentFormatter.format(asset.current / total)}</span>
+						</li>
+					`
+					)
+					.join('');
+			} catch (error) {
+				// Ignorar errores en modo no estricto
+			}
+		};
+
+		updateCurrentDistribution();
+
+		const normalizeTargets = (assets, marginFraction) => {
+			const sumTargets = assets.reduce(
+				(sum, asset) => sum + asset.target,
+				0
+			);
+			if (sumTargets <= 0) {
+				throw new Error('La suma de objetivos debe ser mayor que 0 %.');
+			}
+
+			return assets.map((asset) => {
+				const weight = asset.target / sumTargets;
+				const minShare = clamp(weight - marginFraction, 0, 1);
+				const maxShare = clamp(weight + marginFraction, 0, 1);
+				if (maxShare <= 0 && asset.current > 0) {
+					throw new Error(
+						`El margen no permite mantener ${asset.name} sin vender.`
+					);
+				}
+				return { ...asset, weight, minShare, maxShare };
+			});
+		};
+
+		const ensureOverweightConstraint = (assets, total) =>
+			assets.every((asset) => {
+				if (asset.maxShare <= 0) {
+					return asset.current <= 1e-6;
+				}
+				return asset.current <= asset.maxShare * total + 1e-6;
+			});
+
+		const minimalContribution = (assets) => {
+			const marginFraction = getMarginFraction();
+			const normalized = normalizeTargets(assets, marginFraction);
+			const currentTotal = normalized.reduce(
+				(sum, asset) => sum + asset.current,
+				0
+			);
+
+			const minTotalFromOverweight = normalized.reduce((max, asset) => {
+				if (asset.maxShare <= 0) {
+					return asset.current <= 0 ? max : Infinity;
+				}
+				return Math.max(max, asset.current / asset.maxShare);
+			}, currentTotal);
+
+			let low = Math.max(currentTotal, minTotalFromOverweight);
+			let high = Number.isFinite(low) ? low : currentTotal + 1;
+
+			const requiredAddition = (total) =>
+				normalized.reduce((sum, asset) => {
+					const targetValue = asset.minShare * total;
+					return sum + Math.max(0, targetValue - asset.current);
+				}, 0);
+
+			const feasible = (total) => {
+				if (!Number.isFinite(total)) return false;
+				if (!ensureOverweightConstraint(normalized, total))
+					return false;
+				const additions = requiredAddition(total);
+				return currentTotal + additions <= total + 1e-6;
+			};
+
+			if (!feasible(high)) {
+				while (!feasible(high)) {
+					high *= 2;
+					if (high > 1e12) {
+						throw new Error(
+							'No se puede alcanzar la distribución con el margen indicado.'
+						);
+					}
+				}
+			}
+
+			for (let i = 0; i < 60; i++) {
+				const mid = (low + high) / 2;
+				if (feasible(mid)) {
+					high = mid;
+				} else {
+					low = mid;
+				}
+			}
+
+			const finalTotal = high;
+			const breakdown = normalized.map((asset) => {
+				const desired = Math.max(
+					asset.current,
+					asset.minShare * finalTotal
+				);
+				const addition = Math.max(0, desired - asset.current);
+				const units = asset.price > 0 ? addition / asset.price : 0;
+				return { ...asset, desired, addition, units };
+			});
+
+			const invested = breakdown.reduce(
+				(sum, asset) => sum + asset.addition,
+				0
+			);
+			return {
+				breakdown,
+				totals: {
+					mode: 'minimal',
+					currentTotal,
+					finalTotal,
+					invested,
+				},
+			};
+		};
+
+		const allocateWithBudget = (assets, budget) => {
+			const marginFraction = getMarginFraction();
+			const normalized = normalizeTargets(assets, marginFraction);
+			const currentTotal = normalized.reduce(
+				(sum, asset) => sum + asset.current,
+				0
+			);
+			const finalTotal = currentTotal + budget;
+
+			let warning = null;
+
+			// Verificar si hay activos sobreponderados
+			if (!ensureOverweightConstraint(normalized, finalTotal)) {
+				// En lugar de error, calculamos el mínimo necesario
+				const minimalResult = minimalContribution(assets);
+				warning = {
+					type: 'overweight',
+					message: `⚠️ Con el presupuesto actual (${numberFormatter.format(budget)}) algunos activos quedarían sobreponderados. Se necesitarían al menos ${numberFormatter.format(minimalResult.totals.invested)} para mantener el balance dentro del margen.`,
+					minRequired: minimalResult.totals.invested,
+				};
+			}
+
+			const lowerBounds = normalized.map((asset) =>
+				Math.max(asset.current, asset.minShare * finalTotal)
+			);
+			const upperBounds = normalized.map((asset, index) =>
+				Math.max(lowerBounds[index], asset.maxShare * finalTotal)
+			);
+
+			const sumLower = lowerBounds.reduce((sum, value) => sum + value, 0);
+			if (sumLower - finalTotal > 1e-6) {
+				const minRequired = sumLower - currentTotal;
+				warning = {
+					type: 'insufficient',
+					message: `⚠️ El presupuesto indicado (${numberFormatter.format(budget)}) es insuficiente. Se necesitan al menos ${numberFormatter.format(minRequired)} para alcanzar los mínimos dentro del margen establecido.`,
+					minRequired: minRequired,
+				};
+			}
+
+			let allocations = [...lowerBounds];
+			let remaining = finalTotal - sumLower;
+
+			let flex = normalized
+				.map((asset, index) => ({
+					index,
+					capacity: upperBounds[index] - allocations[index],
+				}))
+				.filter((item) => item.capacity > 1e-6);
+
+			while (flex.length && remaining > 1e-6) {
+				const weightSum = flex.reduce(
+					(sum, item) => sum + normalized[item.index].weight,
+					0
+				);
+				if (weightSum <= 0) break;
+
+				let consumed = 0;
+				const nextFlex = [];
+
+				flex.forEach((item) => {
+					const asset = normalized[item.index];
+					const share = (asset.weight / weightSum) * remaining;
+					if (share >= item.capacity - 1e-9) {
+						allocations[item.index] += item.capacity;
+						consumed += item.capacity;
+					} else {
+						allocations[item.index] += share;
+						consumed += share;
+						nextFlex.push({
+							index: item.index,
+							capacity: item.capacity - share,
+						});
+					}
+				});
+
+				if (consumed <= 1e-9) break;
+				remaining -= consumed;
+				flex = nextFlex;
+			}
+
+			const leftover = Math.max(0, remaining);
+
+			const breakdown = normalized.map((asset, index) => {
+				const desired = allocations[index];
+				const addition = Math.max(0, desired - asset.current);
+				const units = asset.price > 0 ? addition / asset.price : 0;
+				return { ...asset, desired, addition, units };
+			});
+
+			const invested = breakdown.reduce(
+				(sum, asset) => sum + asset.addition,
+				0
+			);
+
+			return {
+				breakdown,
+				totals: {
+					mode: 'budget',
+					currentTotal,
+					finalTotal,
+					budget,
+					invested,
+					leftover,
+				},
+				warning,
+			};
+		};
+
+		const applyUnitConstraints = (breakdown, totals) => {
+			const targetSpend =
+				totals.mode === 'budget' ? totals.budget : totals.invested;
+
+			const adjusted = breakdown.map((asset) => {
+				let addition = asset.addition;
+				let units = asset.price > 0 ? asset.addition / asset.price : 0;
+
+				if (asset.wholeUnits && asset.price > 0) {
+					if (totals.mode === 'minimal') {
+						units = Math.ceil(units - 1e-9);
+					} else {
+						units = Math.floor(units + 1e-9);
+					}
+					addition = units * asset.price;
+				}
+
+				return { ...asset, addition, units };
+			});
+
+			let spent = adjusted.reduce(
+				(sum, asset) => sum + asset.addition,
+				0
+			);
+			let leftover =
+				totals.mode === 'budget' ? Math.max(0, targetSpend - spent) : 0;
+
+			if (totals.mode === 'budget' && leftover > 0.01) {
+				const fractional = adjusted.filter(
+					(asset) => !asset.wholeUnits || asset.price <= 0
+				);
+
+				fractional
+					.sort(
+						(a, b) =>
+							b.desired -
+							(b.current + b.addition) -
+							(a.desired - (a.current + a.addition))
+					)
+					.forEach((asset) => {
+						if (leftover <= 0.01) return;
+						const gap =
+							asset.desired - (asset.current + asset.addition);
+						if (gap <= 0) return;
+						const delta = Math.min(gap, leftover);
+						asset.addition += delta;
+						if (asset.price > 0 && !asset.wholeUnits) {
+							asset.units = asset.addition / asset.price;
+						}
+						leftover -= delta;
+					});
+			}
+
+			spent = adjusted.reduce((sum, asset) => sum + asset.addition, 0);
+			leftover =
+				totals.mode === 'budget' ? Math.max(0, targetSpend - spent) : 0;
+
+			const finalTotal = totals.currentTotal + spent;
+
+			return {
+				breakdown: adjusted.map((asset) => ({
+					...asset,
+					finalShare:
+						finalTotal > 0
+							? (asset.current + asset.addition) / finalTotal
+							: 0,
+				})),
+				spent,
+				leftover,
+				finalTotal,
+			};
+		};
+
+		const renderResults = (breakdown, totals) => {
+			const summaryItems = [
+				{
+					label: 'Total actual',
+					value: numberFormatter.format(totals.currentTotal),
+				},
+				{
+					label: 'Total tras inversión',
+					value: numberFormatter.format(totals.finalTotal),
+				},
+				{
+					label:
+						totals.mode === 'budget'
+							? 'Importe a invertir'
+							: 'Mínimo a invertir',
+					value: numberFormatter.format(totals.invested),
+				},
+			];
+
+			if (totals.mode === 'budget') {
+				summaryItems.push({
+					label: 'Presupuesto disponible',
+					value: numberFormatter.format(totals.budget),
+				});
+
+				if (totals.leftover > 0.01) {
+					summaryItems.push({
+						label: 'Sobrante sin asignar',
+						value: numberFormatter.format(totals.leftover),
+					});
+				}
+			}
+
+			summaryItems.push({
+				label: 'Margen aplicado',
+				value: `${marginNumberFormatter.format(getMarginValue())} %`,
+			});
+
+			summaryEl.innerHTML = summaryItems
+				.map(
+					(item) => `
+				<div class="rounded-lg border border-gray-700 bg-gray-800/70 p-3 sm:p-4">
+					<div class="text-xs text-gray-400 sm:text-sm">${item.label}</div>
+					<div class="mt-1 text-lg font-bold text-gray-100 sm:text-xl">${item.value}</div>
+				</div>`
+				)
+				.join('');
+
+			tbody.innerHTML = '';
+			breakdown.forEach((asset, index) => {
+				const row = document.createElement('tr');
+				row.className =
+					index % 2 === 0 ? 'bg-gray-800/50' : 'bg-gray-900/50';
+
+				const unitsLabel =
+					asset.price > 0
+						? asset.wholeUnits
+							? `${asset.units.toFixed(0)} ud`
+							: unitFormatter.format(asset.units)
+						: '—';
+
+				row.innerHTML = `
+					<td class="px-3 py-2 text-xs text-gray-200 sm:px-4 sm:py-3 sm:text-sm">${asset.name}</td>
+					<td class="px-3 py-2 text-xs text-gray-300 sm:px-4 sm:py-3 sm:text-sm">${numberFormatter.format(asset.current)}</td>
+					<td class="px-3 py-2 text-xs text-gray-300 sm:px-4 sm:py-3 sm:text-sm">${numberFormatter.format(asset.desired)}</td>
+					<td class="px-3 py-2 text-xs font-semibold sm:px-4 sm:py-3 sm:text-sm ${asset.addition > 0 ? 'text-green-400' : 'text-gray-300'}">${numberFormatter.format(
+						asset.addition
+					)}</td>
+					<td class="px-3 py-2 text-xs text-gray-300 sm:px-4 sm:py-3 sm:text-sm">${unitsLabel}</td>
+					<td class="px-3 py-2 text-xs font-medium text-blue-400 sm:px-4 sm:py-3 sm:text-sm">${percentFormatter.format(asset.finalShare)}</td>
+				`;
+				tbody.appendChild(row);
+			});
+
+			const positiveAssets = breakdown.filter(
+				(asset) => asset.addition > 0
+			);
+			if (!positiveAssets.length) {
+				adviceEl.textContent =
+					'Ya cumples la distribución objetivo; no es necesario aportar más.';
+				return;
+			}
+
+			const maxAsset = positiveAssets.reduce((prev, current) =>
+				current.addition > prev.addition ? current : prev
+			);
+
+			const baseMessage =
+				totals.mode === 'budget'
+					? `Con el presupuesto indicado empieza por ${maxAsset.name}, requiere ${numberFormatter.format(
+							maxAsset.addition
+						)}.`
+					: `Para alcanzar la distribución dentro del margen aporta primero en ${maxAsset.name}, necesita ${numberFormatter.format(
+							maxAsset.addition
+						)}.`;
+
+			const leftoverMessage =
+				totals.mode === 'budget' && totals.leftover > 0.01
+					? ` Quedarán ${numberFormatter.format(
+							totals.leftover
+						)} libres al no poder comprar fracciones.`
+					: '';
+
+			adviceEl.textContent = `${baseMessage}${leftoverMessage}`;
+		};
+
+		const showError = (message) => {
+			errorBox.textContent = message;
+			errorBox.hidden = false;
+			resultsSection.hidden = true;
+		};
+
+		const clearError = () => {
+			errorBox.hidden = true;
+			errorBox.textContent = '';
+		};
+
+		const showWarning = (warning) => {
+			if (warning) {
+				errorBox.innerHTML = warning.message;
+				errorBox.hidden = false;
+			} else {
+				clearError();
+			}
+		};
+
+		// Guardar estado en localStorage
+		const saveFormState = () => {
+			try {
+				const rows = getRows({ strict: false });
+				const state = {
+					budget: budgetInput.value,
+					margin: marginInput.value,
+					assets: rows.map((row) => ({
+						name: row.name,
+						current: row.current,
+						price: row.price,
+						target: row.target,
+						wholeUnits: row.wholeUnits,
+					})),
+				};
+				localStorage.setItem(
+					'investmentCalculatorState',
+					JSON.stringify(state)
+				);
+			} catch (e) {
+				console.warn('No se pudo guardar el estado:', e);
+			}
+		};
+
+		// Cargar estado desde localStorage
+		const loadFormState = () => {
+			try {
+				const saved = localStorage.getItem('investmentCalculatorState');
+				if (saved) {
+					const state = JSON.parse(saved);
+
+					// Cargar budget y margin
+					if (state.budget !== undefined)
+						budgetInput.value = state.budget;
+					if (state.margin !== undefined)
+						marginInput.value = state.margin;
+
+					// Limpiar y recrear filas
+					if (state.assets && state.assets.length > 0) {
+						rowsContainer.innerHTML = '';
+						state.assets.forEach((asset) => {
+							const fragment =
+								rowTemplate.content.cloneNode(true);
+							const row = fragment.querySelector('[data-row]');
+							rowsContainer.appendChild(fragment);
+							initializeRow(row, asset);
+						});
+					}
+
+					updateCurrentDistribution();
+					autoCalculate();
+				}
+			} catch (e) {
+				console.warn('No se pudo cargar el estado:', e);
+			}
+		};
+
+		// Auto-calcular
+		let autoCalculateTimeout;
+		const autoCalculate = () => {
+			clearTimeout(autoCalculateTimeout);
+			autoCalculateTimeout = setTimeout(() => {
+				try {
+					const rows = getRows();
+					const budget = Math.max(0, sanitize(budgetInput.value));
+					const result =
+						budget > 0
+							? allocateWithBudget(rows, budget)
+							: minimalContribution(rows);
+					const { breakdown, spent, leftover, finalTotal } =
+						applyUnitConstraints(result.breakdown, result.totals);
+
+					const totals = {
+						...result.totals,
+						invested: spent,
+						leftover,
+						finalTotal,
+					};
+
+					resultsSection.hidden = false;
+					renderResults(breakdown, totals);
+
+					// Mostrar warning si existe
+					if (result.warning) {
+						showWarning(result.warning);
+					} else {
+						clearError();
+					}
+				} catch (err) {
+					showError(err.message);
+				}
+			}, 500);
+		};
+
+		// Event listeners para inputs principales
+		budgetInput.addEventListener('input', () => {
+			saveFormState();
+			autoCalculate();
+		});
+
+		marginInput.addEventListener('input', () => {
+			saveFormState();
+			autoCalculate();
+		});
+
+		// Prevenir submit del form
+		form.addEventListener('submit', (event) => {
+			event.preventDefault();
+		});
+
+		resetBtn.addEventListener('click', () => {
+			// Limpiar localStorage
+			localStorage.removeItem('investmentCalculatorState');
+
+			form.reset();
+			rowsContainer.innerHTML = '';
+			initialAssets.forEach((asset) => {
+				const fragment = rowTemplate.content.cloneNode(true);
+				const row = fragment.querySelector('[data-row]');
+				rowsContainer.appendChild(fragment);
+				initializeRow(row, asset);
+			});
+			resultsSection.hidden = true;
+			clearError();
+			updateCurrentDistribution();
+			saveFormState();
+			autoCalculate();
+		});
+
+		// Cargar estado inicial al cargar la página
+		loadFormState();
+	</script>
+</BasicLayout>
+
+<style>
+	button {
+		cursor: pointer;
+	}
+
+	button:active {
+		transform: scale(0.95);
+		transition: transform 0.2s ease-in-out;
+	}
+</style>

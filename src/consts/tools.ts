@@ -21,5 +21,9 @@ export const tools: Tool[] = [
   {
     path: "/tools/packageMerger",
     title: "Salesforce Package Merger",
-  }
+  },
+  {
+    path: "/tools/investmentCalculator",
+    title: "Investment Calculator",
+  },
 ];
