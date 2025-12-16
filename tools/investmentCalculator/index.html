@@ -1,4 +1,4 @@
-<!DOCTYPE html><html> <head><title>Calculadora de Inversión | Adrian Palomo</title><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="UTF-8"><meta property="og:type" content="website"><meta property="og:url" content="https://adrianpalomo.com/"><meta property="og:title" content="Adrián Palomo | Tools"><meta property="og:site_name" content="Adrián Palomo | Tools"><meta property="og:locale" content="es_ES"><meta name="robots" content="noindex, nofollow, noimageindex"><link rel="icon" type="image/png" href="/images/Fav.webp"><meta name="theme-color" content="#111627"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/a11y-light.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script><link rel="stylesheet" href="/_astro/investmentCalculator.UXfdWoxF.css">
+<!DOCTYPE html><html> <head><title>Calculadora de Inversión | Adrian Palomo</title><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="UTF-8"><meta property="og:type" content="website"><meta property="og:url" content="https://adrianpalomo.com/"><meta property="og:title" content="Adrián Palomo | Tools"><meta property="og:site_name" content="Adrián Palomo | Tools"><meta property="og:locale" content="es_ES"><meta name="robots" content="noindex, nofollow, noimageindex"><link rel="icon" type="image/png" href="/images/Fav.webp"><meta name="theme-color" content="#111627"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/a11y-light.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script><link rel="stylesheet" href="/_astro/investmentCalculator.DHpJ1oHn.css">
 <style>button[data-astro-cid-4w4x4o4c]{cursor:pointer}button[data-astro-cid-4w4x4o4c]:active{transform:scale(.95);transition:transform .2s ease-in-out}
 </style></head> <body style="background-color: #111627;">  <div class="min-h-screen bg-gray-900 px-3 py-4 font-sans text-gray-100 sm:px-4 md:px-6 lg:px-8" data-astro-cid-4w4x4o4c> <h1 class="mb-4 text-2xl font-bold text-blue-500 sm:mb-6 sm:text-3xl" data-astro-cid-4w4x4o4c>
 Calculadora de Inversión
@@ -6,9 +6,9 @@ Calculadora de Inversión
 Ajusta los pesos objetivo, define si puedes comprar
 						fracciones y establece un presupuesto y un margen de
 						tolerancia para evitar rebalanceos excesivos.
-</p> </div> <form id="allocation-form" novalidate data-astro-cid-4w4x4o4c> <div class="mb-4 grid grid-cols-1 gap-3 sm:mb-6 sm:gap-4 md:grid-cols-2" data-astro-cid-4w4x4o4c> <div class="rounded-lg border border-blue-500/30 bg-blue-950/30 p-4" data-astro-cid-4w4x4o4c> <label for="budget" class="mb-2 block text-sm font-medium text-gray-300" data-astro-cid-4w4x4o4c>
+</p> </div> <form id="allocation-form" novalidate data-astro-cid-4w4x4o4c> <div class="mb-4 grid grid-cols-1 gap-3 sm:mb-6 sm:gap-4 md:grid-cols-2" data-astro-cid-4w4x4o4c> <div class="rounded-lg border border-blue-500/30 bg-blue-950/30 p-4" data-astro-cid-4w4x4o4c> <div class="mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between" data-astro-cid-4w4x4o4c> <label for="budget" class="block text-sm font-medium text-gray-300" data-astro-cid-4w4x4o4c>
 Dinero disponible (&euro;)
-</label> <input id="budget" name="budget" type="number" min="0" step="0.01" placeholder="Ej. 500" class="w-full rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none" data-astro-cid-4w4x4o4c> <small class="mt-2 block text-xs text-blue-400" data-astro-cid-4w4x4o4c>
+</label> <div class="flex items-center gap-2" data-astro-cid-4w4x4o4c> <span class="text-xs text-gray-400 sm:text-sm" data-astro-cid-4w4x4o4c>Permitir traspasos</span> <button type="button" id="allow-transfers" role="switch" aria-checked="false" aria-label="Permitir ventas para rebalancear" class="relative inline-flex h-7 w-12 items-center rounded-full bg-gray-600 transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-none" data-astro-cid-4w4x4o4c> <span class="inline-block h-5 w-5 translate-x-1 transform rounded-full bg-white transition-transform" data-astro-cid-4w4x4o4c></span> </button> </div> </div> <input id="budget" name="budget" type="number" min="0" step="0.01" placeholder="Ej. 500" class="w-full rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none" data-astro-cid-4w4x4o4c> <small class="mt-2 block text-xs text-blue-400" data-astro-cid-4w4x4o4c>
 Déjalo vacío para obtener la aportación mínima
 								sin límite.
 </small> </div> <div class="rounded-lg border border-blue-500/30 bg-blue-950/30 p-4" data-astro-cid-4w4x4o4c> <label for="margin" class="mb-2 block text-sm font-medium text-gray-300" data-astro-cid-4w4x4o4c>
@@ -68,9 +68,13 @@ Activa el toggle cuando solo puedas comprar unidades
 						completas; el campo de precio se habilitará
 						automáticamente. Los cálculos se actualizan en tiempo
 						real.
-</p> <div class="flex flex-wrap gap-3" data-astro-cid-4w4x4o4c> <button id="reset-btn" type="button" class="rounded-md border border-gray-600 bg-gray-700 px-6 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-600 sm:px-8 sm:py-3" data-astro-cid-4w4x4o4c>
+</p> <div class="flex flex-wrap gap-2" data-astro-cid-4w4x4o4c> <button id="reset-btn" type="button" class="rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-600 sm:px-8 sm:py-3" data-astro-cid-4w4x4o4c>
 Restablecer
-</button> </div> <template id="row-template" data-astro-cid-4w4x4o4c> <div class="relative rounded-lg border border-gray-700 bg-gray-800 p-3 shadow-md sm:p-4" data-row data-astro-cid-4w4x4o4c> <button type="button" data-action="delete-row" class="absolute top-2 right-2 rounded-md p-1.5 text-gray-400 transition-colors hover:bg-red-600/20 hover:text-red-400 focus:ring-2 focus:ring-red-500 focus:outline-none" title="Eliminar activo" data-astro-cid-4w4x4o4c> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" data-astro-cid-4w4x4o4c> <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" data-astro-cid-4w4x4o4c></path> </svg> </button> <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-5" data-astro-cid-4w4x4o4c> <div class="flex flex-col gap-2" data-astro-cid-4w4x4o4c> <label class="text-sm font-medium text-gray-300" data-astro-cid-4w4x4o4c>
+</button> <button id="export-btn" type="button" class="rounded-md border border-blue-600 bg-blue-700 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-blue-600 sm:px-8 sm:py-3" data-astro-cid-4w4x4o4c>
+Exportar
+</button> <button id="import-btn" type="button" class="rounded-md border border-green-600 bg-green-700 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-green-600 sm:px-8 sm:py-3" data-astro-cid-4w4x4o4c>
+Importar
+</button> <input type="file" id="import-file" accept=".json" class="hidden" data-astro-cid-4w4x4o4c> </div> <template id="row-template" data-astro-cid-4w4x4o4c> <div class="relative rounded-lg border border-gray-700 bg-gray-800 p-3 shadow-md sm:p-4" data-row data-astro-cid-4w4x4o4c> <button type="button" data-action="delete-row" class="absolute top-2 right-2 rounded-md p-1.5 text-gray-400 transition-colors hover:bg-red-600/20 hover:text-red-400 focus:ring-2 focus:ring-red-500 focus:outline-none" title="Eliminar activo" data-astro-cid-4w4x4o4c> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" data-astro-cid-4w4x4o4c> <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" data-astro-cid-4w4x4o4c></path> </svg> </button> <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-5" data-astro-cid-4w4x4o4c> <div class="flex flex-col gap-2" data-astro-cid-4w4x4o4c> <label class="text-sm font-medium text-gray-300" data-astro-cid-4w4x4o4c>
 Activo
 </label> <input data-field="name" type="text" required class="rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-sm text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none" data-astro-cid-4w4x4o4c> </div> <div class="flex flex-col gap-2" data-astro-cid-4w4x4o4c> <label class="text-sm font-medium text-gray-300" data-astro-cid-4w4x4o4c>
 Valor actual (&euro;)
@@ -80,7 +84,9 @@ Precio unidad (&euro;)
 ¿Solo unidades completas?
 </label> <button type="button" role="switch" data-field="whole" aria-checked="false" aria-label="Activar unidades completas" class="relative inline-flex h-8 w-14 items-center rounded-full bg-gray-600 transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-none" data-astro-cid-4w4x4o4c> <span class="inline-block h-6 w-6 translate-x-1 transform rounded-full bg-white transition-transform" data-astro-cid-4w4x4o4c></span> </button> </div> <div class="flex flex-col gap-2" data-astro-cid-4w4x4o4c> <label class="text-sm font-medium text-gray-300" data-astro-cid-4w4x4o4c>
 Objetivo (%)
-</label> <input data-field="target" type="number" min="0" max="100" step="0.1" required class="rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-sm text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none" data-astro-cid-4w4x4o4c> </div> </div> </div> </template> </form> <div id="results" class="mt-4 space-y-4 sm:mt-6 sm:space-y-6" hidden data-astro-cid-4w4x4o4c> <div id="summary" class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3" data-astro-cid-4w4x4o4c></div> <p id="advice" class="rounded-lg border border-blue-500/30 bg-blue-950/30 p-3 text-sm text-gray-200 sm:p-4 sm:text-base" data-astro-cid-4w4x4o4c></p> <div class="overflow-x-auto rounded-lg border border-gray-700 bg-gray-800" data-astro-cid-4w4x4o4c> <table class="w-full" data-astro-cid-4w4x4o4c> <thead class="border-b border-gray-700 bg-gray-900" data-astro-cid-4w4x4o4c> <tr data-astro-cid-4w4x4o4c> <th class="px-3 py-2 text-left text-xs font-medium text-gray-300 sm:px-4 sm:py-3 sm:text-sm" data-astro-cid-4w4x4o4c>Activo</th> <th class="px-3 py-2 text-left text-xs font-medium text-gray-300 sm:px-4 sm:py-3 sm:text-sm" data-astro-cid-4w4x4o4c>Actual</th> <th class="px-3 py-2 text-left text-xs font-medium text-gray-300 sm:px-4 sm:py-3 sm:text-sm" data-astro-cid-4w4x4o4c>Objetivo</th> <th class="px-3 py-2 text-left text-xs font-medium text-gray-300 sm:px-4 sm:py-3 sm:text-sm" data-astro-cid-4w4x4o4c>Aportar</th> <th class="px-3 py-2 text-left text-xs font-medium text-gray-300 sm:px-4 sm:py-3 sm:text-sm" data-astro-cid-4w4x4o4c>Unid.</th> <th class="px-3 py-2 text-left text-xs font-medium text-gray-300 sm:px-4 sm:py-3 sm:text-sm" data-astro-cid-4w4x4o4c>% final</th> </tr> </thead> <tbody id="results-body" class="divide-y divide-gray-700" data-astro-cid-4w4x4o4c></tbody> </table> </div> </div> <p id="error" class="mt-4 rounded-lg border border-red-500/50 bg-red-950/30 p-3 text-sm text-red-400 sm:mt-6 sm:p-4" role="alert" hidden data-astro-cid-4w4x4o4c></p> </div> </div> </div> <script type="module">const defaultAssets = [{"id":"msci","name":"MSCI World","current":null,"price":null,"target":60,"wholeUnits":false},{"id":"emergentes","name":"Mercados emergentes","current":null,"price":null,"target":10,"wholeUnits":false},{"id":"btc","name":"BTC","current":null,"price":null,"target":15,"wholeUnits":true},{"id":"oro","name":"Oro","current":null,"price":null,"target":15,"wholeUnits":true}];
+</label> <input data-field="target" type="number" min="0" max="100" step="0.1" required class="rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-sm text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none" data-astro-cid-4w4x4o4c> </div> </div> </div> </template> </form> <div id="results" class="mt-4 space-y-4 sm:mt-6 sm:space-y-6" hidden data-astro-cid-4w4x4o4c> <div id="summary" class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3" data-astro-cid-4w4x4o4c></div> <p id="advice" class="rounded-lg border border-blue-500/30 bg-blue-950/30 p-3 text-sm text-gray-200 sm:p-4 sm:text-base" data-astro-cid-4w4x4o4c></p> <div class="overflow-x-auto rounded-lg border border-gray-700 bg-gray-800" data-astro-cid-4w4x4o4c> <table class="w-full" data-astro-cid-4w4x4o4c> <thead class="border-b border-gray-700 bg-gray-900" data-astro-cid-4w4x4o4c> <tr data-astro-cid-4w4x4o4c> <th class="px-3 py-2 text-left text-xs font-medium text-gray-300 sm:px-4 sm:py-3 sm:text-sm" data-astro-cid-4w4x4o4c>Activo</th> <th class="px-3 py-2 text-left text-xs font-medium text-gray-300 sm:px-4 sm:py-3 sm:text-sm" data-astro-cid-4w4x4o4c>Actual</th> <th class="px-3 py-2 text-left text-xs font-medium text-gray-300 sm:px-4 sm:py-3 sm:text-sm" data-astro-cid-4w4x4o4c>Objetivo</th> <th class="px-3 py-2 text-left text-xs font-medium text-gray-300 sm:px-4 sm:py-3 sm:text-sm" data-astro-cid-4w4x4o4c>Aportar</th> <th class="px-3 py-2 text-left text-xs font-medium text-gray-300 sm:px-4 sm:py-3 sm:text-sm" data-astro-cid-4w4x4o4c>
+Tu aportación
+</th> <th class="px-3 py-2 text-left text-xs font-medium text-gray-300 sm:px-4 sm:py-3 sm:text-sm" data-astro-cid-4w4x4o4c>Unid.</th> <th class="px-3 py-2 text-left text-xs font-medium text-gray-300 sm:px-4 sm:py-3 sm:text-sm" data-astro-cid-4w4x4o4c>% final</th> </tr> </thead> <tbody id="results-body" class="divide-y divide-gray-700" data-astro-cid-4w4x4o4c></tbody> </table> </div> </div> <p id="error" class="mt-4 rounded-lg border border-red-500/50 bg-red-950/30 p-3 text-sm text-red-400 sm:mt-6 sm:p-4" role="alert" hidden data-astro-cid-4w4x4o4c></p> </div> </div> </div> <script type="module">const defaultAssets = [{"id":"msci","name":"MSCI World","current":null,"price":null,"target":60,"wholeUnits":false},{"id":"emergentes","name":"Mercados emergentes","current":null,"price":null,"target":10,"wholeUnits":false},{"id":"btc","name":"BTC","current":null,"price":null,"target":15,"wholeUnits":true},{"id":"oro","name":"Oro","current":null,"price":null,"target":15,"wholeUnits":true}];
 
 		const initialAssets = defaultAssets;
 		const form = document.querySelector('#allocation-form');
@@ -89,6 +95,7 @@ Objetivo (%)
 		const addRowBtn = document.querySelector('#add-row-btn');
 		const budgetInput = document.querySelector('#budget');
 		const marginInput = document.querySelector('#margin');
+		const transfersToggle = document.querySelector('#allow-transfers');
 		const distributionList = document.querySelector(
 			'#current-distribution'
 		);
@@ -101,6 +108,9 @@ Objetivo (%)
 		const tbody = document.querySelector('#results-body');
 		const errorBox = document.querySelector('#error');
 		const resetBtn = document.querySelector('#reset-btn');
+		const exportBtn = document.querySelector('#export-btn');
+		const importBtn = document.querySelector('#import-btn');
+		const importFileInput = document.querySelector('#import-file');
 
 		const numberFormatter = new Intl.NumberFormat('es-ES', {
 			style: 'currency',
@@ -139,6 +149,33 @@ Objetivo (%)
 		};
 
 		const getMarginFraction = () => getMarginValue() / 100;
+
+		const setTransfersToggle = (enabled) => {
+			const state = Boolean(enabled);
+			transfersToggle.setAttribute('aria-checked', state);
+			if (state) {
+				transfersToggle.classList.remove('bg-gray-600');
+				transfersToggle.classList.add('bg-blue-600');
+				transfersToggle
+					.querySelector('span')
+					.classList.remove('translate-x-1');
+				transfersToggle
+					.querySelector('span')
+					.classList.add('translate-x-6');
+			} else {
+				transfersToggle.classList.remove('bg-blue-600');
+				transfersToggle.classList.add('bg-gray-600');
+				transfersToggle
+					.querySelector('span')
+					.classList.remove('translate-x-6');
+				transfersToggle
+					.querySelector('span')
+					.classList.add('translate-x-1');
+			}
+		};
+
+		const transfersEnabled = () =>
+			transfersToggle.getAttribute('aria-checked') === 'true';
 
 		const initializeRow = (row, data = {}) => {
 			const inputMap = {
@@ -262,6 +299,13 @@ Objetivo (%)
 
 		addRowBtn.addEventListener('click', createRow);
 
+		transfersToggle.addEventListener('click', () => {
+			const current = transfersEnabled();
+			setTransfersToggle(!current);
+			saveFormState();
+			autoCalculate();
+		});
+
 		const getRows = ({ strict = true } = {}) =>
 			[...rowsContainer.querySelectorAll('[data-row]')].map(
 				(row, index) => {
@@ -365,6 +409,411 @@ Objetivo (%)
 				}
 				return { ...asset, weight, minShare, maxShare };
 			});
+		};
+
+		const projectToBounds = (targets, mins, maxs, total) => {
+			const minSum = mins.reduce((sum, value) => sum + value, 0);
+			const maxSum = maxs.reduce((sum, value) => sum + value, 0);
+
+			if (total < minSum - 1e-6) {
+				throw new Error(
+					'El presupuesto disponible es insuficiente para respetar los mínimos dentro del margen.'
+				);
+			}
+
+			if (total > maxSum + 1e-6) {
+				throw new Error(
+					'Los objetivos y el margen no permiten usar todo el presupuesto sin sobrepasar límites.'
+				);
+			}
+
+			const allocations = targets.map((value, index) =>
+				clamp(value, mins[index], maxs[index])
+			);
+
+			for (let i = 0; i < 80; i++) {
+				const currentTotal = allocations.reduce(
+					(sum, value) => sum + value,
+					0
+				);
+				const diff = total - currentTotal;
+				if (Math.abs(diff) <= 1e-6) break;
+
+				const freeIndexes = allocations
+					.map((value, index) => ({ value, index }))
+					.filter(
+						(item) =>
+							item.value > mins[item.index] + 1e-9 &&
+							item.value < maxs[item.index] - 1e-9
+					);
+
+				if (!freeIndexes.length) break;
+
+				const share = diff / freeIndexes.length;
+				let adjusted = false;
+
+				freeIndexes.forEach((item) => {
+					let candidate = allocations[item.index] + share;
+					if (candidate < mins[item.index]) {
+						candidate = mins[item.index];
+						adjusted = true;
+					} else if (candidate > maxs[item.index]) {
+						candidate = maxs[item.index];
+						adjusted = true;
+					}
+					allocations[item.index] = candidate;
+				});
+
+				if (!adjusted && Math.abs(diff) <= 1e-6) break;
+			}
+
+			const finalTotal = allocations.reduce((sum, v) => sum + v, 0);
+			if (Math.abs(finalTotal - total) > 1e-4) {
+				throw new Error(
+					'No se pudo encontrar una distribución válida con las restricciones actuales.'
+				);
+			}
+
+			return allocations;
+		};
+
+		const raiseGroupMinimums = (mins, maxs, groups) => {
+			let unresolved = 0;
+			groups.forEach((group) => {
+				const currentMin = group.indexes.reduce(
+					(sum, idx) => sum + mins[idx],
+					0
+				);
+				let deficit = group.required - currentMin;
+				let safety = 0;
+
+				while (deficit > 1e-6) {
+					safety += 1;
+					if (safety > 50) break;
+					const adjustable = group.indexes.filter(
+						(idx) => maxs[idx] - mins[idx] > 1e-9
+					);
+					if (!adjustable.length) {
+						unresolved += deficit;
+						break;
+					}
+					const totalRoom = adjustable.reduce(
+						(sum, idx) => sum + (maxs[idx] - mins[idx]),
+						0
+					);
+					if (totalRoom + 1e-6 < deficit) {
+						// Llevar todo a su máximo posible
+						adjustable.forEach((idx) => {
+							mins[idx] = maxs[idx];
+						});
+						unresolved += deficit - totalRoom;
+						break;
+					}
+
+					adjustable.forEach((idx) => {
+						const room = maxs[idx] - mins[idx];
+						const addition = Math.min(
+							room,
+							(room / totalRoom) * deficit
+						);
+						mins[idx] += addition;
+					});
+
+					const newMin = group.indexes.reduce(
+						(sum, idx) => sum + mins[idx],
+						0
+					);
+					deficit = group.required - newMin;
+				}
+			});
+			return unresolved;
+		};
+
+		const computeWithTransfers = (assets, budget) => {
+			const marginFraction = getMarginFraction();
+			const normalized = normalizeTargets(assets, marginFraction);
+			const currentTotal = normalized.reduce(
+				(sum, asset) => sum + asset.current,
+				0
+			);
+
+			// PASO 1: Calcular asignación solo con traspasos (sin añadir dinero)
+			const transferTotal = currentTotal;
+			const transferMins = normalized.map(
+				(asset) => asset.minShare * transferTotal
+			);
+			const transferMaxs = normalized.map(
+				(asset) => asset.maxShare * transferTotal
+			);
+			const transferTargets = normalized.map(
+				(asset) => asset.weight * transferTotal
+			);
+
+			// ETFs no pueden venderse
+			normalized.forEach((asset, idx) => {
+				if (asset.wholeUnits) {
+					transferMins[idx] = Math.max(
+						transferMins[idx],
+						asset.current
+					);
+					transferMaxs[idx] = Math.max(
+						transferMaxs[idx],
+						asset.current
+					);
+				}
+			});
+
+			// Asegurar que maxs >= mins
+			normalized.forEach((asset, idx) => {
+				transferMaxs[idx] = Math.max(
+					transferMaxs[idx],
+					transferMins[idx]
+				);
+			});
+
+			// Verificar factibilidad antes de proyectar
+			const transferMinSum = transferMins.reduce((sum, v) => sum + v, 0);
+			if (transferMinSum > transferTotal + 1e-6) {
+				// Escalar mínimos proporcionalmente
+				const scale = transferTotal / transferMinSum;
+				normalized.forEach((asset, idx) => {
+					transferMins[idx] *= scale;
+					transferMaxs[idx] = Math.max(
+						transferMaxs[idx],
+						transferMins[idx]
+					);
+				});
+			}
+
+			const transferAllocations = projectToBounds(
+				transferTargets,
+				transferMins,
+				transferMaxs,
+				transferTotal
+			);
+
+			// PASO 2: Calcular mínimo dinero adicional necesario
+			const calcMinNeeded = () => {
+				let low = transferTotal;
+				let high = transferTotal * 3;
+
+				const feasible = (total) => {
+					try {
+						const mins = normalized.map(
+							(asset) => asset.minShare * total
+						);
+						const maxs = normalized.map(
+							(asset) => asset.maxShare * total
+						);
+						const targets = normalized.map(
+							(asset) => asset.weight * total
+						);
+
+						normalized.forEach((asset, idx) => {
+							if (asset.wholeUnits) {
+								mins[idx] = Math.max(mins[idx], asset.current);
+							} else {
+								mins[idx] = Math.max(
+									mins[idx],
+									transferAllocations[idx]
+								);
+							}
+						});
+
+						// Verificar si los mínimos son factibles
+						const minSum = mins.reduce((sum, v) => sum + v, 0);
+						if (minSum > total + 1e-6) {
+							return false;
+						}
+
+						// Asegurar que maxs >= mins
+						normalized.forEach((asset, idx) => {
+							maxs[idx] = Math.max(maxs[idx], mins[idx]);
+						});
+
+						const allocs = projectToBounds(
+							targets,
+							mins,
+							maxs,
+							total
+						);
+						const needed = normalized.reduce((sum, asset, idx) => {
+							const need = allocs[idx] - transferAllocations[idx];
+							return sum + Math.max(0, need);
+						}, 0);
+
+						return transferTotal + needed <= total + 1e-6;
+					} catch (e) {
+						return false;
+					}
+				};
+
+				for (let i = 0; i < 60; i++) {
+					const mid = (low + high) / 2;
+					if (feasible(mid)) {
+						high = mid;
+					} else {
+						low = mid;
+					}
+					if (high - low < 1e-6) break;
+				}
+				return high;
+			};
+
+			const minNeededTotal = calcMinNeeded();
+			const minNeededBudget = minNeededTotal - currentTotal;
+
+			// PASO 3: Determinar total final
+			let finalTotal;
+			if (budget <= 0) {
+				finalTotal = minNeededTotal;
+			} else {
+				finalTotal = Math.min(currentTotal + budget, minNeededTotal);
+			}
+
+			// PASO 4: Calcular asignación final
+			const mins = normalized.map((asset) => asset.minShare * finalTotal);
+			const maxs = normalized.map((asset) => asset.maxShare * finalTotal);
+			const targets = normalized.map(
+				(asset) => asset.weight * finalTotal
+			);
+
+			// Establecer mínimos: ETFs no pueden bajar, fondos pueden bajar hasta lo que tienen tras traspasos
+			normalized.forEach((asset, idx) => {
+				if (asset.wholeUnits) {
+					mins[idx] = Math.max(mins[idx], asset.current);
+				} else {
+					// Fondos pueden vender hasta lo que tienen tras traspasos
+					const minFromTransfer = transferAllocations[idx];
+					mins[idx] = Math.max(mins[idx], minFromTransfer);
+				}
+			});
+
+			// Asegurar que la suma de mínimos no exceda el total
+			const minSum = mins.reduce((sum, v) => sum + v, 0);
+			if (minSum > finalTotal + 1e-6) {
+				// Escalar los mínimos de fondos proporcionalmente
+				const fixedSum = normalized.reduce(
+					(sum, asset, idx) =>
+						sum + (asset.wholeUnits ? mins[idx] : 0),
+					0
+				);
+				const availableForFonds = Math.max(0, finalTotal - fixedSum);
+				const fondsMinSum = normalized.reduce(
+					(sum, asset, idx) =>
+						sum + (!asset.wholeUnits ? mins[idx] : 0),
+					0
+				);
+
+				if (fondsMinSum > 1e-6) {
+					const scale = availableForFonds / fondsMinSum;
+					normalized.forEach((asset, idx) => {
+						if (!asset.wholeUnits) {
+							mins[idx] *= scale;
+						}
+					});
+				}
+			}
+
+			// Asegurar que maxs >= mins
+			normalized.forEach((asset, idx) => {
+				maxs[idx] = Math.max(maxs[idx], mins[idx]);
+			});
+
+			const allocations = projectToBounds(
+				targets,
+				mins,
+				maxs,
+				finalTotal
+			);
+
+			const breakdown = normalized.map((asset, index) => {
+				const desired = allocations[index];
+				let addition = desired - asset.current;
+
+				if (asset.wholeUnits && addition < 0) {
+					addition = 0;
+				}
+
+				const units =
+					asset.price > 0 ? addition / asset.price : addition;
+				return { ...asset, desired, addition, units };
+			});
+
+			const buys = breakdown.reduce(
+				(sum, asset) => sum + Math.max(0, asset.addition),
+				0
+			);
+			const sells = breakdown.reduce(
+				(sum, asset) => sum + Math.max(0, -asset.addition),
+				0
+			);
+			const netSpent = buys - sells;
+
+			const providedBudget = budget > 0 ? budget : 0;
+			const actualNeeded = netSpent;
+			const extraNeeded = Math.max(0, actualNeeded - providedBudget);
+
+			let bestEffort = null;
+			let warning = null;
+			if (providedBudget > 0 && extraNeeded > 1e-6) {
+				const targetAdds = breakdown.map(
+					(asset) => asset.addition || 0
+				);
+				const totalNeeded = targetAdds.reduce(
+					(sum, val) => sum + Math.max(0, val),
+					0
+				);
+				const factor =
+					totalNeeded > 0
+						? Math.min(1, providedBudget / totalNeeded)
+						: 0;
+
+				const bestAlloc = normalized.map((asset, index) => {
+					const scaledAdd = Math.max(0, targetAdds[index]) * factor;
+					const desired = asset.current + scaledAdd;
+					const units =
+						asset.price > 0 ? scaledAdd / asset.price : scaledAdd;
+					return {
+						...asset,
+						desired,
+						addition: scaledAdd,
+						units,
+					};
+				});
+
+				bestEffort = {
+					breakdown: bestAlloc,
+					invested: bestAlloc.reduce((sum, a) => sum + a.addition, 0),
+				};
+
+				warning = {
+					type: 'insufficient',
+					message: `El presupuesto indicado (${numberFormatter.format(
+						providedBudget
+					)}) es insuficiente. Se necesitan al menos ${numberFormatter.format(
+						actualNeeded
+					)} para alcanzar los mínimos dentro del margen establecido.`,
+					minRequired: actualNeeded,
+				};
+			}
+
+			return {
+				breakdown,
+				bestEffort,
+				totals: {
+					mode: providedBudget > 0 ? 'budget' : 'transfers',
+					currentTotal,
+					finalTotal,
+					budget: actualNeeded,
+					budgetProvided: providedBudget,
+					extraNeeded,
+					invested: actualNeeded,
+					leftover: 0,
+					allowTransfers: true,
+				},
+				warning,
+			};
 		};
 
 		const ensureOverweightConstraint = (assets, total) =>
@@ -547,8 +996,40 @@ Objetivo (%)
 				0
 			);
 
+			let bestEffort = null;
+			if (warning && warning.type === 'insufficient') {
+				const targetAdds = breakdown.map(
+					(asset) => asset.addition || 0
+				);
+				const totalNeeded = targetAdds.reduce(
+					(sum, val) => sum + val,
+					0
+				);
+				const factor =
+					totalNeeded > 0 ? Math.min(1, budget / totalNeeded) : 0;
+
+				const bestAlloc = normalized.map((asset, index) => {
+					const scaledAdd = targetAdds[index] * factor;
+					const desired = asset.current + scaledAdd;
+					const units =
+						asset.price > 0 ? scaledAdd / asset.price : scaledAdd;
+					return {
+						...asset,
+						desired,
+						addition: scaledAdd,
+						units,
+					};
+				});
+
+				bestEffort = {
+					breakdown: bestAlloc,
+					invested: bestAlloc.reduce((sum, a) => sum + a.addition, 0),
+				};
+			}
+
 			return {
 				breakdown,
+				bestEffort,
 				totals: {
 					mode: 'budget',
 					currentTotal,
@@ -561,7 +1042,7 @@ Objetivo (%)
 			};
 		};
 
-		const applyUnitConstraints = (breakdown, totals) => {
+		const applyUnitConstraints = (breakdown, totals, allowTransfers) => {
 			const targetSpend =
 				totals.mode === 'budget' ? totals.budget : totals.invested;
 
@@ -570,10 +1051,15 @@ Objetivo (%)
 				let units = asset.price > 0 ? asset.addition / asset.price : 0;
 
 				if (asset.wholeUnits && asset.price > 0) {
-					if (totals.mode === 'minimal') {
-						units = Math.ceil(units - 1e-9);
+					if (addition >= 0) {
+						if (totals.mode === 'minimal') {
+							units = Math.ceil(units - 1e-9);
+						} else {
+							units = Math.floor(units + 1e-9);
+						}
 					} else {
-						units = Math.floor(units + 1e-9);
+						// Ventas: aproximar hacia cero para no sobre-vender
+						units = Math.ceil(units - 1e-9);
 					}
 					addition = units * asset.price;
 				}
@@ -581,12 +1067,24 @@ Objetivo (%)
 				return { ...asset, addition, units };
 			});
 
-			let spent = adjusted.reduce(
+			const buys = adjusted.reduce(
+				(sum, asset) => sum + Math.max(0, asset.addition),
+				0
+			);
+			const sells = adjusted.reduce(
+				(sum, asset) => sum + Math.max(0, -asset.addition),
+				0
+			);
+
+			const netSpent = adjusted.reduce(
 				(sum, asset) => sum + asset.addition,
 				0
 			);
+
 			let leftover =
-				totals.mode === 'budget' ? Math.max(0, targetSpend - spent) : 0;
+				totals.mode === 'budget'
+					? Math.max(0, targetSpend - netSpent)
+					: 0;
 
 			if (totals.mode === 'budget' && leftover > 0.01) {
 				const fractional = adjusted.filter(
@@ -614,11 +1112,11 @@ Objetivo (%)
 					});
 			}
 
-			spent = adjusted.reduce((sum, asset) => sum + asset.addition, 0);
-			leftover =
-				totals.mode === 'budget' ? Math.max(0, targetSpend - spent) : 0;
-
-			const finalTotal = totals.currentTotal + spent;
+			const finalSpent = adjusted.reduce(
+				(sum, asset) => sum + asset.addition,
+				0
+			);
+			const finalTotal = totals.currentTotal + finalSpent;
 
 			return {
 				breakdown: adjusted.map((asset) => ({
@@ -628,13 +1126,16 @@ Objetivo (%)
 							? (asset.current + asset.addition) / finalTotal
 							: 0,
 				})),
-				spent,
+				spent: finalSpent,
 				leftover,
 				finalTotal,
+				buys,
+				sells,
+				net: finalSpent,
 			};
 		};
 
-		const renderResults = (breakdown, totals) => {
+		const renderResults = (breakdown, totals, bestApplied) => {
 			const summaryItems = [
 				{
 					label: 'Total actual',
@@ -645,8 +1146,9 @@ Objetivo (%)
 					value: numberFormatter.format(totals.finalTotal),
 				},
 				{
-					label:
-						totals.mode === 'budget'
+					label: totals.allowTransfers
+						? 'Importe neto (compras - ventas)'
+						: totals.mode === 'budget'
 							? 'Importe a invertir'
 							: 'Mínimo a invertir',
 					value: numberFormatter.format(totals.invested),
@@ -654,10 +1156,31 @@ Objetivo (%)
 			];
 
 			if (totals.mode === 'budget') {
-				summaryItems.push({
-					label: 'Presupuesto disponible',
-					value: numberFormatter.format(totals.budget),
-				});
+				const budgetItems = [
+					{
+						label: 'Presupuesto calculado',
+						value: numberFormatter.format(totals.budget),
+					},
+				];
+
+				if (
+					totals.allowTransfers &&
+					typeof totals.budgetProvided !== 'undefined'
+				) {
+					budgetItems.push({
+						label: 'Presupuesto indicado',
+						value: numberFormatter.format(totals.budgetProvided),
+					});
+				}
+
+				if (totals.allowTransfers && totals.extraNeeded > 0.01) {
+					budgetItems.push({
+						label: 'Extra para evitar cruzar tipos',
+						value: numberFormatter.format(totals.extraNeeded),
+					});
+				}
+
+				summaryItems.push(...budgetItems);
 
 				if (totals.leftover > 0.01) {
 					summaryItems.push({
@@ -665,6 +1188,30 @@ Objetivo (%)
 						value: numberFormatter.format(totals.leftover),
 					});
 				}
+			}
+
+			if (
+				totals.allowTransfers &&
+				totals.mode !== 'budget' &&
+				totals.extraNeeded > 0.01
+			) {
+				summaryItems.push({
+					label: 'Extra necesario para rebalancear por tipos',
+					value: numberFormatter.format(totals.extraNeeded),
+				});
+			}
+
+			if (totals.allowTransfers && totals.sells > 0.01) {
+				summaryItems.push(
+					{
+						label: 'Compras estimadas',
+						value: numberFormatter.format(totals.buys),
+					},
+					{
+						label: 'Ventas estimadas',
+						value: numberFormatter.format(totals.sells),
+					}
+				);
 			}
 
 			summaryItems.push({
@@ -688,20 +1235,55 @@ Objetivo (%)
 				row.className =
 					index % 2 === 0 ? 'bg-gray-800/50' : 'bg-gray-900/50';
 
+				const bestAsset =
+					bestApplied && bestApplied.breakdown
+						? bestApplied.breakdown[index]
+						: null;
+
 				const unitsLabel =
 					asset.price > 0
 						? asset.wholeUnits
 							? `${asset.units.toFixed(0)} ud`
 							: unitFormatter.format(asset.units)
 						: '—';
+				const additionClass =
+					asset.addition > 0
+						? 'text-green-400'
+						: asset.addition < 0
+							? 'text-red-400'
+							: 'text-gray-300';
+
+				const bestAddition =
+					bestAsset && typeof bestAsset.addition === 'number'
+						? bestAsset.addition
+						: null;
+				const bestClass =
+					bestAddition === null
+						? ''
+						: bestAddition > 0
+							? 'text-green-400'
+							: bestAddition < 0
+								? 'text-red-400'
+								: 'text-gray-300';
+				const bestUnitsLabel =
+					bestAsset && bestAsset.price > 0
+						? bestAsset.wholeUnits
+							? `${bestAsset.units.toFixed(0)} ud`
+							: unitFormatter.format(bestAsset.units)
+						: bestAsset
+							? '—'
+							: null;
 
 				row.innerHTML = `
 					<td class="px-3 py-2 text-xs text-gray-200 sm:px-4 sm:py-3 sm:text-sm">${asset.name}</td>
 					<td class="px-3 py-2 text-xs text-gray-300 sm:px-4 sm:py-3 sm:text-sm">${numberFormatter.format(asset.current)}</td>
 					<td class="px-3 py-2 text-xs text-gray-300 sm:px-4 sm:py-3 sm:text-sm">${numberFormatter.format(asset.desired)}</td>
-					<td class="px-3 py-2 text-xs font-semibold sm:px-4 sm:py-3 sm:text-sm ${asset.addition > 0 ? 'text-green-400' : 'text-gray-300'}">${numberFormatter.format(
+					<td class="px-3 py-2 text-xs font-semibold sm:px-4 sm:py-3 sm:text-sm ${additionClass}">${numberFormatter.format(
 						asset.addition
 					)}</td>
+					<td class="px-3 py-2 text-xs font-semibold sm:px-4 sm:py-3 sm:text-sm ${bestClass}">${
+						bestAsset ? numberFormatter.format(bestAddition) : '—'
+					}</td>
 					<td class="px-3 py-2 text-xs text-gray-300 sm:px-4 sm:py-3 sm:text-sm">${unitsLabel}</td>
 					<td class="px-3 py-2 text-xs font-medium text-blue-400 sm:px-4 sm:py-3 sm:text-sm">${percentFormatter.format(asset.finalShare)}</td>
 				`;
@@ -711,9 +1293,22 @@ Objetivo (%)
 			const positiveAssets = breakdown.filter(
 				(asset) => asset.addition > 0
 			);
+			const negativeAssets = breakdown.filter(
+				(asset) => asset.addition < 0
+			);
+
 			if (!positiveAssets.length) {
-				adviceEl.textContent =
-					'Ya cumples la distribución objetivo; no es necesario aportar más.';
+				if (totals.allowTransfers && negativeAssets.length) {
+					const sellAsset = negativeAssets.reduce((prev, current) =>
+						-current.addition > -prev.addition ? current : prev
+					);
+					adviceEl.textContent = `Solo necesitas traspasos: reduce ${sellAsset.name} en ${numberFormatter.format(
+						Math.abs(sellAsset.addition)
+					)} y redistribuye según la tabla.`;
+				} else {
+					adviceEl.textContent =
+						'Ya cumples la distribución objetivo; no es necesario aportar más.';
+				}
 				return;
 			}
 
@@ -767,6 +1362,7 @@ Objetivo (%)
 				const state = {
 					budget: budgetInput.value,
 					margin: marginInput.value,
+					allowTransfers: transfersEnabled(),
 					assets: rows.map((row) => ({
 						name: row.name,
 						current: row.current,
@@ -796,6 +1392,9 @@ Objetivo (%)
 						budgetInput.value = state.budget;
 					if (state.margin !== undefined)
 						marginInput.value = state.margin;
+					if (typeof state.allowTransfers !== 'undefined') {
+						setTransfersToggle(Boolean(state.allowTransfers));
+					}
 
 					// Limpiar y recrear filas
 					if (state.assets && state.assets.length > 0) {
@@ -825,22 +1424,47 @@ Objetivo (%)
 				try {
 					const rows = getRows();
 					const budget = Math.max(0, sanitize(budgetInput.value));
-					const result =
-						budget > 0
+					const allowMove = transfersEnabled();
+					const result = allowMove
+						? computeWithTransfers(rows, budget)
+						: budget > 0
 							? allocateWithBudget(rows, budget)
 							: minimalContribution(rows);
-					const { breakdown, spent, leftover, finalTotal } =
-						applyUnitConstraints(result.breakdown, result.totals);
+					const appliedMain = applyUnitConstraints(
+						result.breakdown,
+						result.totals,
+						allowMove
+					);
+
+					let appliedBest = null;
+					if (result.bestEffort) {
+						const bestTotals = {
+							...result.totals,
+							invested: result.bestEffort.invested,
+							budget,
+						};
+						appliedBest = applyUnitConstraints(
+							result.bestEffort.breakdown,
+							bestTotals,
+							allowMove
+						);
+					}
 
 					const totals = {
 						...result.totals,
-						invested: spent,
-						leftover,
-						finalTotal,
+						invested: allowMove
+							? appliedMain.net
+							: appliedMain.spent,
+						leftover: appliedMain.leftover,
+						finalTotal: appliedMain.finalTotal,
+						buys: appliedMain.buys,
+						sells: appliedMain.sells,
+						allowTransfers: allowMove,
+						bestEffort: appliedBest,
 					};
 
 					resultsSection.hidden = false;
-					renderResults(breakdown, totals);
+					renderResults(appliedMain.breakdown, totals, appliedBest);
 
 					// Mostrar warning si existe
 					if (result.warning) {
@@ -870,11 +1494,124 @@ Objetivo (%)
 			event.preventDefault();
 		});
 
+		// Exportar datos a JSON
+		const exportData = () => {
+			try {
+				const rows = getRows({ strict: false });
+				const data = {
+					version: '1.0',
+					budget: budgetInput.value || '',
+					margin: marginInput.value || '',
+					allowTransfers: transfersEnabled(),
+					assets: rows.map((row) => ({
+						name: row.name,
+						current: row.current,
+						price: row.price || '',
+						target: row.target,
+						wholeUnits: row.wholeUnits,
+					})),
+				};
+
+				const jsonStr = JSON.stringify(data, null, 2);
+				const blob = new Blob([jsonStr], { type: 'application/json' });
+				const url = URL.createObjectURL(blob);
+				const a = document.createElement('a');
+				a.href = url;
+				a.download = `calculadora-inversion-${new Date().toISOString().split('T')[0]}.json`;
+				document.body.appendChild(a);
+				a.click();
+				document.body.removeChild(a);
+				URL.revokeObjectURL(url);
+			} catch (error) {
+				showError('Error al exportar los datos: ' + error.message);
+			}
+		};
+
+		// Importar datos desde JSON
+		const importData = (file) => {
+			const reader = new FileReader();
+			reader.onload = (e) => {
+				try {
+					const data = JSON.parse(e.target.result);
+
+					if (!data.assets || !Array.isArray(data.assets)) {
+						throw new Error('Formato de archivo inválido');
+					}
+
+					// Cargar presupuesto y margen
+					if (data.budget !== undefined)
+						budgetInput.value = data.budget || '';
+					if (data.margin !== undefined)
+						marginInput.value = data.margin || '';
+					if (typeof data.allowTransfers !== 'undefined') {
+						setTransfersToggle(Boolean(data.allowTransfers));
+					}
+
+					// Limpiar y recrear filas
+					rowsContainer.innerHTML = '';
+					data.assets.forEach((asset) => {
+						const fragment = rowTemplate.content.cloneNode(true);
+						const row = fragment.querySelector('[data-row]');
+						rowsContainer.appendChild(fragment);
+						initializeRow(row, {
+							name: asset.name || '',
+							current: asset.current || null,
+							price: asset.price || null,
+							target: asset.target || 0,
+							wholeUnits: Boolean(asset.wholeUnits),
+						});
+					});
+
+					// Si no hay activos, crear uno vacío
+					if (data.assets.length === 0) {
+						const fragment = rowTemplate.content.cloneNode(true);
+						const row = fragment.querySelector('[data-row]');
+						rowsContainer.appendChild(fragment);
+						initializeRow(row);
+					}
+
+					updateCurrentDistribution();
+					saveFormState();
+					autoCalculate();
+					clearError();
+				} catch (error) {
+					showError('Error al importar los datos: ' + error.message);
+				}
+			};
+			reader.onerror = () => {
+				showError('Error al leer el archivo');
+			};
+			reader.readAsText(file);
+		};
+
+		exportBtn.addEventListener('click', exportData);
+
+		importBtn.addEventListener('click', () => {
+			importFileInput.click();
+		});
+
+		importFileInput.addEventListener('change', (e) => {
+			const file = e.target.files[0];
+			if (file) {
+				if (
+					file.type !== 'application/json' &&
+					!file.name.endsWith('.json')
+				) {
+					showError('El archivo debe ser un JSON válido');
+					return;
+				}
+				importData(file);
+				// Limpiar el input para permitir cargar el mismo archivo de nuevo
+				e.target.value = '';
+			}
+		});
+
 		resetBtn.addEventListener('click', () => {
 			// Limpiar localStorage
 			localStorage.removeItem('investmentCalculatorState');
 
 			form.reset();
+			setTransfersToggle(false);
 			rowsContainer.innerHTML = '';
 			initialAssets.forEach((asset) => {
 				const fragment = rowTemplate.content.cloneNode(true);
