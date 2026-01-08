@@ -195,7 +195,7 @@ const defaultAssets = [
 											/>
 										</svg>
 									</button>
-									<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-7">
+									<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-8">
 										<div class="flex flex-col gap-2">
 											<label class="text-sm font-medium text-gray-300">
 												ISIN
@@ -292,6 +292,32 @@ const defaultAssets = [
 												class="rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-sm text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
 											/>
 										</div>
+
+										<div class="flex flex-col gap-2">
+											<label class="text-sm font-medium text-gray-300">
+												Incluir en cálculo
+											</label>
+											<button
+												type="button"
+												role="switch"
+												data-field="included"
+												aria-checked={
+													typeof (asset as any)
+														.includedInCalculation ===
+														'undefined' ||
+													(asset as any)
+														.includedInCalculation
+														? 'true'
+														: 'false'
+												}
+												aria-label={`Incluir ${asset.name} en el cálculo`}
+												class={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-none ${typeof (asset as any).includedInCalculation === 'undefined' || (asset as any).includedInCalculation ? 'bg-blue-600' : 'bg-gray-600'}`}
+											>
+												<span
+													class={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${typeof (asset as any).includedInCalculation === 'undefined' || (asset as any).includedInCalculation ? 'translate-x-7' : 'translate-x-1'}`}
+												/>
+											</button>
+										</div>
 									</div>
 								</div>
 							))
@@ -367,7 +393,7 @@ const defaultAssets = [
 								</svg>
 							</button>
 							<div
-								class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-7"
+								class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-8"
 							>
 								<div class="flex flex-col gap-2">
 									<label
@@ -467,6 +493,26 @@ const defaultAssets = [
 										required
 										class="rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-sm text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
 									/>
+								</div>
+
+								<div class="flex flex-col gap-2">
+									<label
+										class="text-sm font-medium text-gray-300"
+									>
+										Incluir en cálculo
+									</label>
+									<button
+										type="button"
+										role="switch"
+										data-field="included"
+										aria-checked="true"
+										aria-label="Incluir en el cálculo"
+										class="relative inline-flex h-8 w-14 items-center rounded-full bg-blue-600 transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-none"
+									>
+										<span
+											class="inline-block h-6 w-6 translate-x-7 transform rounded-full bg-white transition-transform"
+										></span>
+									</button>
 								</div>
 							</div>
 						</div>
@@ -723,6 +769,7 @@ const defaultAssets = [
 
 					// Actualizar cálculos
 					saveFormState();
+					updateCurrentDistribution();
 					autoCalculate();
 				} else {
 					throw new Error(data.message || 'Precio no disponible');
@@ -789,6 +836,7 @@ const defaultAssets = [
 				price: row.querySelector('[data-field="price"]'),
 				target: row.querySelector('[data-field="target"]'),
 				whole: row.querySelector('[data-field="whole"]'),
+				included: row.querySelector('[data-field="included"]'),
 			};
 
 			if (data.name) inputMap.name.value = data.name;
@@ -800,7 +848,7 @@ const defaultAssets = [
 			if (typeof data.target !== 'undefined')
 				inputMap.target.value = data.target;
 
-			// Inicializar estado del toggle
+			// Inicializar estado del toggle de unidades completas
 			const isChecked = Boolean(data.wholeUnits);
 			inputMap.whole.setAttribute('aria-checked', isChecked);
 			if (isChecked) {
@@ -812,6 +860,32 @@ const defaultAssets = [
 				inputMap.whole
 					.querySelector('span')
 					.classList.add('translate-x-7');
+			}
+
+			// Inicializar estado del toggle de inclusión en cálculo
+			const isIncluded =
+				typeof data.includedInCalculation === 'undefined'
+					? true
+					: Boolean(data.includedInCalculation);
+			inputMap.included.setAttribute('aria-checked', isIncluded);
+			if (isIncluded) {
+				inputMap.included.classList.remove('bg-gray-600');
+				inputMap.included.classList.add('bg-blue-600');
+				inputMap.included
+					.querySelector('span')
+					.classList.remove('translate-x-1');
+				inputMap.included
+					.querySelector('span')
+					.classList.add('translate-x-7');
+			} else {
+				inputMap.included.classList.remove('bg-blue-600');
+				inputMap.included.classList.add('bg-gray-600');
+				inputMap.included
+					.querySelector('span')
+					.classList.remove('translate-x-7');
+				inputMap.included
+					.querySelector('span')
+					.classList.add('translate-x-1');
 			}
 
 			const updatePriceState = () => {
@@ -854,6 +928,38 @@ const defaultAssets = [
 			});
 
 			updatePriceState();
+
+			// Manejar click en el toggle de inclusión
+			inputMap.included.addEventListener('click', () => {
+				const isChecked =
+					inputMap.included.getAttribute('aria-checked') === 'true';
+				const newState = !isChecked;
+
+				inputMap.included.setAttribute('aria-checked', newState);
+				if (newState) {
+					inputMap.included.classList.remove('bg-gray-600');
+					inputMap.included.classList.add('bg-blue-600');
+					inputMap.included
+						.querySelector('span')
+						.classList.remove('translate-x-1');
+					inputMap.included
+						.querySelector('span')
+						.classList.add('translate-x-7');
+				} else {
+					inputMap.included.classList.remove('bg-blue-600');
+					inputMap.included.classList.add('bg-gray-600');
+					inputMap.included
+						.querySelector('span')
+						.classList.remove('translate-x-7');
+					inputMap.included
+						.querySelector('span')
+						.classList.add('translate-x-1');
+				}
+
+				saveFormState();
+				updateCurrentDistribution();
+				autoCalculate();
+			});
 
 			// Manejar cambios en el campo ISIN
 			let isinTimeout;
@@ -984,6 +1090,9 @@ const defaultAssets = [
 					const wholeToggle = row.querySelector(
 						'[data-field="whole"]'
 					);
+					const includedToggle = row.querySelector(
+						'[data-field="included"]'
+					);
 
 					const name =
 						nameField.value.trim() || `Activo ${index + 1}`;
@@ -992,6 +1101,8 @@ const defaultAssets = [
 					const target = sanitize(targetField.value);
 					const wholeUnits =
 						wholeToggle.getAttribute('aria-checked') === 'true';
+					const includedInCalculation =
+						includedToggle.getAttribute('aria-checked') === 'true';
 					const price = wholeUnits
 						? sanitize(priceField.value)
 						: sanitize(priceField.value) || 0;
@@ -1017,6 +1128,7 @@ const defaultAssets = [
 						price: price > 0 ? price : 0,
 						target,
 						wholeUnits,
+						includedInCalculation,
 					};
 				}
 			);
@@ -1024,27 +1136,65 @@ const defaultAssets = [
 		const updateCurrentDistribution = () => {
 			try {
 				const rows = getRows({ strict: false });
-				const total = rows.reduce(
+				const totalAll = rows.reduce(
 					(sum, asset) => sum + asset.current,
 					0
 				);
-				if (total <= 0) {
+				const includedRows = rows.filter(
+					(asset) => asset.includedInCalculation
+				);
+				const totalIncluded = includedRows.reduce(
+					(sum, asset) => sum + asset.current,
+					0
+				);
+
+				if (totalAll <= 0) {
 					currentTotalLabel.textContent = '-';
 					distributionList.innerHTML =
 						'<li class="rounded-lg border border-dashed border-gray-600 bg-gray-700/30 px-3 py-2 text-sm text-gray-400">Introduce los importes para ver el reparto.</li>';
 					return;
 				}
 
-				currentTotalLabel.textContent = numberFormatter.format(total);
+				// Mostrar dos totales: todos y solo incluidos
+				if (totalIncluded !== totalAll) {
+					currentTotalLabel.innerHTML = `
+						<div class="flex flex-col gap-1">
+							<span>Total: ${numberFormatter.format(totalAll)}</span>
+							<span class="text-sm text-blue-300">Incluidos: ${numberFormatter.format(totalIncluded)}</span>
+						</div>
+					`;
+				} else {
+					currentTotalLabel.textContent =
+						numberFormatter.format(totalAll);
+				}
+
+				// Mostrar todos los activos, pero marcar visualmente los excluidos
+				const allRowElements = Array.from(
+					rowsContainer.querySelectorAll('[data-row]')
+				);
 				distributionList.innerHTML = rows
-					.map(
-						(asset) => `
-						<li class="flex items-center justify-between rounded-lg border border-gray-700 bg-gray-700/50 px-3 py-2 text-sm">
-							<strong class="text-gray-200">${asset.name}</strong>
-							<span class="font-medium text-blue-400">${percentFormatter.format(asset.current / total)}</span>
-						</li>
-					`
-					)
+					.map((asset, index) => {
+						// Obtener el nombre real del campo de la fila correspondiente
+						const rowElement = allRowElements[index];
+						const nameField = rowElement?.querySelector(
+							'[data-field="name"]'
+						);
+						// Usar el valor del campo si existe, sino el nombre del asset
+						const displayName =
+							nameField?.value?.trim() || asset.name;
+						const isIncluded = asset.includedInCalculation;
+						const opacity = isIncluded ? '' : 'opacity-50';
+						const totalForPercent = isIncluded
+							? totalIncluded
+							: totalAll;
+
+						return `
+							<li class="flex items-center justify-between rounded-lg border border-gray-700 bg-gray-700/50 px-3 py-2 text-sm ${opacity}">
+								<strong class="text-gray-200">${displayName}</strong>
+								<span class="font-medium text-blue-400">${percentFormatter.format(asset.current / totalForPercent)}</span>
+							</li>
+						`;
+					})
 					.join('');
 			} catch (error) {
 				// Ignorar errores en modo no estricto
@@ -2437,6 +2587,7 @@ const defaultAssets = [
 						price: row.price,
 						target: row.target,
 						wholeUnits: row.wholeUnits,
+						includedInCalculation: row.includedInCalculation,
 					})),
 				};
 				localStorage.setItem(
@@ -2490,7 +2641,19 @@ const defaultAssets = [
 			clearTimeout(autoCalculateTimeout);
 			autoCalculateTimeout = setTimeout(() => {
 				try {
-					const rows = getRows();
+					const allRows = getRows();
+					// Filtrar solo los activos incluidos en el cálculo
+					const rows = allRows.filter(
+						(asset) => asset.includedInCalculation
+					);
+
+					if (rows.length === 0) {
+						showError(
+							'Debe haber al menos un activo incluido en el cálculo'
+						);
+						return;
+					}
+
 					const budget = Math.max(0, sanitize(budgetInput.value));
 					const allowMove = transfersEnabled();
 					const result = allowMove
@@ -2587,6 +2750,7 @@ const defaultAssets = [
 						price: row.price || '',
 						target: row.target,
 						wholeUnits: row.wholeUnits,
+						includedInCalculation: row.includedInCalculation,
 					})),
 				};
 
@@ -2638,6 +2802,11 @@ const defaultAssets = [
 							price: asset.price || null,
 							target: asset.target || 0,
 							wholeUnits: Boolean(asset.wholeUnits),
+							includedInCalculation:
+								typeof asset.includedInCalculation ===
+								'undefined'
+									? true
+									: Boolean(asset.includedInCalculation),
 						});
 					});
 
