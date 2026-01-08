@@ -7,6 +7,7 @@ const defaultAssets = [
 		name: 'MSCI World',
 		current: null,
 		price: null,
+		isin: null,
 		target: 60,
 		wholeUnits: false,
 	},
@@ -15,6 +16,7 @@ const defaultAssets = [
 		name: 'Mercados emergentes',
 		current: null,
 		price: null,
+		isin: null,
 		target: 10,
 		wholeUnits: false,
 	},
@@ -23,6 +25,7 @@ const defaultAssets = [
 		name: 'BTC',
 		current: null,
 		price: null,
+		isin: null,
 		target: 15,
 		wholeUnits: true,
 	},
@@ -31,6 +34,7 @@ const defaultAssets = [
 		name: 'Oro',
 		current: null,
 		price: null,
+		isin: null,
 		target: 15,
 		wholeUnits: true,
 	},
@@ -191,8 +195,21 @@ const defaultAssets = [
 											/>
 										</svg>
 									</button>
-									<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-5">
+									<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-7">
 										<div class="flex flex-col gap-2">
+											<label class="text-sm font-medium text-gray-300">
+												ISIN
+											</label>
+											<input
+												data-field="isin"
+												type="text"
+												value={asset.isin || ''}
+												placeholder="ES0123456789"
+												class="rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-sm text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+											/>
+										</div>
+
+										<div class="flex flex-col gap-2 lg:col-span-2">
 											<label class="text-sm font-medium text-gray-300">
 												Activo
 											</label>
@@ -350,9 +367,23 @@ const defaultAssets = [
 								</svg>
 							</button>
 							<div
-								class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-5"
+								class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-7"
 							>
 								<div class="flex flex-col gap-2">
+									<label
+										class="text-sm font-medium text-gray-300"
+									>
+										ISIN
+									</label>
+									<input
+										data-field="isin"
+										type="text"
+										placeholder="ES0123456789"
+										class="rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-sm text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+									/>
+								</div>
+
+								<div class="flex flex-col gap-2 lg:col-span-2">
 									<label
 										class="text-sm font-medium text-gray-300"
 									>
@@ -587,6 +618,134 @@ const defaultAssets = [
 			return Number(value.replace(',', '.')) || 0;
 		};
 
+		// Función para refrescar todos los precios de ISINs en el formulario
+		const refreshAllPrices = () => {
+			const rows = rowsContainer.querySelectorAll('[data-row]');
+			rows.forEach((row) => {
+				const isinInput = row.querySelector('[data-field="isin"]');
+				const priceInput = row.querySelector('[data-field="price"]');
+				const wholeToggle = row.querySelector('[data-field="whole"]');
+
+				const isin = isinInput?.value?.trim().toUpperCase();
+				const isinRegex = /^[A-Z]{2}[A-Z0-9]{9}[0-9]$/;
+
+				// Solo intentar si hay un ISIN válido
+				if (
+					isin &&
+					isinRegex.test(isin) &&
+					isinInput &&
+					priceInput &&
+					wholeToggle
+				) {
+					const isETF =
+						wholeToggle.getAttribute('aria-checked') === 'true';
+					// Añadir un pequeño delay entre requests para no sobrecargar
+					setTimeout(() => {
+						fetchPriceByISIN(isin, priceInput, isinInput, isETF);
+					}, Math.random() * 1000); // Random delay 0-1s
+				}
+			});
+		};
+
+		// Función para obtener el precio de un fondo por ISIN
+		const fetchPriceByISIN = async (isin, priceInput, isinInput, isETF) => {
+			// Validar que el ISIN no esté vacío
+			if (!isin || isin.trim().length === 0) {
+				console.warn('ISIN vacío o inválido:', isin);
+				return;
+			}
+
+			// Mostrar estado de carga
+			isinInput.classList.remove('border-yellow-500', 'border-green-500');
+			isinInput.classList.add('border-blue-500');
+			isinInput.title = 'Buscando precio...';
+
+			try {
+				// Normalizar ISIN antes de enviarlo
+				const normalizedIsin = isin.trim().toUpperCase();
+
+				// Construir URL con query params
+				const params = new URLSearchParams();
+				params.set('isin', normalizedIsin);
+				params.set('isETF', isETF ? 'true' : 'false');
+				const apiUrl = `/api/fund-price?${params.toString()}`;
+
+				// Llamar al endpoint API de Astro que hace el fetch desde el servidor
+				// Esto evita problemas de CORS mediante web scraping
+				const response = await fetch(apiUrl, {
+					method: 'GET',
+					headers: {
+						Accept: 'application/json',
+					},
+				});
+
+				if (!response.ok) {
+					const errorData = await response.json().catch(() => ({}));
+					throw new Error(
+						errorData.message || 'No se pudo obtener el precio'
+					);
+				}
+
+				const data = await response.json();
+
+				if (data.price && data.price > 0) {
+					// Precio obtenido exitosamente
+					priceInput.value = data.price.toFixed(4);
+
+					// Actualizar el nombre si viene en la respuesta
+					if (data.name) {
+						const row = priceInput.closest('[data-row]');
+						const nameInput = row.querySelector(
+							'[data-field="name"]'
+						);
+						// Solo actualizar si está vacío o es un nombre genérico
+						if (
+							!nameInput.value ||
+							nameInput.value.startsWith('Activo ')
+						) {
+							nameInput.value = data.name;
+						}
+					}
+
+					// Habilitar el campo de precio si el toggle está activado
+					const row = priceInput.closest('[data-row]');
+					const wholeToggle = row.querySelector(
+						'[data-field="whole"]'
+					);
+					if (wholeToggle.getAttribute('aria-checked') === 'true') {
+						priceInput.disabled = false;
+					}
+
+					// Actualizar estilos
+					isinInput.classList.remove('border-blue-500');
+					isinInput.classList.add('border-green-500');
+					isinInput.title = 'Precio obtenido correctamente';
+
+					// Actualizar cálculos
+					saveFormState();
+					autoCalculate();
+				} else {
+					throw new Error(data.message || 'Precio no disponible');
+				}
+			} catch (error) {
+				// Si falla, mostrar mensaje al usuario
+				console.warn('Error al obtener precio por ISIN:', error);
+
+				isinInput.classList.remove('border-blue-500');
+				isinInput.classList.add('border-yellow-500');
+				isinInput.title =
+					'No se pudo obtener el precio automáticamente. Introdúcelo manualmente en el campo "Precio unidad".';
+
+				// Habilitar el campo de precio para entrada manual si el toggle está activado
+				const row = priceInput.closest('[data-row]');
+				const wholeToggle = row.querySelector('[data-field="whole"]');
+				if (wholeToggle.getAttribute('aria-checked') === 'true') {
+					priceInput.disabled = false;
+					priceInput.focus();
+				}
+			}
+		};
+
 		const getMarginValue = () => {
 			const raw = marginInput.value.trim();
 			const fallback = raw === '' ? 1 : sanitize(raw);
@@ -625,6 +784,7 @@ const defaultAssets = [
 		const initializeRow = (row, data = {}) => {
 			const inputMap = {
 				name: row.querySelector('[data-field="name"]'),
+				isin: row.querySelector('[data-field="isin"]'),
 				current: row.querySelector('[data-field="current"]'),
 				price: row.querySelector('[data-field="price"]'),
 				target: row.querySelector('[data-field="target"]'),
@@ -632,6 +792,7 @@ const defaultAssets = [
 			};
 
 			if (data.name) inputMap.name.value = data.name;
+			if (data.isin) inputMap.isin.value = data.isin;
 			if (typeof data.current !== 'undefined')
 				inputMap.current.value = data.current;
 			if (typeof data.price !== 'undefined' && data.price !== 0)
@@ -694,12 +855,67 @@ const defaultAssets = [
 
 			updatePriceState();
 
+			// Manejar cambios en el campo ISIN
+			let isinTimeout;
+			inputMap.isin.addEventListener('input', (e) => {
+				const isinValue = inputMap.isin.value.trim().toUpperCase();
+				clearTimeout(isinTimeout);
+
+				if (isinValue.length >= 12) {
+					// Validar formato ISIN básico (12 caracteres)
+					const isinRegex = /^[A-Z]{2}[A-Z0-9]{9}[0-9]$/;
+					if (isinRegex.test(isinValue)) {
+						// Mostrar indicador de carga
+						inputMap.isin.classList.add('border-blue-500');
+						inputMap.price.disabled = true;
+
+						// Capturar los elementos en el closure
+						const priceInput = inputMap.price;
+						const isinInput = inputMap.isin;
+
+						isinTimeout = setTimeout(() => {
+							// Verificar que el valor no haya cambiado
+							const currentIsin = isinInput.value
+								.trim()
+								.toUpperCase();
+
+							if (
+								currentIsin === isinValue &&
+								isinRegex.test(currentIsin)
+							) {
+								// Obtener el estado del toggle de unidades completas
+								const row = isinInput.closest('[data-row]');
+								const wholeToggle = row.querySelector(
+									'[data-field="whole"]'
+								);
+								const isETF =
+									wholeToggle.getAttribute('aria-checked') ===
+									'true';
+
+								fetchPriceByISIN(
+									currentIsin,
+									priceInput,
+									isinInput,
+									isETF
+								);
+							}
+						}, 800); // Debounce de 800ms
+					}
+				} else {
+					inputMap.isin.classList.remove('border-blue-500');
+				}
+
+				saveFormState();
+			});
+
 			row.querySelectorAll('input').forEach((input) => {
-				input.addEventListener('input', () => {
-					window.requestAnimationFrame(updateCurrentDistribution);
-					saveFormState();
-					autoCalculate();
-				});
+				if (input !== inputMap.isin) {
+					input.addEventListener('input', () => {
+						window.requestAnimationFrame(updateCurrentDistribution);
+						saveFormState();
+						autoCalculate();
+					});
+				}
 			});
 
 			// Manejar el botón de eliminar
@@ -755,6 +971,7 @@ const defaultAssets = [
 			[...rowsContainer.querySelectorAll('[data-row]')].map(
 				(row, index) => {
 					const nameField = row.querySelector('[data-field="name"]');
+					const isinField = row.querySelector('[data-field="isin"]');
 					const currentField = row.querySelector(
 						'[data-field="current"]'
 					);
@@ -770,6 +987,7 @@ const defaultAssets = [
 
 					const name =
 						nameField.value.trim() || `Activo ${index + 1}`;
+					const isin = isinField.value.trim().toUpperCase() || null;
 					const current = sanitize(currentField.value);
 					const target = sanitize(targetField.value);
 					const wholeUnits =
@@ -794,6 +1012,7 @@ const defaultAssets = [
 
 					return {
 						name,
+						isin,
 						current,
 						price: price > 0 ? price : 0,
 						target,
@@ -2213,6 +2432,7 @@ const defaultAssets = [
 					allowTransfers: transfersEnabled(),
 					assets: rows.map((row) => ({
 						name: row.name,
+						isin: row.isin,
 						current: row.current,
 						price: row.price,
 						target: row.target,
@@ -2362,6 +2582,7 @@ const defaultAssets = [
 					allowTransfers: transfersEnabled(),
 					assets: rows.map((row) => ({
 						name: row.name,
+						isin: row.isin || '',
 						current: row.current,
 						price: row.price || '',
 						target: row.target,
@@ -2412,6 +2633,7 @@ const defaultAssets = [
 						rowsContainer.appendChild(fragment);
 						initializeRow(row, {
 							name: asset.name || '',
+							isin: asset.isin || null,
 							current: asset.current || null,
 							price: asset.price || null,
 							target: asset.target || 0,
@@ -2431,6 +2653,9 @@ const defaultAssets = [
 					saveFormState();
 					autoCalculate();
 					clearError();
+
+					// Refrescar precios de todos los ISINs
+					setTimeout(() => refreshAllPrices(), 500);
 				} catch (error) {
 					showError('Error al importar los datos: ' + error.message);
 				}
@@ -2485,6 +2710,9 @@ const defaultAssets = [
 
 		// Cargar estado inicial al cargar la página
 		loadFormState();
+
+		// Refrescar precios de todos los ISINs después de cargar
+		setTimeout(() => refreshAllPrices(), 1000);
 	</script>
 </BasicLayout>
 
