@@ -1,0 +1,423 @@
+---
+import BasicLayout from '@/layouts/BasicLayout.astro';
+import Copy from '@/components/icons/Copy2.astro';
+import Trash from '@/components/icons/Trash.astro';
+---
+
+<BasicLayout title="Package Merger | Adrian Palomo">
+	<div class="min-h-screen bg-gray-900 p-4 font-sans text-gray-100">
+		<!-- Header -->
+		<div class="mb-4 flex items-center justify-between">
+			<div>
+				<h1 class="text-3xl font-bold text-blue-500">
+					Package.xml Merger
+				</h1>
+				<p class="mt-2 text-sm text-gray-400">
+					Combina dos archivos package.xml de Salesforce en uno solo
+				</p>
+			</div>
+			<button
+				id="clearAll"
+				class="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700"
+				title="Limpiar todo"
+			>
+				<Trash />
+			</button>
+		</div>
+
+		<!-- Grid Layout -->
+		<div class="parent">
+			<div class="div1">
+				<div class="panel-header">
+					<span>Package 1</span>
+				</div>
+				<textarea
+					id="input1"
+					placeholder="Pega aquí el primer package.xml..."
+					class="textarea-input"></textarea>
+			</div>
+			<div class="div2">
+				<div class="panel-header">
+					<span>Package 2</span>
+				</div>
+				<textarea
+					id="input2"
+					placeholder="Pega aquí el segundo package.xml..."
+					class="textarea-input"></textarea>
+			</div>
+			<div class="div3">
+				<div class="panel-header">
+					<span>Resultado del merge</span>
+					<button class="copy-btn" id="copy" title="Copiar resultado">
+						<Copy />
+					</button>
+				</div>
+				<textarea
+					id="output"
+					readonly
+					placeholder="El resultado aparecerá aquí..."
+					class="textarea-output"></textarea>
+			</div>
+		</div>
+	</div>
+</BasicLayout>
+
+<script type="module" is:inline>
+	function parsePackage(xmlStr) {
+		const parser = new DOMParser();
+		return parser.parseFromString(xmlStr, 'application/xml');
+	}
+	function recogerTypes(doc) {
+		const tipos = {};
+		const list = doc.getElementsByTagName('types');
+		for (let t of list) {
+			const nameNode = t.getElementsByTagName('name')[0];
+			if (!nameNode) continue;
+			const name = nameNode.textContent;
+			if (!tipos[name]) tipos[name] = [];
+			for (let m of t.getElementsByTagName('members')) {
+				const text = m.textContent;
+				if (!tipos[name].includes(text)) tipos[name].push(text);
+			}
+		}
+		return tipos;
+	}
+	function obtenerVersion(doc) {
+		const v = doc.getElementsByTagName('version')[0];
+		return v ? v.textContent : '';
+	}
+	function buildPackage(tipos, version) {
+		let out = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n';
+		out += '<Package xmlns="http://soap.sforce.com/2006/04/metadata">\n';
+		for (let name of Object.keys(tipos)) {
+			out += '\t<types>\n';
+			for (let mem of tipos[name]) {
+				out += `\t\t<members>${mem}</members>\n`;
+			}
+			out += `\t\t<name>${name}</name>\n`;
+			out += '\t</types>\n';
+		}
+		out += `\t<version>${version}</version>\n`;
+		out += '</Package>';
+		return out;
+	}
+	function merge() {
+		const outArea = document.getElementById('output');
+		outArea.classList.remove('error');
+		const xml1 = document.getElementById('input1').value.trim();
+		const xml2 = document.getElementById('input2').value.trim();
+
+		// Si ambos campos están vacíos, limpiar output y no hacer nada más
+		if (!xml1 && !xml2) {
+			outArea.value = '';
+			return;
+		}
+
+		try {
+			const doc1 = parsePackage(xml1);
+			const doc2 = parsePackage(xml2);
+			const tipos1 = recogerTypes(doc1);
+			const tipos2 = recogerTypes(doc2);
+			for (let name in tipos2) {
+				if (!tipos1[name]) {
+					tipos1[name] = tipos2[name].slice();
+				} else {
+					for (let mem of tipos2[name]) {
+						if (!tipos1[name].includes(mem)) tipos1[name].push(mem);
+					}
+				}
+			}
+			const version = obtenerVersion(doc1) || obtenerVersion(doc2) || '';
+			outArea.value = buildPackage(tipos1, version);
+		} catch (e) {
+			outArea.value = e.message;
+			outArea.classList.add('error');
+		}
+	}
+
+	function saveToLocalStorage() {
+		const xml1 = document.getElementById('input1').value;
+		const xml2 = document.getElementById('input2').value;
+
+		localStorage.setItem('packageMerger_input1', xml1);
+		localStorage.setItem('packageMerger_input2', xml2);
+	}
+
+	function loadFromLocalStorage() {
+		const savedInput1 = localStorage.getItem('packageMerger_input1');
+		const savedInput2 = localStorage.getItem('packageMerger_input2');
+
+		if (savedInput1) {
+			document.getElementById('input1').value = savedInput1;
+		}
+		if (savedInput2) {
+			document.getElementById('input2').value = savedInput2;
+		}
+
+		// Ejecutar merge si hay datos guardados
+		if (savedInput1 || savedInput2) {
+			merge();
+		}
+	}
+
+	document.getElementById('input1').addEventListener('input', function () {
+		saveToLocalStorage();
+		merge();
+	});
+
+	document.getElementById('input2').addEventListener('input', function () {
+		saveToLocalStorage();
+		merge();
+	});
+
+	document.getElementById('copy').addEventListener('click', () => {
+		const texto = document.getElementById('output').value;
+
+		if (navigator.clipboard) {
+			navigator.clipboard.writeText(texto).then(() => {
+				// Feedback visual
+				const btn = document.getElementById('copy');
+				const originalColor = btn.style.color;
+				btn.style.color = '#10b981';
+				setTimeout(() => {
+					btn.style.color = originalColor;
+				}, 1000);
+			});
+		} else {
+			// Fallback para navegadores antiguos
+			const outArea = document.getElementById('output');
+			outArea.select();
+			document.execCommand('copy');
+		}
+	});
+
+	function clearAll() {
+		// Limpiar campos
+		document.getElementById('input1').value = '';
+		document.getElementById('input2').value = '';
+		document.getElementById('output').value = '';
+
+		// Limpiar localStorage
+		localStorage.removeItem('packageMerger_input1');
+		localStorage.removeItem('packageMerger_input2');
+
+		// Remover clase de error si existe
+		document.getElementById('output').classList.remove('error');
+	}
+
+	document.getElementById('clearAll').addEventListener('click', clearAll);
+
+	// Cargar datos guardados al iniciar
+	window.addEventListener('load', loadFromLocalStorage);
+</script>
+
+<style>
+	.parent {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		grid-template-rows: repeat(2, 1fr);
+		gap: 16px;
+		height: calc(100vh - 180px);
+		min-height: 600px;
+	}
+
+	.div1,
+	.div2,
+	.div3 {
+		display: flex;
+		flex-direction: column;
+		border-radius: 8px;
+		border: 1px solid #374151;
+		background-color: #1f2937;
+		overflow: hidden;
+	}
+
+	.div1 {
+		grid-column-start: 1;
+		grid-row-start: 1;
+	}
+
+	.div2 {
+		grid-column-start: 1;
+		grid-row-start: 2;
+	}
+
+	.div3 {
+		grid-column-start: 2;
+		grid-row-start: 1;
+		grid-row-end: span 2;
+	}
+
+	.panel-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 12px 16px;
+		background-color: #374151;
+		border-bottom: 1px solid #4b5563;
+		font-weight: 600;
+		font-size: 14px;
+		color: #f3f4f6;
+	}
+
+	textarea {
+		flex: 1;
+		width: 100%;
+		resize: none;
+		font-family:
+			'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro',
+			monospace;
+		font-size: 13px;
+		box-sizing: border-box;
+		padding: 16px;
+		border: none;
+		background-color: #1f2937;
+		color: #f3f4f6;
+		outline: none;
+	}
+
+	textarea::placeholder {
+		color: #6b7280;
+	}
+
+	.textarea-input:focus {
+		background-color: #111827;
+	}
+
+	.textarea-output {
+		background-color: #111827;
+		cursor: default;
+	}
+
+	textarea.error {
+		color: #ef4444;
+		font-weight: 500;
+	}
+
+	.copy-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 6px;
+		cursor: pointer;
+		background: transparent;
+		border: none;
+		border-radius: 4px;
+		transition:
+			background 0.2s,
+			transform 0.1s;
+		color: #9ca3af;
+	}
+
+	.copy-btn:hover {
+		background: #4b5563;
+		color: #f3f4f6;
+	}
+
+	.copy-btn:active {
+		transform: scale(0.95);
+	}
+
+	/* SVG Icon Sizing */
+	svg {
+		width: 18px;
+		height: 18px;
+	}
+
+	/* Custom Scrollbar */
+	textarea::-webkit-scrollbar {
+		width: 10px;
+		height: 10px;
+	}
+
+	textarea::-webkit-scrollbar-track {
+		background: #374151;
+	}
+
+	textarea::-webkit-scrollbar-thumb {
+		background: #4b5563;
+		border-radius: 5px;
+	}
+
+	textarea::-webkit-scrollbar-thumb:hover {
+		background: #6b7280;
+	}
+
+	/* Animation */
+	@keyframes fadeInUp {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	.div1,
+	.div2,
+	.div3 {
+		animation: fadeInUp 0.3s ease-out;
+	}
+
+	.div2 {
+		animation-delay: 0.1s;
+	}
+
+	.div3 {
+		animation-delay: 0.2s;
+	}
+
+	/* Responsive Design */
+	@media (max-width: 768px) {
+		.parent {
+			grid-template-columns: 1fr;
+			grid-template-rows: repeat(3, 1fr);
+			height: auto;
+			min-height: auto;
+		}
+
+		.div1,
+		.div2,
+		.div3 {
+			grid-column-start: 1;
+			grid-row-end: span 1;
+			min-height: 250px;
+		}
+
+		.div1 {
+			grid-row-start: 1;
+		}
+
+		.div2 {
+			grid-row-start: 2;
+		}
+
+		.div3 {
+			grid-row-start: 3;
+		}
+	}
+
+	/* Clear All Button */
+	#clearAll {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		cursor: pointer;
+	}
+
+	#clearAll:active {
+		transform: scale(0.95);
+	}
+
+	@media (max-width: 768px) {
+		#clearAll {
+			padding: 8px;
+		}
+
+		#clearAll span {
+			display: none;
+		}
+	}
+</style>

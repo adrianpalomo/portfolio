@@ -1,0 +1,46 @@
+---
+import PageHeader from "@/components/PageHeader.astro";
+import Layout from "@/layouts/Layout.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+
+  return projects.map((project) => ({
+    params: { id: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { data } = project;
+const {
+  title,
+  img,
+  description,
+  tags,
+  links,
+  technologies,
+  startDate,
+  endDate,
+  company,
+  companyLogo,
+} = data;
+const { Content } = await render(project);
+---
+
+<Layout
+  title={title}
+  description={description}
+  image={img}
+  canonical={`https://www.adrianpalomo.com/projects/${project.id}`},
+  index={false}
+>
+  <PageHeader transitionName="projectsDetail">
+    <div class="flex w-full flex-col gap-8 px-8">
+      <h1 class="text-center text-2xl font-bold">{title}</h1>
+      <h2 class="text-center text-xl font-bold">En construcción</h2>
+      <Content />
+    </div>
+  </PageHeader>
+</Layout>
