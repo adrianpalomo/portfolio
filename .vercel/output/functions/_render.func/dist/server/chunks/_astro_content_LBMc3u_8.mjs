@@ -1,11 +1,106 @@
-import { escape } from 'html-escaper';
-import { Traverse } from 'neotraverse/modern';
-import pLimit from 'p-limit';
-import { z } from 'zod';
+import { o as objectType, j as dateType, k as arrayType, l as stringType, A as AstroError, U as UnknownContentCollectionError, R as RenderUndefinedEntryError, c as createComponent, u as unescapeHTML, a as renderTemplate, n as escape, p as renderUniqueStylesheet, q as renderScriptElement, t as createHeadAndContent, r as renderComponent } from './astro/server_D5FaFTUc.mjs';
+import Queue from 'yocto-queue';
 import { r as removeBase, i as isRemotePath, p as prependForwardSlash } from './path_tbLlI_c1.mjs';
 import { V as VALID_INPUT_FORMATS } from './consts_BmVDRGlB.mjs';
-import { A as AstroError, U as UnknownContentCollectionError, R as RenderUndefinedEntryError, c as createComponent, u as unescapeHTML, a as renderTemplate, j as renderUniqueStylesheet, k as renderScriptElement, l as createHeadAndContent, r as renderComponent } from './astro/server_D5k8374Y.mjs';
-import * as devalue from 'devalue';
+import { u as unflatten } from './parse_CGy4bDMr.mjs';
+
+var e=e=>Object.prototype.toString.call(e),t=e=>ArrayBuffer.isView(e)&&!(e instanceof DataView),o=t=>"[object Date]"===e(t),n=t=>"[object RegExp]"===e(t),r=t=>"[object Error]"===e(t),s=t=>"[object Boolean]"===e(t),l=t=>"[object Number]"===e(t),i=t=>"[object String]"===e(t),c=Array.isArray,u=Object.getOwnPropertyDescriptor,a=Object.prototype.propertyIsEnumerable,f=Object.getOwnPropertySymbols,p=Object.prototype.hasOwnProperty,h=Object.keys;function d(e){const t=h(e),o=f(e);for(let n=0;n<o.length;n++)a.call(e,o[n])&&t.push(o[n]);return t}function b(e,t){return !u(e,t)?.writable}function y(e,u){if("object"==typeof e&&null!==e){let a;if(c(e))a=[];else if(o(e))a=new Date(e.getTime?e.getTime():e);else if(n(e))a=new RegExp(e);else if(r(e))a={message:e.message};else if(s(e)||l(e)||i(e))a=Object(e);else {if(t(e))return e.slice();a=Object.create(Object.getPrototypeOf(e));}const f=u.includeSymbols?d:h;for(const t of f(e))a[t]=e[t];return a}return e}var g={includeSymbols:false,immutable:false};function m(e,t,o=g){const n=[],r=[];let s=true;const l=o.includeSymbols?d:h,i=!!o.immutable;return function e(u){const a=i?y(u,o):u,f={};let h=true;const d={node:a,node_:u,path:[].concat(n),parent:r[r.length-1],parents:r,key:n[n.length-1],isRoot:0===n.length,level:n.length,circular:void 0,isLeaf:false,notLeaf:true,notRoot:true,isFirst:false,isLast:false,update:function(e,t=false){d.isRoot||(d.parent.node[d.key]=e),d.node=e,t&&(h=false);},delete:function(e){delete d.parent.node[d.key],e&&(h=false);},remove:function(e){c(d.parent.node)?d.parent.node.splice(d.key,1):delete d.parent.node[d.key],e&&(h=false);},keys:null,before:function(e){f.before=e;},after:function(e){f.after=e;},pre:function(e){f.pre=e;},post:function(e){f.post=e;},stop:function(){s=false;},block:function(){h=false;}};if(!s)return d;function g(){if("object"==typeof d.node&&null!==d.node){d.keys&&d.node_===d.node||(d.keys=l(d.node)),d.isLeaf=0===d.keys.length;for(let e=0;e<r.length;e++)if(r[e].node_===u){d.circular=r[e];break}}else d.isLeaf=true,d.keys=null;d.notLeaf=!d.isLeaf,d.notRoot=!d.isRoot;}g();const m=t(d,d.node);if(void 0!==m&&d.update&&d.update(m),f.before&&f.before(d,d.node),!h)return d;if("object"==typeof d.node&&null!==d.node&&!d.circular){r.push(d),g();for(const[t,o]of Object.entries(d.keys??[])){n.push(o),f.pre&&f.pre(d,d.node[o],o);const r=e(d.node[o]);i&&p.call(d.node,o)&&!b(d.node,o)&&(d.node[o]=r.node),r.isLast=!!d.keys?.length&&+t==d.keys.length-1,r.isFirst=0==+t,f.post&&f.post(d,r),n.pop();}r.pop();}return f.after&&f.after(d,d.node),d}(e).node}var j=class{#e;#t;constructor(e,t=g){this.#e=e,this.#t=t;}get(e){let t=this.#e;for(let o=0;t&&o<e.length;o++){const n=e[o];if(!p.call(t,n)||!this.#t.includeSymbols&&"symbol"==typeof n)return;t=t[n];}return t}has(e){let t=this.#e;for(let o=0;t&&o<e.length;o++){const n=e[o];if(!p.call(t,n)||!this.#t.includeSymbols&&"symbol"==typeof n)return  false;t=t[n];}return  true}set(e,t){let o=this.#e,n=0;for(n=0;n<e.length-1;n++){const t=e[n];p.call(o,t)||(o[t]={}),o=o[t];}return o[e[n]]=t,t}map(e){return m(this.#e,e,{immutable:true,includeSymbols:!!this.#t.includeSymbols})}forEach(e){return this.#e=m(this.#e,e,this.#t),this.#e}reduce(e,t){const o=1===arguments.length;let n=o?this.#e:t;return this.forEach(((t,r)=>{t.isRoot&&o||(n=e(t,n,r));})),n}paths(){const e=[];return this.forEach((t=>{e.push(t.path);})),e}nodes(){const e=[];return this.forEach((t=>{e.push(t.node);})),e}clone(){const e=[],o=[],n=this.#t;return t(this.#e)?this.#e.slice():function t(r){for(let t=0;t<e.length;t++)if(e[t]===r)return o[t];if("object"==typeof r&&null!==r){const s=y(r,n);e.push(r),o.push(s);const l=n.includeSymbols?d:h;for(const e of l(r))s[e]=t(r[e]);return e.pop(),o.pop(),s}return r}(this.#e)}};
+
+function pLimit(concurrency) {
+	validateConcurrency(concurrency);
+
+	const queue = new Queue();
+	let activeCount = 0;
+
+	const resumeNext = () => {
+		if (activeCount < concurrency && queue.size > 0) {
+			queue.dequeue()();
+			// Since `pendingCount` has been decreased by one, increase `activeCount` by one.
+			activeCount++;
+		}
+	};
+
+	const next = () => {
+		activeCount--;
+
+		resumeNext();
+	};
+
+	const run = async (function_, resolve, arguments_) => {
+		const result = (async () => function_(...arguments_))();
+
+		resolve(result);
+
+		try {
+			await result;
+		} catch {}
+
+		next();
+	};
+
+	const enqueue = (function_, resolve, arguments_) => {
+		// Queue `internalResolve` instead of the `run` function
+		// to preserve asynchronous context.
+		new Promise(internalResolve => {
+			queue.enqueue(internalResolve);
+		}).then(
+			run.bind(undefined, function_, resolve, arguments_),
+		);
+
+		(async () => {
+			// This function needs to wait until the next microtask before comparing
+			// `activeCount` to `concurrency`, because `activeCount` is updated asynchronously
+			// after the `internalResolve` function is dequeued and called. The comparison in the if-statement
+			// needs to happen asynchronously as well to get an up-to-date value for `activeCount`.
+			await Promise.resolve();
+
+			if (activeCount < concurrency) {
+				resumeNext();
+			}
+		})();
+	};
+
+	const generator = (function_, ...arguments_) => new Promise(resolve => {
+		enqueue(function_, resolve, arguments_);
+	});
+
+	Object.defineProperties(generator, {
+		activeCount: {
+			get: () => activeCount,
+		},
+		pendingCount: {
+			get: () => queue.size,
+		},
+		clearQueue: {
+			value() {
+				queue.clear();
+			},
+		},
+		concurrency: {
+			get: () => concurrency,
+
+			set(newConcurrency) {
+				validateConcurrency(newConcurrency);
+				concurrency = newConcurrency;
+
+				queueMicrotask(() => {
+					// eslint-disable-next-line no-unmodified-loop-condition
+					while (activeCount < concurrency && queue.size > 0) {
+						resumeNext();
+					}
+				});
+			},
+		},
+	});
+
+	return generator;
+}
+
+function validateConcurrency(concurrency) {
+	if (!((Number.isInteger(concurrency) || concurrency === Number.POSITIVE_INFINITY) && concurrency > 0)) {
+		throw new TypeError('Expected `concurrency` to be a number from 1 and up');
+	}
+}
 
 const CONTENT_IMAGE_FLAG = "astroContentImageFlag";
 const IMAGE_IMPORT_PREFIX = "__ASTRO_IMAGE_";
@@ -69,7 +164,7 @@ class ImmutableDataStore {
       if (data.default instanceof Map) {
         return ImmutableDataStore.fromMap(data.default);
       }
-      const map = devalue.unflatten(data.default);
+      const map = unflatten(data.default);
       return ImmutableDataStore.fromMap(map);
     } catch {
     }
@@ -113,9 +208,9 @@ function createCollectionToGlobResultMap({
   }
   return collectionToGlobResultMap;
 }
-z.object({
-  tags: z.array(z.string()).optional(),
-  lastModified: z.date().optional()
+objectType({
+  tags: arrayType(stringType()).optional(),
+  lastModified: dateType().optional()
 });
 function createGetCollection({
   contentCollectionToEntryMap,
@@ -223,7 +318,7 @@ const CONTENT_LAYER_IMAGE_REGEX = /__ASTRO_IMAGE_="([^"]+)"/g;
 async function updateImageReferencesInBody(html, fileName) {
   const { default: imageAssetMap } = await import('./content-assets_DleWbedO.mjs');
   const imageObjects = /* @__PURE__ */ new Map();
-  const { getImage } = await import('./_astro_assets_BIx5rcqa.mjs').then(n => n._);
+  const { getImage } = await import('./_astro_assets_B-CztFzp.mjs').then(n => n._);
   for (const [_full, imagePath] of html.matchAll(CONTENT_LAYER_IMAGE_REGEX)) {
     try {
       const decodedImagePath = JSON.parse(imagePath.replaceAll("&#x22;", '"'));
@@ -259,7 +354,7 @@ async function updateImageReferencesInBody(html, fileName) {
   });
 }
 function updateImageReferencesInData(data, fileName, imageAssetMap) {
-  return new Traverse(data).map(function(ctx, val) {
+  return new j(data).map(function(ctx, val) {
     if (typeof val === "string" && val.startsWith(IMAGE_IMPORT_PREFIX)) {
       const src = val.replace(IMAGE_IMPORT_PREFIX, "");
       const id = imageSrcToImportId(src, fileName);

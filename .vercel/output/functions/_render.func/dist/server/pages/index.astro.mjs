@@ -1,11 +1,10 @@
-import { d as createAstro, c as createComponent, m as maybeRenderHead, s as spreadAttributes, a as renderTemplate, b as addAttribute, r as renderComponent, i as renderTransition, e as renderScript } from '../chunks/astro/server_D5k8374Y.mjs';
-import 'clsx';
+import { d as createAstro, c as createComponent, m as maybeRenderHead, s as spreadAttributes, a as renderTemplate, b as addAttribute, r as renderComponent, i as renderTransition, e as renderScript } from '../chunks/astro/server_D5FaFTUc.mjs';
 import { c as certifications } from '../chunks/certifications_BQ4xoOyt.mjs';
 /* empty css                                 */
-import { $ as $$Github } from '../chunks/Github_D--r5zeG.mjs';
-import { g as getCollection } from '../chunks/_astro_content_D4UjJ2Qc.mjs';
+import { $ as $$Github } from '../chunks/Github_B_bkNDWo.mjs';
+import { g as getCollection } from '../chunks/_astro_content_LBMc3u_8.mjs';
 /* empty css                                 */
-import { $ as $$Layout } from '../chunks/Layout_Ce_E4fCl.mjs';
+import { $ as $$Layout } from '../chunks/Layout_D8AibV7U.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Astro$4 = createAstro("https://adrianpalomo.com");

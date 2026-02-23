@@ -1,7 +1,7 @@
-import { c as createComponent, r as renderComponent, a as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_D5k8374Y.mjs';
-import { $ as $$PageHeader } from '../chunks/PageHeader_JXvWjokx.mjs';
-import { $ as $$Layout } from '../chunks/Layout_Ce_E4fCl.mjs';
-import { g as getCollection, r as renderEntry } from '../chunks/_astro_content_D4UjJ2Qc.mjs';
+import { c as createComponent, r as renderComponent, a as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_D5FaFTUc.mjs';
+import { $ as $$PageHeader } from '../chunks/PageHeader_PqyjCcJB.mjs';
+import { $ as $$Layout } from '../chunks/Layout_D8AibV7U.mjs';
+import { g as getCollection, r as renderEntry } from '../chunks/_astro_content_LBMc3u_8.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$AboutDetail = createComponent(async ($$result, $$props, $$slots) => {

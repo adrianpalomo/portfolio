@@ -15,7 +15,22 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
     ssr: {
-      noExternal: ["piccolore"],
+      noExternal: [
+        "piccolore",
+        "clsx",
+        "cookie",
+        "deterministic-object-hash",
+        "devalue",
+        "es-module-lexer",
+        "html-escaper",
+        "mrmime",
+        "neotraverse",
+        "p-limit",
+        "unstorage",
+        "zod",
+        "@oslojs/encoding",
+        "@vercel/routing-utils",
+      ],
     },
   },
   site: "https://adrianpalomo.com",

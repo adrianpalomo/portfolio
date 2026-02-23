@@ -1,8 +1,7 @@
-import { d as createAstro, c as createComponent, m as maybeRenderHead, s as spreadAttributes, a as renderTemplate, r as renderComponent, e as renderScript } from '../chunks/astro/server_D5k8374Y.mjs';
-import 'clsx';
-import { $ as $$Github } from '../chunks/Github_D--r5zeG.mjs';
-import { $ as $$PageHeader } from '../chunks/PageHeader_JXvWjokx.mjs';
-import { $ as $$Layout } from '../chunks/Layout_Ce_E4fCl.mjs';
+import { d as createAstro, c as createComponent, m as maybeRenderHead, s as spreadAttributes, a as renderTemplate, r as renderComponent, e as renderScript } from '../chunks/astro/server_D5FaFTUc.mjs';
+import { $ as $$Github } from '../chunks/Github_B_bkNDWo.mjs';
+import { $ as $$PageHeader } from '../chunks/PageHeader_PqyjCcJB.mjs';
+import { $ as $$Layout } from '../chunks/Layout_D8AibV7U.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Astro$2 = createAstro("https://adrianpalomo.com");

@@ -1,5 +1,5 @@
-import { d as createAstro, c as createComponent, r as renderComponent, a as renderTemplate, f as defineScriptVars, b as addAttribute, m as maybeRenderHead } from '../../chunks/astro/server_D5k8374Y.mjs';
-import { $ as $$BasicLayout } from '../../chunks/BasicLayout_BtS-D3GL.mjs';
+import { d as createAstro, c as createComponent, r as renderComponent, a as renderTemplate, f as defineScriptVars, b as addAttribute, m as maybeRenderHead } from '../../chunks/astro/server_D5FaFTUc.mjs';
+import { $ as $$BasicLayout } from '../../chunks/BasicLayout_BbO7esl8.mjs';
 /* empty css                                                   */
 export { renderers } from '../../renderers.mjs';
 

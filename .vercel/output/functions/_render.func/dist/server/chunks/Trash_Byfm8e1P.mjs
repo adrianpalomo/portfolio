@@ -1,5 +1,4 @@
-import { d as createAstro, c as createComponent, m as maybeRenderHead, s as spreadAttributes, a as renderTemplate } from './astro/server_D5k8374Y.mjs';
-import 'clsx';
+import { d as createAstro, c as createComponent, m as maybeRenderHead, s as spreadAttributes, a as renderTemplate } from './astro/server_D5FaFTUc.mjs';
 
 const $$Astro$1 = createAstro("https://adrianpalomo.com");
 const $$Copy2 = createComponent(($$result, $$props, $$slots) => {

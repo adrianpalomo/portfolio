@@ -1,17 +1,16 @@
-import { o as decryptString, p as createSlotValueFromString, q as isAstroComponentFactory, r as renderComponent, a as renderTemplate, t as ROUTE_TYPE_HEADER, v as REROUTE_DIRECTIVE_HEADER, A as AstroError, w as i18nNoLocaleFoundInPath, x as ResponseSentError, y as s, z as ActionNotFoundError, M as MiddlewareNoDataOrNextCalled, B as MiddlewareNotAResponse, C as originPathnameSymbol, D as RewriteWithBodyUsed, G as GetStaticPathsRequired, I as InvalidGetStaticPathsReturn, E as InvalidGetStaticPathsEntry, F as GetStaticPathsExpectedParams, H as GetStaticPathsInvalidRouteParam, P as PageNumberParamNotFound, J as DEFAULT_404_COMPONENT, N as NoMatchingStaticPathFound, K as PrerenderDynamicEndpointPathCollide, L as ReservedSlotName, O as renderSlotToString, Q as renderJSX, S as chunkToString, T as isRenderInstruction, V as ForbiddenRewrite, W as SessionStorageInitError, X as SessionStorageSaveError, Y as ASTRO_VERSION, Z as CspNotEnabled, _ as LocalsReassigned, $ as generateCspDigest, a0 as PrerenderClientAddressNotAvailable, a1 as clientAddressSymbol, a2 as ClientAddressNotAvailable, a3 as StaticClientAddressNotAvailable, a4 as AstroResponseHeadersReassigned, a5 as responseSentSymbol$1, a6 as renderPage, a7 as REWRITE_DIRECTIVE_HEADER_KEY, a8 as REWRITE_DIRECTIVE_HEADER_VALUE, a9 as renderEndpoint, aa as LocalsNotAnObject, ab as REROUTABLE_STATUS_CODES, ac as nodeRequestAbortControllerCleanupSymbol } from './astro/server_D5k8374Y.mjs';
-import 'clsx';
-import { A as ActionError, d as deserializeActionResult, s as serializeActionResult, a as ACTION_RPC_ROUTE_PATTERN, b as ACTION_QUERY_PARAMS, g as getActionQueryString, D as DEFAULT_404_ROUTE, c as default404Instance, N as NOOP_MIDDLEWARE_FN, e as ensure404Route } from './astro-designed-error-pages_D8I4O81s.mjs';
-import 'es-module-lexer';
+import { w as decryptString, x as createSlotValueFromString, y as isAstroComponentFactory, r as renderComponent, a as renderTemplate, z as ROUTE_TYPE_HEADER, B as REROUTE_DIRECTIVE_HEADER, A as AstroError, C as i18nNoLocaleFoundInPath, D as ResponseSentError, E as s, F as ActionNotFoundError, M as MiddlewareNoDataOrNextCalled, G as MiddlewareNotAResponse, H as originPathnameSymbol, I as RewriteWithBodyUsed, J as GetStaticPathsRequired, K as InvalidGetStaticPathsReturn, L as InvalidGetStaticPathsEntry, N as GetStaticPathsExpectedParams, O as GetStaticPathsInvalidRouteParam, P as PageNumberParamNotFound, Q as DEFAULT_404_COMPONENT, S as NoMatchingStaticPathFound, T as PrerenderDynamicEndpointPathCollide, V as ReservedSlotName, W as renderSlotToString, X as renderJSX, Y as chunkToString, Z as isRenderInstruction, _ as ForbiddenRewrite, $ as SessionStorageInitError, a0 as SessionStorageSaveError, a1 as ASTRO_VERSION, a2 as CspNotEnabled, a3 as LocalsReassigned, a4 as generateCspDigest, a5 as PrerenderClientAddressNotAvailable, a6 as clientAddressSymbol, a7 as ClientAddressNotAvailable, a8 as StaticClientAddressNotAvailable, a9 as AstroResponseHeadersReassigned, aa as responseSentSymbol$1, ab as renderPage, ac as REWRITE_DIRECTIVE_HEADER_KEY, ad as REWRITE_DIRECTIVE_HEADER_VALUE, ae as renderEndpoint, af as LocalsNotAnObject, ag as REROUTABLE_STATUS_CODES, ah as nodeRequestAbortControllerCleanupSymbol } from './astro/server_D5FaFTUc.mjs';
+import { A as ActionError, d as deserializeActionResult, s as serializeActionResult, a as ACTION_RPC_ROUTE_PATTERN, b as ACTION_QUERY_PARAMS, g as getActionQueryString, D as DEFAULT_404_ROUTE, c as default404Instance, N as NOOP_MIDDLEWARE_FN, e as stringify$2, f as ensure404Route } from './astro-designed-error-pages_XvsQtS51.mjs';
 import buffer from 'node:buffer';
 import crypto$1 from 'node:crypto';
 import { Http2ServerResponse } from 'node:http2';
 import { a as appendForwardSlash, j as joinPaths, f as fileExtension, s as slash, p as prependForwardSlash, b as removeTrailingForwardSlash, t as trimSlashes, c as isInternalPath, d as collapseDuplicateTrailingSlashes, h as hasFileExtension } from './path_tbLlI_c1.mjs';
 import { m as matchPattern } from './index_CZWCDbwp.mjs';
-import { serialize, parse } from 'cookie';
-import { unflatten as unflatten$1, stringify as stringify$1 } from 'devalue';
-import { createStorage, builtinDrivers } from 'unstorage';
-import '@vercel/routing-utils';
-import 'deterministic-object-hash';
+import destr from 'destr';
+import { u as unflatten$1 } from './parse_CGy4bDMr.mjs';
+import require$$0 from 'url';
+import require$$1 from 'path-to-regexp';
+import require$$2 from 'path-to-regexp-updated';
+import require$$0$1 from 'base-64';
 import nodePath from 'node:path';
 import { builtinModules } from 'node:module';
 
@@ -488,6 +487,367 @@ function redirectToFallback({
   };
 }
 
+var dist$2 = {};
+
+var hasRequiredDist$2;
+
+function requireDist$2 () {
+	if (hasRequiredDist$2) return dist$2;
+	hasRequiredDist$2 = 1;
+	Object.defineProperty(dist$2, "__esModule", { value: true });
+	dist$2.parseCookie = parseCookie;
+	dist$2.parse = parseCookie;
+	dist$2.stringifyCookie = stringifyCookie;
+	dist$2.stringifySetCookie = stringifySetCookie;
+	dist$2.serialize = stringifySetCookie;
+	dist$2.parseSetCookie = parseSetCookie;
+	dist$2.stringifySetCookie = stringifySetCookie;
+	dist$2.serialize = stringifySetCookie;
+	/**
+	 * RegExp to match cookie-name in RFC 6265 sec 4.1.1
+	 * This refers out to the obsoleted definition of token in RFC 2616 sec 2.2
+	 * which has been replaced by the token definition in RFC 7230 appendix B.
+	 *
+	 * cookie-name       = token
+	 * token             = 1*tchar
+	 * tchar             = "!" / "#" / "$" / "%" / "&" / "'" /
+	 *                     "*" / "+" / "-" / "." / "^" / "_" /
+	 *                     "`" / "|" / "~" / DIGIT / ALPHA
+	 *
+	 * Note: Allowing more characters - https://github.com/jshttp/cookie/issues/191
+	 * Allow same range as cookie value, except `=`, which delimits end of name.
+	 */
+	const cookieNameRegExp = /^[\u0021-\u003A\u003C\u003E-\u007E]+$/;
+	/**
+	 * RegExp to match cookie-value in RFC 6265 sec 4.1.1
+	 *
+	 * cookie-value      = *cookie-octet / ( DQUOTE *cookie-octet DQUOTE )
+	 * cookie-octet      = %x21 / %x23-2B / %x2D-3A / %x3C-5B / %x5D-7E
+	 *                     ; US-ASCII characters excluding CTLs,
+	 *                     ; whitespace DQUOTE, comma, semicolon,
+	 *                     ; and backslash
+	 *
+	 * Allowing more characters: https://github.com/jshttp/cookie/issues/191
+	 * Comma, backslash, and DQUOTE are not part of the parsing algorithm.
+	 */
+	const cookieValueRegExp = /^[\u0021-\u003A\u003C-\u007E]*$/;
+	/**
+	 * RegExp to match domain-value in RFC 6265 sec 4.1.1
+	 *
+	 * domain-value      = <subdomain>
+	 *                     ; defined in [RFC1034], Section 3.5, as
+	 *                     ; enhanced by [RFC1123], Section 2.1
+	 * <subdomain>       = <label> | <subdomain> "." <label>
+	 * <label>           = <let-dig> [ [ <ldh-str> ] <let-dig> ]
+	 *                     Labels must be 63 characters or less.
+	 *                     'let-dig' not 'letter' in the first char, per RFC1123
+	 * <ldh-str>         = <let-dig-hyp> | <let-dig-hyp> <ldh-str>
+	 * <let-dig-hyp>     = <let-dig> | "-"
+	 * <let-dig>         = <letter> | <digit>
+	 * <letter>          = any one of the 52 alphabetic characters A through Z in
+	 *                     upper case and a through z in lower case
+	 * <digit>           = any one of the ten digits 0 through 9
+	 *
+	 * Keep support for leading dot: https://github.com/jshttp/cookie/issues/173
+	 *
+	 * > (Note that a leading %x2E ("."), if present, is ignored even though that
+	 * character is not permitted, but a trailing %x2E ("."), if present, will
+	 * cause the user agent to ignore the attribute.)
+	 */
+	const domainValueRegExp = /^([.]?[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)([.][a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*$/i;
+	/**
+	 * RegExp to match path-value in RFC 6265 sec 4.1.1
+	 *
+	 * path-value        = <any CHAR except CTLs or ";">
+	 * CHAR              = %x01-7F
+	 *                     ; defined in RFC 5234 appendix B.1
+	 */
+	const pathValueRegExp = /^[\u0020-\u003A\u003D-\u007E]*$/;
+	/**
+	 * RegExp to match max-age-value in RFC 6265 sec 5.6.2
+	 */
+	const maxAgeRegExp = /^-?\d+$/;
+	const __toString = Object.prototype.toString;
+	const NullObject = /* @__PURE__ */ (() => {
+	    const C = function () { };
+	    C.prototype = Object.create(null);
+	    return C;
+	})();
+	/**
+	 * Parse a `Cookie` header.
+	 *
+	 * Parse the given cookie header string into an object
+	 * The object has the various cookies as keys(names) => values
+	 */
+	function parseCookie(str, options) {
+	    const obj = new NullObject();
+	    const len = str.length;
+	    // RFC 6265 sec 4.1.1, RFC 2616 2.2 defines a cookie name consists of one char minimum, plus '='.
+	    if (len < 2)
+	        return obj;
+	    const dec = options?.decode || decode;
+	    let index = 0;
+	    do {
+	        const eqIdx = eqIndex(str, index, len);
+	        if (eqIdx === -1)
+	            break; // No more cookie pairs.
+	        const endIdx = endIndex(str, index, len);
+	        if (eqIdx > endIdx) {
+	            // backtrack on prior semicolon
+	            index = str.lastIndexOf(";", eqIdx - 1) + 1;
+	            continue;
+	        }
+	        const key = valueSlice(str, index, eqIdx);
+	        // only assign once
+	        if (obj[key] === undefined) {
+	            obj[key] = dec(valueSlice(str, eqIdx + 1, endIdx));
+	        }
+	        index = endIdx + 1;
+	    } while (index < len);
+	    return obj;
+	}
+	/**
+	 * Stringifies an object into an HTTP `Cookie` header.
+	 */
+	function stringifyCookie(cookie, options) {
+	    const enc = options?.encode || encodeURIComponent;
+	    const cookieStrings = [];
+	    for (const name of Object.keys(cookie)) {
+	        const val = cookie[name];
+	        if (val === undefined)
+	            continue;
+	        if (!cookieNameRegExp.test(name)) {
+	            throw new TypeError(`cookie name is invalid: ${name}`);
+	        }
+	        const value = enc(val);
+	        if (!cookieValueRegExp.test(value)) {
+	            throw new TypeError(`cookie val is invalid: ${val}`);
+	        }
+	        cookieStrings.push(`${name}=${value}`);
+	    }
+	    return cookieStrings.join("; ");
+	}
+	function stringifySetCookie(_name, _val, _opts) {
+	    const cookie = typeof _name === "object"
+	        ? _name
+	        : { ..._opts, name: _name, value: String(_val) };
+	    const options = typeof _val === "object" ? _val : _opts;
+	    const enc = options?.encode || encodeURIComponent;
+	    if (!cookieNameRegExp.test(cookie.name)) {
+	        throw new TypeError(`argument name is invalid: ${cookie.name}`);
+	    }
+	    const value = cookie.value ? enc(cookie.value) : "";
+	    if (!cookieValueRegExp.test(value)) {
+	        throw new TypeError(`argument val is invalid: ${cookie.value}`);
+	    }
+	    let str = cookie.name + "=" + value;
+	    if (cookie.maxAge !== undefined) {
+	        if (!Number.isInteger(cookie.maxAge)) {
+	            throw new TypeError(`option maxAge is invalid: ${cookie.maxAge}`);
+	        }
+	        str += "; Max-Age=" + cookie.maxAge;
+	    }
+	    if (cookie.domain) {
+	        if (!domainValueRegExp.test(cookie.domain)) {
+	            throw new TypeError(`option domain is invalid: ${cookie.domain}`);
+	        }
+	        str += "; Domain=" + cookie.domain;
+	    }
+	    if (cookie.path) {
+	        if (!pathValueRegExp.test(cookie.path)) {
+	            throw new TypeError(`option path is invalid: ${cookie.path}`);
+	        }
+	        str += "; Path=" + cookie.path;
+	    }
+	    if (cookie.expires) {
+	        if (!isDate(cookie.expires) || !Number.isFinite(cookie.expires.valueOf())) {
+	            throw new TypeError(`option expires is invalid: ${cookie.expires}`);
+	        }
+	        str += "; Expires=" + cookie.expires.toUTCString();
+	    }
+	    if (cookie.httpOnly) {
+	        str += "; HttpOnly";
+	    }
+	    if (cookie.secure) {
+	        str += "; Secure";
+	    }
+	    if (cookie.partitioned) {
+	        str += "; Partitioned";
+	    }
+	    if (cookie.priority) {
+	        const priority = typeof cookie.priority === "string"
+	            ? cookie.priority.toLowerCase()
+	            : undefined;
+	        switch (priority) {
+	            case "low":
+	                str += "; Priority=Low";
+	                break;
+	            case "medium":
+	                str += "; Priority=Medium";
+	                break;
+	            case "high":
+	                str += "; Priority=High";
+	                break;
+	            default:
+	                throw new TypeError(`option priority is invalid: ${cookie.priority}`);
+	        }
+	    }
+	    if (cookie.sameSite) {
+	        const sameSite = typeof cookie.sameSite === "string"
+	            ? cookie.sameSite.toLowerCase()
+	            : cookie.sameSite;
+	        switch (sameSite) {
+	            case true:
+	            case "strict":
+	                str += "; SameSite=Strict";
+	                break;
+	            case "lax":
+	                str += "; SameSite=Lax";
+	                break;
+	            case "none":
+	                str += "; SameSite=None";
+	                break;
+	            default:
+	                throw new TypeError(`option sameSite is invalid: ${cookie.sameSite}`);
+	        }
+	    }
+	    return str;
+	}
+	/**
+	 * Deserialize a `Set-Cookie` header into an object.
+	 *
+	 * deserialize('foo=bar; httpOnly')
+	 *   => { name: 'foo', value: 'bar', httpOnly: true }
+	 */
+	function parseSetCookie(str, options) {
+	    const dec = options?.decode || decode;
+	    const len = str.length;
+	    const endIdx = endIndex(str, 0, len);
+	    const eqIdx = eqIndex(str, 0, endIdx);
+	    const setCookie = eqIdx === -1
+	        ? { name: "", value: dec(valueSlice(str, 0, endIdx)) }
+	        : {
+	            name: valueSlice(str, 0, eqIdx),
+	            value: dec(valueSlice(str, eqIdx + 1, endIdx)),
+	        };
+	    let index = endIdx + 1;
+	    while (index < len) {
+	        const endIdx = endIndex(str, index, len);
+	        const eqIdx = eqIndex(str, index, endIdx);
+	        const attr = eqIdx === -1
+	            ? valueSlice(str, index, endIdx)
+	            : valueSlice(str, index, eqIdx);
+	        const val = eqIdx === -1 ? undefined : valueSlice(str, eqIdx + 1, endIdx);
+	        switch (attr.toLowerCase()) {
+	            case "httponly":
+	                setCookie.httpOnly = true;
+	                break;
+	            case "secure":
+	                setCookie.secure = true;
+	                break;
+	            case "partitioned":
+	                setCookie.partitioned = true;
+	                break;
+	            case "domain":
+	                setCookie.domain = val;
+	                break;
+	            case "path":
+	                setCookie.path = val;
+	                break;
+	            case "max-age":
+	                if (val && maxAgeRegExp.test(val))
+	                    setCookie.maxAge = Number(val);
+	                break;
+	            case "expires":
+	                if (!val)
+	                    break;
+	                const date = new Date(val);
+	                if (Number.isFinite(date.valueOf()))
+	                    setCookie.expires = date;
+	                break;
+	            case "priority":
+	                if (!val)
+	                    break;
+	                const priority = val.toLowerCase();
+	                if (priority === "low" ||
+	                    priority === "medium" ||
+	                    priority === "high") {
+	                    setCookie.priority = priority;
+	                }
+	                break;
+	            case "samesite":
+	                if (!val)
+	                    break;
+	                const sameSite = val.toLowerCase();
+	                if (sameSite === "lax" ||
+	                    sameSite === "strict" ||
+	                    sameSite === "none") {
+	                    setCookie.sameSite = sameSite;
+	                }
+	                break;
+	        }
+	        index = endIdx + 1;
+	    }
+	    return setCookie;
+	}
+	/**
+	 * Find the `;` character between `min` and `len` in str.
+	 */
+	function endIndex(str, min, len) {
+	    const index = str.indexOf(";", min);
+	    return index === -1 ? len : index;
+	}
+	/**
+	 * Find the `=` character between `min` and `max` in str.
+	 */
+	function eqIndex(str, min, max) {
+	    const index = str.indexOf("=", min);
+	    return index < max ? index : -1;
+	}
+	/**
+	 * Slice out a value between startPod to max.
+	 */
+	function valueSlice(str, min, max) {
+	    let start = min;
+	    let end = max;
+	    do {
+	        const code = str.charCodeAt(start);
+	        if (code !== 0x20 /*   */ && code !== 0x09 /* \t */)
+	            break;
+	    } while (++start < end);
+	    while (end > start) {
+	        const code = str.charCodeAt(end - 1);
+	        if (code !== 0x20 /*   */ && code !== 0x09 /* \t */)
+	            break;
+	        end--;
+	    }
+	    return str.slice(start, end);
+	}
+	/**
+	 * URL-decode string value. Optimized to skip native call when no %.
+	 */
+	function decode(str) {
+	    if (str.indexOf("%") === -1)
+	        return str;
+	    try {
+	        return decodeURIComponent(str);
+	    }
+	    catch (e) {
+	        return str;
+	    }
+	}
+	/**
+	 * Determine if value is a Date.
+	 */
+	function isDate(val) {
+	    return __toString.call(val) === "[object Date]";
+	}
+	
+	return dist$2;
+}
+
+var distExports = /*@__PURE__*/ requireDist$2();
+
 const DELETED_EXPIRATION = /* @__PURE__ */ new Date(0);
 const DELETED_VALUE = "deleted";
 const responseSentSymbol = Symbol.for("astro.responseSent");
@@ -542,7 +902,7 @@ class AstroCookies {
     };
     this.#ensureOutgoingMap().set(key, [
       DELETED_VALUE,
-      serialize(key, DELETED_VALUE, serializeOptions),
+      distExports.serialize(key, DELETED_VALUE, serializeOptions),
       false
     ]);
   }
@@ -626,7 +986,7 @@ class AstroCookies {
     }
     this.#ensureOutgoingMap().set(key, [
       serializedValue,
-      serialize(key, serializedValue, serializeOptions),
+      distExports.serialize(key, serializedValue, serializeOptions),
       true
     ]);
     if (this.#request[responseSentSymbol]) {
@@ -687,7 +1047,7 @@ class AstroCookies {
     if (!raw) {
       return;
     }
-    this.#requestValues = parse(raw, { decode: identity });
+    this.#requestValues = distExports.parse(raw, { decode: identity });
   }
 }
 
@@ -1963,6 +2323,597 @@ function defineMiddleware(fn) {
   return fn;
 }
 
+function wrapToPromise(value) {
+  if (!value || typeof value.then !== "function") {
+    return Promise.resolve(value);
+  }
+  return value;
+}
+function asyncCall(function_, ...arguments_) {
+  try {
+    return wrapToPromise(function_(...arguments_));
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
+function isPrimitive(value) {
+  const type = typeof value;
+  return value === null || type !== "object" && type !== "function";
+}
+function isPureObject(value) {
+  const proto = Object.getPrototypeOf(value);
+  return !proto || proto.isPrototypeOf(Object);
+}
+function stringify$1(value) {
+  if (isPrimitive(value)) {
+    return String(value);
+  }
+  if (isPureObject(value) || Array.isArray(value)) {
+    return JSON.stringify(value);
+  }
+  if (typeof value.toJSON === "function") {
+    return stringify$1(value.toJSON());
+  }
+  throw new Error("[unstorage] Cannot stringify value!");
+}
+const BASE64_PREFIX = "base64:";
+function serializeRaw(value) {
+  if (typeof value === "string") {
+    return value;
+  }
+  return BASE64_PREFIX + base64Encode(value);
+}
+function deserializeRaw(value) {
+  if (typeof value !== "string") {
+    return value;
+  }
+  if (!value.startsWith(BASE64_PREFIX)) {
+    return value;
+  }
+  return base64Decode(value.slice(BASE64_PREFIX.length));
+}
+function base64Decode(input) {
+  if (globalThis.Buffer) {
+    return Buffer.from(input, "base64");
+  }
+  return Uint8Array.from(
+    globalThis.atob(input),
+    (c) => c.codePointAt(0)
+  );
+}
+function base64Encode(input) {
+  if (globalThis.Buffer) {
+    return Buffer.from(input).toString("base64");
+  }
+  return globalThis.btoa(String.fromCodePoint(...input));
+}
+function normalizeKey(key) {
+  if (!key) {
+    return "";
+  }
+  return key.split("?")[0]?.replace(/[/\\]/g, ":").replace(/:+/g, ":").replace(/^:|:$/g, "") || "";
+}
+function joinKeys(...keys) {
+  return normalizeKey(keys.join(":"));
+}
+function normalizeBaseKey(base) {
+  base = normalizeKey(base);
+  return base ? base + ":" : "";
+}
+function filterKeyByDepth(key, depth) {
+  if (depth === void 0) {
+    return true;
+  }
+  let substrCount = 0;
+  let index = key.indexOf(":");
+  while (index > -1) {
+    substrCount++;
+    index = key.indexOf(":", index + 1);
+  }
+  return substrCount <= depth;
+}
+function filterKeyByBase(key, base) {
+  if (base) {
+    return key.startsWith(base) && key[key.length - 1] !== "$";
+  }
+  return key[key.length - 1] !== "$";
+}
+
+function defineDriver(factory) {
+  return factory;
+}
+
+const DRIVER_NAME = "memory";
+const memory = defineDriver(() => {
+  const data = /* @__PURE__ */ new Map();
+  return {
+    name: DRIVER_NAME,
+    getInstance: () => data,
+    hasItem(key) {
+      return data.has(key);
+    },
+    getItem(key) {
+      return data.get(key) ?? null;
+    },
+    getItemRaw(key) {
+      return data.get(key) ?? null;
+    },
+    setItem(key, value) {
+      data.set(key, value);
+    },
+    setItemRaw(key, value) {
+      data.set(key, value);
+    },
+    removeItem(key) {
+      data.delete(key);
+    },
+    getKeys() {
+      return [...data.keys()];
+    },
+    clear() {
+      data.clear();
+    },
+    dispose() {
+      data.clear();
+    }
+  };
+});
+
+function createStorage(options = {}) {
+  const context = {
+    mounts: { "": options.driver || memory() },
+    mountpoints: [""],
+    watching: false,
+    watchListeners: [],
+    unwatch: {}
+  };
+  const getMount = (key) => {
+    for (const base of context.mountpoints) {
+      if (key.startsWith(base)) {
+        return {
+          base,
+          relativeKey: key.slice(base.length),
+          driver: context.mounts[base]
+        };
+      }
+    }
+    return {
+      base: "",
+      relativeKey: key,
+      driver: context.mounts[""]
+    };
+  };
+  const getMounts = (base, includeParent) => {
+    return context.mountpoints.filter(
+      (mountpoint) => mountpoint.startsWith(base) || includeParent && base.startsWith(mountpoint)
+    ).map((mountpoint) => ({
+      relativeBase: base.length > mountpoint.length ? base.slice(mountpoint.length) : void 0,
+      mountpoint,
+      driver: context.mounts[mountpoint]
+    }));
+  };
+  const onChange = (event, key) => {
+    if (!context.watching) {
+      return;
+    }
+    key = normalizeKey(key);
+    for (const listener of context.watchListeners) {
+      listener(event, key);
+    }
+  };
+  const startWatch = async () => {
+    if (context.watching) {
+      return;
+    }
+    context.watching = true;
+    for (const mountpoint in context.mounts) {
+      context.unwatch[mountpoint] = await watch(
+        context.mounts[mountpoint],
+        onChange,
+        mountpoint
+      );
+    }
+  };
+  const stopWatch = async () => {
+    if (!context.watching) {
+      return;
+    }
+    for (const mountpoint in context.unwatch) {
+      await context.unwatch[mountpoint]();
+    }
+    context.unwatch = {};
+    context.watching = false;
+  };
+  const runBatch = (items, commonOptions, cb) => {
+    const batches = /* @__PURE__ */ new Map();
+    const getBatch = (mount) => {
+      let batch = batches.get(mount.base);
+      if (!batch) {
+        batch = {
+          driver: mount.driver,
+          base: mount.base,
+          items: []
+        };
+        batches.set(mount.base, batch);
+      }
+      return batch;
+    };
+    for (const item of items) {
+      const isStringItem = typeof item === "string";
+      const key = normalizeKey(isStringItem ? item : item.key);
+      const value = isStringItem ? void 0 : item.value;
+      const options2 = isStringItem || !item.options ? commonOptions : { ...commonOptions, ...item.options };
+      const mount = getMount(key);
+      getBatch(mount).items.push({
+        key,
+        value,
+        relativeKey: mount.relativeKey,
+        options: options2
+      });
+    }
+    return Promise.all([...batches.values()].map((batch) => cb(batch))).then(
+      (r) => r.flat()
+    );
+  };
+  const storage = {
+    // Item
+    hasItem(key, opts = {}) {
+      key = normalizeKey(key);
+      const { relativeKey, driver } = getMount(key);
+      return asyncCall(driver.hasItem, relativeKey, opts);
+    },
+    getItem(key, opts = {}) {
+      key = normalizeKey(key);
+      const { relativeKey, driver } = getMount(key);
+      return asyncCall(driver.getItem, relativeKey, opts).then(
+        (value) => destr(value)
+      );
+    },
+    getItems(items, commonOptions = {}) {
+      return runBatch(items, commonOptions, (batch) => {
+        if (batch.driver.getItems) {
+          return asyncCall(
+            batch.driver.getItems,
+            batch.items.map((item) => ({
+              key: item.relativeKey,
+              options: item.options
+            })),
+            commonOptions
+          ).then(
+            (r) => r.map((item) => ({
+              key: joinKeys(batch.base, item.key),
+              value: destr(item.value)
+            }))
+          );
+        }
+        return Promise.all(
+          batch.items.map((item) => {
+            return asyncCall(
+              batch.driver.getItem,
+              item.relativeKey,
+              item.options
+            ).then((value) => ({
+              key: item.key,
+              value: destr(value)
+            }));
+          })
+        );
+      });
+    },
+    getItemRaw(key, opts = {}) {
+      key = normalizeKey(key);
+      const { relativeKey, driver } = getMount(key);
+      if (driver.getItemRaw) {
+        return asyncCall(driver.getItemRaw, relativeKey, opts);
+      }
+      return asyncCall(driver.getItem, relativeKey, opts).then(
+        (value) => deserializeRaw(value)
+      );
+    },
+    async setItem(key, value, opts = {}) {
+      if (value === void 0) {
+        return storage.removeItem(key);
+      }
+      key = normalizeKey(key);
+      const { relativeKey, driver } = getMount(key);
+      if (!driver.setItem) {
+        return;
+      }
+      await asyncCall(driver.setItem, relativeKey, stringify$1(value), opts);
+      if (!driver.watch) {
+        onChange("update", key);
+      }
+    },
+    async setItems(items, commonOptions) {
+      await runBatch(items, commonOptions, async (batch) => {
+        if (batch.driver.setItems) {
+          return asyncCall(
+            batch.driver.setItems,
+            batch.items.map((item) => ({
+              key: item.relativeKey,
+              value: stringify$1(item.value),
+              options: item.options
+            })),
+            commonOptions
+          );
+        }
+        if (!batch.driver.setItem) {
+          return;
+        }
+        await Promise.all(
+          batch.items.map((item) => {
+            return asyncCall(
+              batch.driver.setItem,
+              item.relativeKey,
+              stringify$1(item.value),
+              item.options
+            );
+          })
+        );
+      });
+    },
+    async setItemRaw(key, value, opts = {}) {
+      if (value === void 0) {
+        return storage.removeItem(key, opts);
+      }
+      key = normalizeKey(key);
+      const { relativeKey, driver } = getMount(key);
+      if (driver.setItemRaw) {
+        await asyncCall(driver.setItemRaw, relativeKey, value, opts);
+      } else if (driver.setItem) {
+        await asyncCall(driver.setItem, relativeKey, serializeRaw(value), opts);
+      } else {
+        return;
+      }
+      if (!driver.watch) {
+        onChange("update", key);
+      }
+    },
+    async removeItem(key, opts = {}) {
+      if (typeof opts === "boolean") {
+        opts = { removeMeta: opts };
+      }
+      key = normalizeKey(key);
+      const { relativeKey, driver } = getMount(key);
+      if (!driver.removeItem) {
+        return;
+      }
+      await asyncCall(driver.removeItem, relativeKey, opts);
+      if (opts.removeMeta || opts.removeMata) {
+        await asyncCall(driver.removeItem, relativeKey + "$", opts);
+      }
+      if (!driver.watch) {
+        onChange("remove", key);
+      }
+    },
+    // Meta
+    async getMeta(key, opts = {}) {
+      if (typeof opts === "boolean") {
+        opts = { nativeOnly: opts };
+      }
+      key = normalizeKey(key);
+      const { relativeKey, driver } = getMount(key);
+      const meta = /* @__PURE__ */ Object.create(null);
+      if (driver.getMeta) {
+        Object.assign(meta, await asyncCall(driver.getMeta, relativeKey, opts));
+      }
+      if (!opts.nativeOnly) {
+        const value = await asyncCall(
+          driver.getItem,
+          relativeKey + "$",
+          opts
+        ).then((value_) => destr(value_));
+        if (value && typeof value === "object") {
+          if (typeof value.atime === "string") {
+            value.atime = new Date(value.atime);
+          }
+          if (typeof value.mtime === "string") {
+            value.mtime = new Date(value.mtime);
+          }
+          Object.assign(meta, value);
+        }
+      }
+      return meta;
+    },
+    setMeta(key, value, opts = {}) {
+      return this.setItem(key + "$", value, opts);
+    },
+    removeMeta(key, opts = {}) {
+      return this.removeItem(key + "$", opts);
+    },
+    // Keys
+    async getKeys(base, opts = {}) {
+      base = normalizeBaseKey(base);
+      const mounts = getMounts(base, true);
+      let maskedMounts = [];
+      const allKeys = [];
+      let allMountsSupportMaxDepth = true;
+      for (const mount of mounts) {
+        if (!mount.driver.flags?.maxDepth) {
+          allMountsSupportMaxDepth = false;
+        }
+        const rawKeys = await asyncCall(
+          mount.driver.getKeys,
+          mount.relativeBase,
+          opts
+        );
+        for (const key of rawKeys) {
+          const fullKey = mount.mountpoint + normalizeKey(key);
+          if (!maskedMounts.some((p) => fullKey.startsWith(p))) {
+            allKeys.push(fullKey);
+          }
+        }
+        maskedMounts = [
+          mount.mountpoint,
+          ...maskedMounts.filter((p) => !p.startsWith(mount.mountpoint))
+        ];
+      }
+      const shouldFilterByDepth = opts.maxDepth !== void 0 && !allMountsSupportMaxDepth;
+      return allKeys.filter(
+        (key) => (!shouldFilterByDepth || filterKeyByDepth(key, opts.maxDepth)) && filterKeyByBase(key, base)
+      );
+    },
+    // Utils
+    async clear(base, opts = {}) {
+      base = normalizeBaseKey(base);
+      await Promise.all(
+        getMounts(base, false).map(async (m) => {
+          if (m.driver.clear) {
+            return asyncCall(m.driver.clear, m.relativeBase, opts);
+          }
+          if (m.driver.removeItem) {
+            const keys = await m.driver.getKeys(m.relativeBase || "", opts);
+            return Promise.all(
+              keys.map((key) => m.driver.removeItem(key, opts))
+            );
+          }
+        })
+      );
+    },
+    async dispose() {
+      await Promise.all(
+        Object.values(context.mounts).map((driver) => dispose(driver))
+      );
+    },
+    async watch(callback) {
+      await startWatch();
+      context.watchListeners.push(callback);
+      return async () => {
+        context.watchListeners = context.watchListeners.filter(
+          (listener) => listener !== callback
+        );
+        if (context.watchListeners.length === 0) {
+          await stopWatch();
+        }
+      };
+    },
+    async unwatch() {
+      context.watchListeners = [];
+      await stopWatch();
+    },
+    // Mount
+    mount(base, driver) {
+      base = normalizeBaseKey(base);
+      if (base && context.mounts[base]) {
+        throw new Error(`already mounted at ${base}`);
+      }
+      if (base) {
+        context.mountpoints.push(base);
+        context.mountpoints.sort((a, b) => b.length - a.length);
+      }
+      context.mounts[base] = driver;
+      if (context.watching) {
+        Promise.resolve(watch(driver, onChange, base)).then((unwatcher) => {
+          context.unwatch[base] = unwatcher;
+        }).catch(console.error);
+      }
+      return storage;
+    },
+    async unmount(base, _dispose = true) {
+      base = normalizeBaseKey(base);
+      if (!base || !context.mounts[base]) {
+        return;
+      }
+      if (context.watching && base in context.unwatch) {
+        context.unwatch[base]?.();
+        delete context.unwatch[base];
+      }
+      if (_dispose) {
+        await dispose(context.mounts[base]);
+      }
+      context.mountpoints = context.mountpoints.filter((key) => key !== base);
+      delete context.mounts[base];
+    },
+    getMount(key = "") {
+      key = normalizeKey(key) + ":";
+      const m = getMount(key);
+      return {
+        driver: m.driver,
+        base: m.base
+      };
+    },
+    getMounts(base = "", opts = {}) {
+      base = normalizeKey(base);
+      const mounts = getMounts(base, opts.parents);
+      return mounts.map((m) => ({
+        driver: m.driver,
+        base: m.mountpoint
+      }));
+    },
+    // Aliases
+    keys: (base, opts = {}) => storage.getKeys(base, opts),
+    get: (key, opts = {}) => storage.getItem(key, opts),
+    set: (key, value, opts = {}) => storage.setItem(key, value, opts),
+    has: (key, opts = {}) => storage.hasItem(key, opts),
+    del: (key, opts = {}) => storage.removeItem(key, opts),
+    remove: (key, opts = {}) => storage.removeItem(key, opts)
+  };
+  return storage;
+}
+function watch(driver, onChange, base) {
+  return driver.watch ? driver.watch((event, key) => onChange(event, base + key)) : () => {
+  };
+}
+async function dispose(driver) {
+  if (typeof driver.dispose === "function") {
+    await asyncCall(driver.dispose);
+  }
+}
+
+const builtinDrivers = {
+  "azure-app-configuration": "unstorage/drivers/azure-app-configuration",
+  "azureAppConfiguration": "unstorage/drivers/azure-app-configuration",
+  "azure-cosmos": "unstorage/drivers/azure-cosmos",
+  "azureCosmos": "unstorage/drivers/azure-cosmos",
+  "azure-key-vault": "unstorage/drivers/azure-key-vault",
+  "azureKeyVault": "unstorage/drivers/azure-key-vault",
+  "azure-storage-blob": "unstorage/drivers/azure-storage-blob",
+  "azureStorageBlob": "unstorage/drivers/azure-storage-blob",
+  "azure-storage-table": "unstorage/drivers/azure-storage-table",
+  "azureStorageTable": "unstorage/drivers/azure-storage-table",
+  "capacitor-preferences": "unstorage/drivers/capacitor-preferences",
+  "capacitorPreferences": "unstorage/drivers/capacitor-preferences",
+  "cloudflare-kv-binding": "unstorage/drivers/cloudflare-kv-binding",
+  "cloudflareKVBinding": "unstorage/drivers/cloudflare-kv-binding",
+  "cloudflare-kv-http": "unstorage/drivers/cloudflare-kv-http",
+  "cloudflareKVHttp": "unstorage/drivers/cloudflare-kv-http",
+  "cloudflare-r2-binding": "unstorage/drivers/cloudflare-r2-binding",
+  "cloudflareR2Binding": "unstorage/drivers/cloudflare-r2-binding",
+  "db0": "unstorage/drivers/db0",
+  "deno-kv-node": "unstorage/drivers/deno-kv-node",
+  "denoKVNode": "unstorage/drivers/deno-kv-node",
+  "deno-kv": "unstorage/drivers/deno-kv",
+  "denoKV": "unstorage/drivers/deno-kv",
+  "fs-lite": "unstorage/drivers/fs-lite",
+  "fsLite": "unstorage/drivers/fs-lite",
+  "fs": "unstorage/drivers/fs",
+  "github": "unstorage/drivers/github",
+  "http": "unstorage/drivers/http",
+  "indexedb": "unstorage/drivers/indexedb",
+  "localstorage": "unstorage/drivers/localstorage",
+  "lru-cache": "unstorage/drivers/lru-cache",
+  "lruCache": "unstorage/drivers/lru-cache",
+  "memory": "unstorage/drivers/memory",
+  "mongodb": "unstorage/drivers/mongodb",
+  "netlify-blobs": "unstorage/drivers/netlify-blobs",
+  "netlifyBlobs": "unstorage/drivers/netlify-blobs",
+  "null": "unstorage/drivers/null",
+  "overlay": "unstorage/drivers/overlay",
+  "planetscale": "unstorage/drivers/planetscale",
+  "redis": "unstorage/drivers/redis",
+  "s3": "unstorage/drivers/s3",
+  "session-storage": "unstorage/drivers/session-storage",
+  "sessionStorage": "unstorage/drivers/session-storage",
+  "uploadthing": "unstorage/drivers/uploadthing",
+  "upstash": "unstorage/drivers/upstash",
+  "vercel-blob": "unstorage/drivers/vercel-blob",
+  "vercelBlob": "unstorage/drivers/vercel-blob",
+  "vercel-kv": "unstorage/drivers/vercel-kv",
+  "vercelKV": "unstorage/drivers/vercel-kv",
+  "vercel-runtime-cache": "unstorage/drivers/vercel-runtime-cache",
+  "vercelRuntimeCache": "unstorage/drivers/vercel-runtime-cache"
+};
+
 const PERSIST_SYMBOL = Symbol();
 const DEFAULT_COOKIE_NAME = "astro-session";
 const VALID_COOKIE_REGEX = /^[\w-]+$/;
@@ -1972,7 +2923,7 @@ const unflatten = (parsed, _) => {
   });
 };
 const stringify = (data, _) => {
-  return stringify$1(data, {
+  return stringify$2(data, {
     // Support URL objects
     URL: (val) => val instanceof URL && val.href
   });
@@ -3975,6 +4926,1945 @@ function getRequestSocket(req) {
 }
 
 apply();
+
+var dist$1 = {exports: {}};
+
+var superstatic;
+var hasRequiredSuperstatic;
+
+function requireSuperstatic () {
+	if (hasRequiredSuperstatic) return superstatic;
+	hasRequiredSuperstatic = 1;
+	var __defProp = Object.defineProperty;
+	var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+	var __getOwnPropNames = Object.getOwnPropertyNames;
+	var __hasOwnProp = Object.prototype.hasOwnProperty;
+	var __export = (target, all) => {
+	  for (var name in all)
+	    __defProp(target, name, { get: all[name], enumerable: true });
+	};
+	var __copyProps = (to, from, except, desc) => {
+	  if (from && typeof from === "object" || typeof from === "function") {
+	    for (let key of __getOwnPropNames(from))
+	      if (!__hasOwnProp.call(to, key) && key !== except)
+	        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+	  }
+	  return to;
+	};
+	var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+	var superstatic_exports = {};
+	__export(superstatic_exports, {
+	  collectHasSegments: () => collectHasSegments,
+	  convertCleanUrls: () => convertCleanUrls,
+	  convertHeaders: () => convertHeaders,
+	  convertRedirects: () => convertRedirects,
+	  convertRewrites: () => convertRewrites,
+	  convertTrailingSlash: () => convertTrailingSlash,
+	  getCleanUrls: () => getCleanUrls,
+	  pathToRegexp: () => pathToRegexp,
+	  sourceToRegex: () => sourceToRegex
+	});
+	superstatic = __toCommonJS(superstatic_exports);
+	var import_url = require$$0;
+	var import_path_to_regexp = require$$1;
+	var import_path_to_regexp_updated = require$$2;
+	function cloneKeys(keys) {
+	  if (typeof keys === "undefined") {
+	    return void 0;
+	  }
+	  return keys.slice(0);
+	}
+	function compareKeys(left, right) {
+	  const leftSerialized = typeof left === "undefined" ? "undefined" : left.toString();
+	  const rightSerialized = typeof right === "undefined" ? "undefined" : right.toString();
+	  return leftSerialized === rightSerialized;
+	}
+	function pathToRegexp(callerId, path, keys, options) {
+	  const newKeys = cloneKeys(keys);
+	  const currentRegExp = (0, import_path_to_regexp.pathToRegexp)(path, keys, options);
+	  try {
+	    const currentKeys = keys;
+	    const newRegExp = (0, import_path_to_regexp_updated.pathToRegexp)(path, newKeys, options);
+	    const isDiffRegExp = currentRegExp.toString() !== newRegExp.toString();
+	    if (process.env.FORCE_PATH_TO_REGEXP_LOG || isDiffRegExp) {
+	      const message = JSON.stringify({
+	        path,
+	        currentRegExp: currentRegExp.toString(),
+	        newRegExp: newRegExp.toString()
+	      });
+	      console.error(`[vc] PATH TO REGEXP PATH DIFF @ #${callerId}: ${message}`);
+	    }
+	    const isDiffKeys = !compareKeys(keys, newKeys);
+	    if (process.env.FORCE_PATH_TO_REGEXP_LOG || isDiffKeys) {
+	      const message = JSON.stringify({
+	        isDiffKeys,
+	        currentKeys,
+	        newKeys
+	      });
+	      console.error(`[vc] PATH TO REGEXP KEYS DIFF @ #${callerId}: ${message}`);
+	    }
+	  } catch (err) {
+	    const error = err;
+	    const message = JSON.stringify({
+	      path,
+	      error: error.message
+	    });
+	    console.error(`[vc] PATH TO REGEXP ERROR @ #${callerId}: ${message}`);
+	  }
+	  return currentRegExp;
+	}
+	const UN_NAMED_SEGMENT = "__UN_NAMED_SEGMENT__";
+	function getCleanUrls(filePaths) {
+	  const htmlFiles = filePaths.map(toRoute).filter((f) => f.endsWith(".html")).map((f) => ({
+	    html: f,
+	    clean: f.slice(0, -5)
+	  }));
+	  return htmlFiles;
+	}
+	function convertCleanUrls(cleanUrls, trailingSlash, status = 308) {
+	  const routes = [];
+	  if (cleanUrls) {
+	    const loc = trailingSlash ? "/$1/" : "/$1";
+	    routes.push({
+	      src: "^/(?:(.+)/)?index(?:\\.html)?/?$",
+	      headers: { Location: loc },
+	      status
+	    });
+	    routes.push({
+	      src: "^/(.*)\\.html/?$",
+	      headers: { Location: loc },
+	      status
+	    });
+	  }
+	  return routes;
+	}
+	function convertRedirects(redirects, defaultStatus = 308) {
+	  return redirects.map((r) => {
+	    const { src, segments } = sourceToRegex(r.source);
+	    const hasSegments = collectHasSegments(r.has);
+	    normalizeHasKeys(r.has);
+	    normalizeHasKeys(r.missing);
+	    try {
+	      const loc = replaceSegments(segments, hasSegments, r.destination, true);
+	      let status;
+	      if (typeof r.permanent === "boolean") {
+	        status = r.permanent ? 308 : 307;
+	      } else if (r.statusCode) {
+	        status = r.statusCode;
+	      } else {
+	        status = defaultStatus;
+	      }
+	      const route = {
+	        src,
+	        headers: { Location: loc },
+	        status
+	      };
+	      if (typeof r.env !== "undefined") {
+	        route.env = r.env;
+	      }
+	      if (r.has) {
+	        route.has = r.has;
+	      }
+	      if (r.missing) {
+	        route.missing = r.missing;
+	      }
+	      return route;
+	    } catch (e) {
+	      throw new Error(`Failed to parse redirect: ${JSON.stringify(r)}`);
+	    }
+	  });
+	}
+	function convertRewrites(rewrites, internalParamNames) {
+	  return rewrites.map((r) => {
+	    const { src, segments } = sourceToRegex(r.source);
+	    const hasSegments = collectHasSegments(r.has);
+	    normalizeHasKeys(r.has);
+	    normalizeHasKeys(r.missing);
+	    try {
+	      const dest = replaceSegments(
+	        segments,
+	        hasSegments,
+	        r.destination,
+	        false,
+	        internalParamNames
+	      );
+	      const route = { src, dest, check: true };
+	      if (typeof r.env !== "undefined") {
+	        route.env = r.env;
+	      }
+	      if (r.has) {
+	        route.has = r.has;
+	      }
+	      if (r.missing) {
+	        route.missing = r.missing;
+	      }
+	      if (r.statusCode) {
+	        route.status = r.statusCode;
+	      }
+	      return route;
+	    } catch (e) {
+	      throw new Error(`Failed to parse rewrite: ${JSON.stringify(r)}`);
+	    }
+	  });
+	}
+	function convertHeaders(headers) {
+	  return headers.map((h) => {
+	    const obj = {};
+	    const { src, segments } = sourceToRegex(h.source);
+	    const hasSegments = collectHasSegments(h.has);
+	    normalizeHasKeys(h.has);
+	    normalizeHasKeys(h.missing);
+	    const namedSegments = segments.filter((name) => name !== UN_NAMED_SEGMENT);
+	    const indexes = {};
+	    segments.forEach((name, index) => {
+	      indexes[name] = toSegmentDest(index);
+	    });
+	    hasSegments.forEach((name) => {
+	      indexes[name] = "$" + name;
+	    });
+	    h.headers.forEach(({ key, value }) => {
+	      if (namedSegments.length > 0 || hasSegments.length > 0) {
+	        if (key.includes(":")) {
+	          key = safelyCompile(key, indexes);
+	        }
+	        if (value.includes(":")) {
+	          value = safelyCompile(value, indexes);
+	        }
+	      }
+	      obj[key] = value;
+	    });
+	    const route = {
+	      src,
+	      headers: obj,
+	      continue: true
+	    };
+	    if (h.has) {
+	      route.has = h.has;
+	    }
+	    if (h.missing) {
+	      route.missing = h.missing;
+	    }
+	    return route;
+	  });
+	}
+	function convertTrailingSlash(enable, status = 308) {
+	  const routes = [];
+	  if (enable) {
+	    routes.push({
+	      src: "^/\\.well-known(?:/.*)?$"
+	    });
+	    routes.push({
+	      src: "^/((?:[^/]+/)*[^/\\.]+)$",
+	      headers: { Location: "/$1/" },
+	      status
+	    });
+	    routes.push({
+	      src: "^/((?:[^/]+/)*[^/]+\\.\\w+)/$",
+	      headers: { Location: "/$1" },
+	      status
+	    });
+	  } else {
+	    routes.push({
+	      src: "^/(.*)\\/$",
+	      headers: { Location: "/$1" },
+	      status
+	    });
+	  }
+	  return routes;
+	}
+	function sourceToRegex(source) {
+	  const keys = [];
+	  const r = pathToRegexp("632", source, keys, {
+	    strict: true,
+	    sensitive: true,
+	    delimiter: "/"
+	  });
+	  const segments = keys.map((k) => k.name).map((name) => {
+	    if (typeof name !== "string") {
+	      return UN_NAMED_SEGMENT;
+	    }
+	    return name;
+	  });
+	  return { src: r.source, segments };
+	}
+	const namedGroupsRegex = /\(\?<([a-zA-Z][a-zA-Z0-9_]*)>/g;
+	const normalizeHasKeys = (hasItems = []) => {
+	  for (const hasItem of hasItems) {
+	    if ("key" in hasItem && hasItem.type === "header") {
+	      hasItem.key = hasItem.key.toLowerCase();
+	    }
+	  }
+	  return hasItems;
+	};
+	function getStringValueForRegex(value) {
+	  if (typeof value === "string") {
+	    return value;
+	  }
+	  if (value && typeof value === "object" && value !== null) {
+	    if ("re" in value && typeof value.re === "string") {
+	      return value.re;
+	    }
+	  }
+	  return null;
+	}
+	function collectHasSegments(has) {
+	  const hasSegments = /* @__PURE__ */ new Set();
+	  for (const hasItem of has || []) {
+	    if (!hasItem.value && "key" in hasItem) {
+	      hasSegments.add(hasItem.key);
+	    }
+	    const stringValue = getStringValueForRegex(hasItem.value);
+	    if (stringValue) {
+	      for (const match of stringValue.matchAll(namedGroupsRegex)) {
+	        if (match[1]) {
+	          hasSegments.add(match[1]);
+	        }
+	      }
+	      if (hasItem.type === "host") {
+	        hasSegments.add("host");
+	      }
+	    }
+	  }
+	  return [...hasSegments];
+	}
+	const escapeSegment = (str, segmentName) => str.replace(new RegExp(`:${segmentName}`, "g"), `__ESC_COLON_${segmentName}`);
+	const unescapeSegments = (str) => str.replace(/__ESC_COLON_/gi, ":");
+	function replaceSegments(segments, hasItemSegments, destination, isRedirect, internalParamNames) {
+	  const namedSegments = segments.filter((name) => name !== UN_NAMED_SEGMENT);
+	  const canNeedReplacing = destination.includes(":") && namedSegments.length > 0 || hasItemSegments.length > 0 || !isRedirect;
+	  if (!canNeedReplacing) {
+	    return destination;
+	  }
+	  let escapedDestination = destination;
+	  const indexes = {};
+	  segments.forEach((name, index) => {
+	    indexes[name] = toSegmentDest(index);
+	    escapedDestination = escapeSegment(escapedDestination, name);
+	  });
+	  hasItemSegments.forEach((name) => {
+	    indexes[name] = "$" + name;
+	    escapedDestination = escapeSegment(escapedDestination, name);
+	  });
+	  const parsedDestination = (0, import_url.parse)(escapedDestination, true);
+	  delete parsedDestination.href;
+	  delete parsedDestination.path;
+	  delete parsedDestination.search;
+	  delete parsedDestination.host;
+	  let { pathname, hash, query, hostname, ...rest } = parsedDestination;
+	  pathname = unescapeSegments(pathname || "");
+	  hash = unescapeSegments(hash || "");
+	  hostname = unescapeSegments(hostname || "");
+	  let destParams = /* @__PURE__ */ new Set();
+	  const pathnameKeys = [];
+	  const hashKeys = [];
+	  const hostnameKeys = [];
+	  try {
+	    pathToRegexp("528", pathname, pathnameKeys);
+	    pathToRegexp("834", hash || "", hashKeys);
+	    pathToRegexp("712", hostname || "", hostnameKeys);
+	  } catch (_) {
+	  }
+	  destParams = new Set(
+	    [...pathnameKeys, ...hashKeys, ...hostnameKeys].map((key) => key.name).filter((val) => typeof val === "string")
+	  );
+	  pathname = safelyCompile(pathname, indexes, true);
+	  hash = hash ? safelyCompile(hash, indexes, true) : null;
+	  hostname = hostname ? safelyCompile(hostname, indexes, true) : null;
+	  for (const [key, strOrArray] of Object.entries(query)) {
+	    if (Array.isArray(strOrArray)) {
+	      query[key] = strOrArray.map(
+	        (str) => safelyCompile(unescapeSegments(str), indexes, true)
+	      );
+	    } else {
+	      query[key] = safelyCompile(
+	        unescapeSegments(strOrArray),
+	        indexes,
+	        true
+	      );
+	    }
+	  }
+	  const paramKeys = Object.keys(indexes);
+	  const needsQueryUpdating = (
+	    // we do not consider an internal param since it is added automatically
+	    !isRedirect && !paramKeys.some(
+	      (param) => !(internalParamNames && internalParamNames.includes(param)) && destParams.has(param)
+	    )
+	  );
+	  if (needsQueryUpdating) {
+	    for (const param of paramKeys) {
+	      if (!(param in query) && param !== UN_NAMED_SEGMENT) {
+	        query[param] = indexes[param];
+	      }
+	    }
+	  }
+	  destination = (0, import_url.format)({
+	    ...rest,
+	    hostname,
+	    pathname,
+	    query,
+	    hash
+	  });
+	  return destination.replace(/%24/g, "$");
+	}
+	function safelyCompile(value, indexes, attemptDirectCompile) {
+	  if (!value) {
+	    return value;
+	  }
+	  if (attemptDirectCompile) {
+	    try {
+	      return (0, import_path_to_regexp.compile)(value, { validate: false })(indexes);
+	    } catch (e) {
+	    }
+	  }
+	  for (const key of Object.keys(indexes)) {
+	    if (value.includes(`:${key}`)) {
+	      value = value.replace(
+	        new RegExp(`:${key}\\*`, "g"),
+	        `:${key}--ESCAPED_PARAM_ASTERISK`
+	      ).replace(
+	        new RegExp(`:${key}\\?`, "g"),
+	        `:${key}--ESCAPED_PARAM_QUESTION`
+	      ).replace(new RegExp(`:${key}\\+`, "g"), `:${key}--ESCAPED_PARAM_PLUS`).replace(
+	        new RegExp(`:${key}(?!\\w)`, "g"),
+	        `--ESCAPED_PARAM_COLON${key}`
+	      );
+	    }
+	  }
+	  value = value.replace(/(:|\*|\?|\+|\(|\)|\{|\})/g, "\\$1").replace(/--ESCAPED_PARAM_PLUS/g, "+").replace(/--ESCAPED_PARAM_COLON/g, ":").replace(/--ESCAPED_PARAM_QUESTION/g, "?").replace(/--ESCAPED_PARAM_ASTERISK/g, "*");
+	  return (0, import_path_to_regexp.compile)(`/${value}`, { validate: false })(indexes).slice(1);
+	}
+	function toSegmentDest(index) {
+	  const i = index + 1;
+	  return "$" + i.toString();
+	}
+	function toRoute(filePath) {
+	  return filePath.startsWith("/") ? filePath : "/" + filePath;
+	}
+	return superstatic;
+}
+
+var append;
+var hasRequiredAppend;
+
+function requireAppend () {
+	if (hasRequiredAppend) return append;
+	hasRequiredAppend = 1;
+	var __defProp = Object.defineProperty;
+	var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+	var __getOwnPropNames = Object.getOwnPropertyNames;
+	var __hasOwnProp = Object.prototype.hasOwnProperty;
+	var __export = (target, all) => {
+	  for (var name in all)
+	    __defProp(target, name, { get: all[name], enumerable: true });
+	};
+	var __copyProps = (to, from, except, desc) => {
+	  if (from && typeof from === "object" || typeof from === "function") {
+	    for (let key of __getOwnPropNames(from))
+	      if (!__hasOwnProp.call(to, key) && key !== except)
+	        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+	  }
+	  return to;
+	};
+	var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+	var append_exports = {};
+	__export(append_exports, {
+	  appendRoutesToPhase: () => appendRoutesToPhase
+	});
+	append = __toCommonJS(append_exports);
+	var import_index = requireDist$1();
+	function appendRoutesToPhase({
+	  routes: prevRoutes,
+	  newRoutes,
+	  phase
+	}) {
+	  const routes = prevRoutes ? [...prevRoutes] : [];
+	  if (newRoutes === null || newRoutes.length === 0) {
+	    return routes;
+	  }
+	  let isInPhase = false;
+	  let insertIndex = -1;
+	  routes.forEach((r, i) => {
+	    if ((0, import_index.isHandler)(r)) {
+	      if (r.handle === phase) {
+	        isInPhase = true;
+	      } else if (isInPhase) {
+	        insertIndex = i;
+	        isInPhase = false;
+	      }
+	    }
+	  });
+	  if (isInPhase) {
+	    routes.push(...newRoutes);
+	  } else if (phase === null) {
+	    const lastPhase = routes.findIndex((r) => (0, import_index.isHandler)(r) && r.handle);
+	    if (lastPhase === -1) {
+	      routes.push(...newRoutes);
+	    } else {
+	      routes.splice(lastPhase, 0, ...newRoutes);
+	    }
+	  } else if (insertIndex > -1) {
+	    routes.splice(insertIndex, 0, ...newRoutes);
+	  } else {
+	    routes.push({ handle: phase });
+	    routes.push(...newRoutes);
+	  }
+	  return routes;
+	}
+	return append;
+}
+
+var merge;
+var hasRequiredMerge;
+
+function requireMerge () {
+	if (hasRequiredMerge) return merge;
+	hasRequiredMerge = 1;
+	var __defProp = Object.defineProperty;
+	var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+	var __getOwnPropNames = Object.getOwnPropertyNames;
+	var __hasOwnProp = Object.prototype.hasOwnProperty;
+	var __export = (target, all) => {
+	  for (var name in all)
+	    __defProp(target, name, { get: all[name], enumerable: true });
+	};
+	var __copyProps = (to, from, except, desc) => {
+	  if (from && typeof from === "object" || typeof from === "function") {
+	    for (let key of __getOwnPropNames(from))
+	      if (!__hasOwnProp.call(to, key) && key !== except)
+	        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+	  }
+	  return to;
+	};
+	var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+	var merge_exports = {};
+	__export(merge_exports, {
+	  mergeRoutes: () => mergeRoutes
+	});
+	merge = __toCommonJS(merge_exports);
+	var import_index = requireDist$1();
+	function getBuilderRoutesMapping(builds) {
+	  const builderRoutes = {};
+	  for (const { entrypoint, routes, use } of builds) {
+	    if (routes) {
+	      if (!builderRoutes[entrypoint]) {
+	        builderRoutes[entrypoint] = {};
+	      }
+	      builderRoutes[entrypoint][use] = routes;
+	    }
+	  }
+	  return builderRoutes;
+	}
+	function getCheckAndContinue(routes) {
+	  const checks = [];
+	  const continues = [];
+	  const others = [];
+	  for (const route of routes) {
+	    if ((0, import_index.isHandler)(route)) {
+	      throw new Error(
+	        `Unexpected route found in getCheckAndContinue(): ${JSON.stringify(
+	          route
+	        )}`
+	      );
+	    } else if (route.check && !route.override) {
+	      checks.push(route);
+	    } else if (route.continue && !route.override) {
+	      continues.push(route);
+	    } else {
+	      others.push(route);
+	    }
+	  }
+	  return { checks, continues, others };
+	}
+	function mergeRoutes({ userRoutes, builds }) {
+	  const userHandleMap = /* @__PURE__ */ new Map();
+	  let userPrevHandle = null;
+	  (userRoutes || []).forEach((route) => {
+	    if ((0, import_index.isHandler)(route)) {
+	      userPrevHandle = route.handle;
+	    } else {
+	      const routes = userHandleMap.get(userPrevHandle);
+	      if (!routes) {
+	        userHandleMap.set(userPrevHandle, [route]);
+	      } else {
+	        routes.push(route);
+	      }
+	    }
+	  });
+	  const builderHandleMap = /* @__PURE__ */ new Map();
+	  const builderRoutes = getBuilderRoutesMapping(builds);
+	  const sortedPaths = Object.keys(builderRoutes).sort();
+	  sortedPaths.forEach((path) => {
+	    const br = builderRoutes[path];
+	    const sortedBuilders = Object.keys(br).sort();
+	    sortedBuilders.forEach((use) => {
+	      let builderPrevHandle = null;
+	      br[use].forEach((route) => {
+	        if ((0, import_index.isHandler)(route)) {
+	          builderPrevHandle = route.handle;
+	        } else {
+	          const routes = builderHandleMap.get(builderPrevHandle);
+	          if (!routes) {
+	            builderHandleMap.set(builderPrevHandle, [route]);
+	          } else {
+	            routes.push(route);
+	          }
+	        }
+	      });
+	    });
+	  });
+	  const outputRoutes = [];
+	  const uniqueHandleValues = /* @__PURE__ */ new Set([
+	    null,
+	    ...userHandleMap.keys(),
+	    ...builderHandleMap.keys()
+	  ]);
+	  for (const handle of uniqueHandleValues) {
+	    const userRoutes2 = userHandleMap.get(handle) || [];
+	    const builderRoutes2 = builderHandleMap.get(handle) || [];
+	    const builderSorted = getCheckAndContinue(builderRoutes2);
+	    if (handle !== null && (userRoutes2.length > 0 || builderRoutes2.length > 0)) {
+	      outputRoutes.push({ handle });
+	    }
+	    outputRoutes.push(...builderSorted.continues);
+	    outputRoutes.push(...userRoutes2);
+	    outputRoutes.push(...builderSorted.checks);
+	    outputRoutes.push(...builderSorted.others);
+	  }
+	  return outputRoutes;
+	}
+	return merge;
+}
+
+var schemas;
+var hasRequiredSchemas;
+
+function requireSchemas () {
+	if (hasRequiredSchemas) return schemas;
+	hasRequiredSchemas = 1;
+	var __defProp = Object.defineProperty;
+	var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+	var __getOwnPropNames = Object.getOwnPropertyNames;
+	var __hasOwnProp = Object.prototype.hasOwnProperty;
+	var __export = (target, all) => {
+	  for (var name in all)
+	    __defProp(target, name, { get: all[name], enumerable: true });
+	};
+	var __copyProps = (to, from, except, desc) => {
+	  if (from && typeof from === "object" || typeof from === "function") {
+	    for (let key of __getOwnPropNames(from))
+	      if (!__hasOwnProp.call(to, key) && key !== except)
+	        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+	  }
+	  return to;
+	};
+	var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+	var schemas_exports = {};
+	__export(schemas_exports, {
+	  bulkRedirectsSchema: () => bulkRedirectsSchema,
+	  cleanUrlsSchema: () => cleanUrlsSchema,
+	  hasSchema: () => hasSchema,
+	  headersSchema: () => headersSchema,
+	  redirectsSchema: () => redirectsSchema,
+	  rewritesSchema: () => rewritesSchema,
+	  routesSchema: () => routesSchema,
+	  trailingSlashSchema: () => trailingSlashSchema
+	});
+	schemas = __toCommonJS(schemas_exports);
+	const mitigateSchema = {
+	  description: "Mitigation action to take on a route",
+	  type: "object",
+	  additionalProperties: false,
+	  required: ["action"],
+	  properties: {
+	    action: {
+	      description: "The mitigation action to take",
+	      type: "string",
+	      enum: ["challenge", "deny"]
+	    }
+	  }
+	};
+	const matchableValueSchema = {
+	  description: "A value to match against. Can be a string (regex) or a condition operation object",
+	  anyOf: [
+	    {
+	      description: "A regular expression used to match thev value. Named groups can be used in the destination.",
+	      type: "string",
+	      maxLength: 4096
+	    },
+	    {
+	      description: "A condition operation object",
+	      type: "object",
+	      additionalProperties: false,
+	      minProperties: 1,
+	      properties: {
+	        eq: {
+	          description: "Equal to",
+	          anyOf: [
+	            {
+	              type: "string",
+	              maxLength: 4096
+	            },
+	            {
+	              type: "number"
+	            }
+	          ]
+	        },
+	        neq: {
+	          description: "Not equal",
+	          type: "string",
+	          maxLength: 4096
+	        },
+	        inc: {
+	          description: "In array",
+	          type: "array",
+	          items: {
+	            type: "string",
+	            maxLength: 4096
+	          }
+	        },
+	        ninc: {
+	          description: "Not in array",
+	          type: "array",
+	          items: {
+	            type: "string",
+	            maxLength: 4096
+	          }
+	        },
+	        pre: {
+	          description: "Starts with",
+	          type: "string",
+	          maxLength: 4096
+	        },
+	        suf: {
+	          description: "Ends with",
+	          type: "string",
+	          maxLength: 4096
+	        },
+	        re: {
+	          description: "Regex",
+	          type: "string",
+	          maxLength: 4096
+	        },
+	        gt: {
+	          description: "Greater than",
+	          type: "number"
+	        },
+	        gte: {
+	          description: "Greater than or equal to",
+	          type: "number"
+	        },
+	        lt: {
+	          description: "Less than",
+	          type: "number"
+	        },
+	        lte: {
+	          description: "Less than or equal to",
+	          type: "number"
+	        }
+	      }
+	    }
+	  ]
+	};
+	const hasSchema = {
+	  description: "An array of requirements that are needed to match",
+	  type: "array",
+	  maxItems: 16,
+	  items: {
+	    anyOf: [
+	      {
+	        type: "object",
+	        additionalProperties: false,
+	        required: ["type", "value"],
+	        properties: {
+	          type: {
+	            description: "The type of request element to check",
+	            type: "string",
+	            enum: ["host"]
+	          },
+	          value: matchableValueSchema
+	        }
+	      },
+	      {
+	        type: "object",
+	        additionalProperties: false,
+	        required: ["type", "key"],
+	        properties: {
+	          type: {
+	            description: "The type of request element to check",
+	            type: "string",
+	            enum: ["header", "cookie", "query"]
+	          },
+	          key: {
+	            description: "The name of the element contained in the particular type",
+	            type: "string",
+	            maxLength: 4096
+	          },
+	          value: matchableValueSchema
+	        }
+	      }
+	    ]
+	  }
+	};
+	const transformsSchema = {
+	  description: "A list of transform rules to adjust the query parameters of a request or HTTP headers of request or response",
+	  type: "array",
+	  minItems: 1,
+	  items: {
+	    type: "object",
+	    additionalProperties: false,
+	    required: ["type", "op", "target"],
+	    properties: {
+	      type: {
+	        description: "The scope of the transform to apply",
+	        type: "string",
+	        enum: ["request.headers", "request.query", "response.headers"]
+	      },
+	      op: {
+	        description: "The operation to perform on the target",
+	        type: "string",
+	        enum: ["append", "set", "delete"]
+	      },
+	      target: {
+	        description: "The target of the transform",
+	        type: "object",
+	        required: ["key"],
+	        properties: {
+	          // re is not supported for transforms. Once supported, replace target.key with matchableValueSchema
+	          key: {
+	            description: "A value to match against. Can be a string or a condition operation object (without regex support)",
+	            anyOf: [
+	              {
+	                description: "A valid header name (letters, numbers, hyphens, underscores)",
+	                type: "string",
+	                maxLength: 4096
+	              },
+	              {
+	                description: "A condition operation object",
+	                type: "object",
+	                additionalProperties: false,
+	                minProperties: 1,
+	                properties: {
+	                  eq: {
+	                    description: "Equal to",
+	                    anyOf: [
+	                      {
+	                        type: "string",
+	                        maxLength: 4096
+	                      },
+	                      {
+	                        type: "number"
+	                      }
+	                    ]
+	                  },
+	                  neq: {
+	                    description: "Not equal",
+	                    type: "string",
+	                    maxLength: 4096
+	                  },
+	                  inc: {
+	                    description: "In array",
+	                    type: "array",
+	                    items: {
+	                      type: "string",
+	                      maxLength: 4096
+	                    }
+	                  },
+	                  ninc: {
+	                    description: "Not in array",
+	                    type: "array",
+	                    items: {
+	                      type: "string",
+	                      maxLength: 4096
+	                    }
+	                  },
+	                  pre: {
+	                    description: "Starts with",
+	                    type: "string",
+	                    maxLength: 4096
+	                  },
+	                  suf: {
+	                    description: "Ends with",
+	                    type: "string",
+	                    maxLength: 4096
+	                  },
+	                  gt: {
+	                    description: "Greater than",
+	                    type: "number"
+	                  },
+	                  gte: {
+	                    description: "Greater than or equal to",
+	                    type: "number"
+	                  },
+	                  lt: {
+	                    description: "Less than",
+	                    type: "number"
+	                  },
+	                  lte: {
+	                    description: "Less than or equal to",
+	                    type: "number"
+	                  }
+	                }
+	              }
+	            ]
+	          }
+	        }
+	      },
+	      args: {
+	        description: "The arguments to the operation",
+	        anyOf: [
+	          {
+	            type: "string",
+	            maxLength: 4096
+	          },
+	          {
+	            type: "array",
+	            minItems: 1,
+	            items: {
+	              type: "string",
+	              maxLength: 4096
+	            }
+	          }
+	        ]
+	      },
+	      env: {
+	        description: "An array of environment variable names that should be replaced at runtime in the args value",
+	        type: "array",
+	        minItems: 1,
+	        maxItems: 64,
+	        items: {
+	          type: "string",
+	          maxLength: 256
+	        }
+	      }
+	    },
+	    allOf: [
+	      {
+	        if: {
+	          properties: {
+	            op: {
+	              enum: ["append", "set"]
+	            }
+	          }
+	        },
+	        then: {
+	          required: ["args"]
+	        }
+	      },
+	      {
+	        if: {
+	          allOf: [
+	            {
+	              properties: {
+	                type: {
+	                  enum: ["request.headers", "response.headers"]
+	                }
+	              }
+	            },
+	            {
+	              properties: {
+	                op: {
+	                  enum: ["set", "append"]
+	                }
+	              }
+	            }
+	          ]
+	        },
+	        then: {
+	          properties: {
+	            target: {
+	              properties: {
+	                key: {
+	                  if: {
+	                    type: "string"
+	                  },
+	                  then: {
+	                    pattern: "^[a-zA-Z0-9_-]+$"
+	                  }
+	                }
+	              }
+	            },
+	            args: {
+	              anyOf: [
+	                {
+	                  type: "string",
+	                  pattern: "^[a-zA-Z0-9_ :;.,\"'?!(){}\\[\\]@<>=+*#$&`|~\\^%/-]+$"
+	                },
+	                {
+	                  type: "array",
+	                  items: {
+	                    type: "string",
+	                    pattern: "^[a-zA-Z0-9_ :;.,\"'?!(){}\\[\\]@<>=+*#$&`|~\\^%/-]+$"
+	                  }
+	                }
+	              ]
+	            }
+	          }
+	        }
+	      }
+	    ]
+	  }
+	};
+	const routesSchema = {
+	  type: "array",
+	  deprecated: true,
+	  description: "A list of routes objects used to rewrite paths to point towards other internal or external paths",
+	  example: [{ dest: "https://docs.example.com", src: "/docs" }],
+	  items: {
+	    anyOf: [
+	      {
+	        type: "object",
+	        required: ["src"],
+	        additionalProperties: false,
+	        properties: {
+	          src: {
+	            type: "string",
+	            maxLength: 4096
+	          },
+	          dest: {
+	            type: "string",
+	            maxLength: 4096
+	          },
+	          headers: {
+	            type: "object",
+	            additionalProperties: false,
+	            minProperties: 1,
+	            maxProperties: 100,
+	            patternProperties: {
+	              "^.{1,256}$": {
+	                type: "string",
+	                maxLength: 32768
+	              }
+	            }
+	          },
+	          methods: {
+	            type: "array",
+	            maxItems: 10,
+	            items: {
+	              type: "string",
+	              maxLength: 32
+	            }
+	          },
+	          caseSensitive: {
+	            type: "boolean"
+	          },
+	          important: {
+	            type: "boolean"
+	          },
+	          user: {
+	            type: "boolean"
+	          },
+	          continue: {
+	            type: "boolean"
+	          },
+	          override: {
+	            type: "boolean"
+	          },
+	          check: {
+	            type: "boolean"
+	          },
+	          isInternal: {
+	            type: "boolean"
+	          },
+	          status: {
+	            type: "integer",
+	            minimum: 100,
+	            maximum: 999
+	          },
+	          locale: {
+	            type: "object",
+	            additionalProperties: false,
+	            minProperties: 1,
+	            properties: {
+	              redirect: {
+	                type: "object",
+	                additionalProperties: false,
+	                minProperties: 1,
+	                maxProperties: 100,
+	                patternProperties: {
+	                  "^.{1,256}$": {
+	                    type: "string",
+	                    maxLength: 4096
+	                  }
+	                }
+	              },
+	              value: {
+	                type: "string",
+	                maxLength: 4096
+	              },
+	              path: {
+	                type: "string",
+	                maxLength: 4096
+	              },
+	              cookie: {
+	                type: "string",
+	                maxLength: 4096
+	              },
+	              default: {
+	                type: "string",
+	                maxLength: 4096
+	              }
+	            }
+	          },
+	          middleware: { type: "number" },
+	          middlewarePath: { type: "string" },
+	          middlewareRawSrc: {
+	            type: "array",
+	            items: {
+	              type: "string"
+	            }
+	          },
+	          has: hasSchema,
+	          missing: hasSchema,
+	          mitigate: mitigateSchema,
+	          transforms: transformsSchema,
+	          env: {
+	            description: "An array of environment variable names that should be replaced at runtime in the destination or headers",
+	            type: "array",
+	            minItems: 1,
+	            maxItems: 64,
+	            items: {
+	              type: "string",
+	              maxLength: 256
+	            }
+	          }
+	        }
+	      },
+	      {
+	        type: "object",
+	        required: ["handle"],
+	        additionalProperties: false,
+	        properties: {
+	          handle: {
+	            type: "string",
+	            maxLength: 32,
+	            enum: ["error", "filesystem", "hit", "miss", "resource", "rewrite"]
+	          }
+	        }
+	      }
+	    ]
+	  }
+	};
+	const rewritesSchema = {
+	  type: "array",
+	  maxItems: 2048,
+	  description: "A list of rewrite definitions.",
+	  items: {
+	    type: "object",
+	    additionalProperties: false,
+	    required: ["source", "destination"],
+	    properties: {
+	      source: {
+	        description: "A pattern that matches each incoming pathname (excluding querystring).",
+	        type: "string",
+	        maxLength: 4096
+	      },
+	      destination: {
+	        description: "An absolute pathname to an existing resource or an external URL.",
+	        type: "string",
+	        maxLength: 4096
+	      },
+	      has: hasSchema,
+	      missing: hasSchema,
+	      statusCode: {
+	        description: "An optional integer to override the status code of the response.",
+	        type: "integer",
+	        minimum: 100,
+	        maximum: 999
+	      },
+	      env: {
+	        description: "An array of environment variable names that should be replaced at runtime in the destination",
+	        type: "array",
+	        minItems: 1,
+	        maxItems: 64,
+	        items: {
+	          type: "string",
+	          maxLength: 256
+	        }
+	      }
+	    }
+	  }
+	};
+	const redirectsSchema = {
+	  title: "Redirects",
+	  type: "array",
+	  maxItems: 2048,
+	  description: "A list of redirect definitions.",
+	  items: {
+	    type: "object",
+	    additionalProperties: false,
+	    required: ["source", "destination"],
+	    properties: {
+	      source: {
+	        description: "A pattern that matches each incoming pathname (excluding querystring).",
+	        type: "string",
+	        maxLength: 4096
+	      },
+	      destination: {
+	        description: "A location destination defined as an absolute pathname or external URL.",
+	        type: "string",
+	        maxLength: 4096
+	      },
+	      permanent: {
+	        description: "A boolean to toggle between permanent and temporary redirect. When `true`, the status code is `308`. When `false` the status code is `307`.",
+	        type: "boolean"
+	      },
+	      statusCode: {
+	        description: "An optional integer to define the status code of the redirect.",
+	        private: true,
+	        type: "integer",
+	        minimum: 100,
+	        maximum: 999
+	      },
+	      has: hasSchema,
+	      missing: hasSchema,
+	      env: {
+	        description: "An array of environment variable names that should be replaced at runtime in the destination",
+	        type: "array",
+	        minItems: 1,
+	        maxItems: 64,
+	        items: {
+	          type: "string",
+	          maxLength: 256
+	        }
+	      }
+	    }
+	  }
+	};
+	const headersSchema = {
+	  type: "array",
+	  maxItems: 2048,
+	  description: "A list of header definitions.",
+	  items: {
+	    type: "object",
+	    additionalProperties: false,
+	    required: ["source", "headers"],
+	    properties: {
+	      source: {
+	        description: "A pattern that matches each incoming pathname (excluding querystring)",
+	        type: "string",
+	        maxLength: 4096
+	      },
+	      headers: {
+	        description: "An array of key/value pairs representing each response header.",
+	        type: "array",
+	        maxItems: 1024,
+	        items: {
+	          type: "object",
+	          additionalProperties: false,
+	          required: ["key", "value"],
+	          properties: {
+	            key: {
+	              type: "string",
+	              maxLength: 4096
+	            },
+	            value: {
+	              type: "string",
+	              maxLength: 32768
+	            }
+	          }
+	        }
+	      },
+	      has: hasSchema,
+	      missing: hasSchema
+	    }
+	  }
+	};
+	const cleanUrlsSchema = {
+	  description: "When set to `true`, all HTML files and Serverless Functions will have their extension removed. When visiting a path that ends with the extension, a 308 response will redirect the client to the extensionless path.",
+	  type: "boolean"
+	};
+	const trailingSlashSchema = {
+	  description: "When `false`, visiting a path that ends with a forward slash will respond with a `308` status code and redirect to the path without the trailing slash.",
+	  type: "boolean"
+	};
+	const bulkRedirectsSchema = {
+	  type: "array",
+	  description: "A list of bulk redirect definitions.",
+	  items: {
+	    type: "object",
+	    additionalProperties: false,
+	    required: ["source", "destination"],
+	    properties: {
+	      source: {
+	        description: "The exact URL path or pattern to match.",
+	        type: "string",
+	        maxLength: 2048
+	      },
+	      destination: {
+	        description: "The target URL path where traffic should be redirected.",
+	        type: "string",
+	        maxLength: 2048
+	      },
+	      permanent: {
+	        description: "A boolean to toggle between permanent and temporary redirect. When `true`, the status code is `308`. When `false` the status code is `307`.",
+	        type: "boolean"
+	      },
+	      statusCode: {
+	        description: "An optional integer to define the status code of the redirect.",
+	        type: "integer",
+	        enum: [301, 302, 307, 308]
+	      },
+	      sensitive: {
+	        description: "A boolean to toggle between case-sensitive and case-insensitive redirect. When `true`, the redirect is case-sensitive. When `false` the redirect is case-insensitive.",
+	        type: "boolean"
+	      },
+	      query: {
+	        description: "Whether the query string should be preserved by the redirect. The default is `false`.",
+	        type: "boolean"
+	      }
+	    }
+	  }
+	};
+	return schemas;
+}
+
+var types;
+var hasRequiredTypes;
+
+function requireTypes () {
+	if (hasRequiredTypes) return types;
+	hasRequiredTypes = 1;
+	var __defProp = Object.defineProperty;
+	var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+	var __getOwnPropNames = Object.getOwnPropertyNames;
+	var __hasOwnProp = Object.prototype.hasOwnProperty;
+	var __copyProps = (to, from, except, desc) => {
+	  if (from && typeof from === "object" || typeof from === "function") {
+	    for (let key of __getOwnPropNames(from))
+	      if (!__hasOwnProp.call(to, key) && key !== except)
+	        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+	  }
+	  return to;
+	};
+	var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+	var types_exports = {};
+	types = __toCommonJS(types_exports);
+	return types;
+}
+
+var hasRequiredDist$1;
+
+function requireDist$1 () {
+	if (hasRequiredDist$1) return dist$1.exports;
+	hasRequiredDist$1 = 1;
+	(function (module) {
+		var __defProp = Object.defineProperty;
+		var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+		var __getOwnPropNames = Object.getOwnPropertyNames;
+		var __hasOwnProp = Object.prototype.hasOwnProperty;
+		var __export = (target, all) => {
+		  for (var name in all)
+		    __defProp(target, name, { get: all[name], enumerable: true });
+		};
+		var __copyProps = (to, from, except, desc) => {
+		  if (from && typeof from === "object" || typeof from === "function") {
+		    for (let key of __getOwnPropNames(from))
+		      if (!__hasOwnProp.call(to, key) && key !== except)
+		        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+		  }
+		  return to;
+		};
+		var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "default"), secondTarget && __copyProps(secondTarget, mod, "default"));
+		var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+		var src_exports = {};
+		__export(src_exports, {
+		  appendRoutesToPhase: () => import_append.appendRoutesToPhase,
+		  getCleanUrls: () => import_superstatic2.getCleanUrls,
+		  getTransformedRoutes: () => getTransformedRoutes,
+		  isHandler: () => isHandler,
+		  isValidHandleValue: () => isValidHandleValue,
+		  mergeRoutes: () => import_merge.mergeRoutes,
+		  normalizeRoutes: () => normalizeRoutes,
+		  sourceToRegex: () => import_superstatic2.sourceToRegex
+		});
+		module.exports = __toCommonJS(src_exports);
+		var import_url = require$$0;
+		var import_superstatic = requireSuperstatic();
+		var import_append = requireAppend();
+		var import_merge = requireMerge();
+		__reExport(src_exports, requireSchemas(), module.exports);
+		var import_superstatic2 = requireSuperstatic();
+		__reExport(src_exports, requireTypes(), module.exports);
+		const VALID_HANDLE_VALUES = [
+		  "filesystem",
+		  "hit",
+		  "miss",
+		  "rewrite",
+		  "error",
+		  "resource"
+		];
+		const validHandleValues = new Set(VALID_HANDLE_VALUES);
+		function isHandler(route) {
+		  return typeof route.handle !== "undefined";
+		}
+		function isValidHandleValue(handle) {
+		  return validHandleValues.has(handle);
+		}
+		function normalizeRoutes(inputRoutes) {
+		  if (!inputRoutes || inputRoutes.length === 0) {
+		    return { routes: inputRoutes, error: null };
+		  }
+		  const routes = [];
+		  const handling = [];
+		  const errors = [];
+		  inputRoutes.forEach((r, i) => {
+		    const route = { ...r };
+		    routes.push(route);
+		    const keys = Object.keys(route);
+		    if (isHandler(route)) {
+		      const { handle } = route;
+		      if (keys.length !== 1) {
+		        const unknownProp = keys.find((prop) => prop !== "handle");
+		        errors.push(
+		          `Route at index ${i} has unknown property \`${unknownProp}\`.`
+		        );
+		      } else if (!isValidHandleValue(handle)) {
+		        errors.push(
+		          `Route at index ${i} has unknown handle value \`handle: ${handle}\`.`
+		        );
+		      } else if (handling.includes(handle)) {
+		        errors.push(
+		          `Route at index ${i} is a duplicate. Please use one \`handle: ${handle}\` at most.`
+		        );
+		      } else {
+		        handling.push(handle);
+		      }
+		    } else if (route.src) {
+		      if (!route.src.startsWith("^")) {
+		        route.src = `^${route.src}`;
+		      }
+		      if (!route.src.endsWith("$")) {
+		        route.src = `${route.src}$`;
+		      }
+		      route.src = route.src.replace(/\\\//g, "/");
+		      const regError = checkRegexSyntax("Route", i, route.src);
+		      if (regError) {
+		        errors.push(regError);
+		      }
+		      const handleValue = handling[handling.length - 1];
+		      if (handleValue === "hit") {
+		        if (route.dest) {
+		          errors.push(
+		            `Route at index ${i} cannot define \`dest\` after \`handle: hit\`.`
+		          );
+		        }
+		        if (route.status) {
+		          errors.push(
+		            `Route at index ${i} cannot define \`status\` after \`handle: hit\`.`
+		          );
+		        }
+		        if (!route.continue) {
+		          errors.push(
+		            `Route at index ${i} must define \`continue: true\` after \`handle: hit\`.`
+		          );
+		        }
+		      } else if (handleValue === "miss") {
+		        if (route.dest && !route.check) {
+		          errors.push(
+		            `Route at index ${i} must define \`check: true\` after \`handle: miss\`.`
+		          );
+		        } else if (!route.dest && !route.continue) {
+		          errors.push(
+		            `Route at index ${i} must define \`continue: true\` after \`handle: miss\`.`
+		          );
+		        }
+		      }
+		    } else {
+		      errors.push(
+		        `Route at index ${i} must define either \`handle\` or \`src\` property.`
+		      );
+		    }
+		  });
+		  const error = errors.length > 0 ? createError(
+		    "invalid_route",
+		    errors,
+		    "https://vercel.link/routes-json",
+		    "Learn More"
+		  ) : null;
+		  return { routes, error };
+		}
+		function checkRegexSyntax(type, index, src) {
+		  try {
+		    new RegExp(src);
+		  } catch (err) {
+		    const prop = type === "Route" ? "src" : "source";
+		    return `${type} at index ${index} has invalid \`${prop}\` regular expression "${src}".`;
+		  }
+		  return null;
+		}
+		function checkPatternSyntax(type, index, {
+		  source,
+		  destination,
+		  has
+		}) {
+		  let sourceSegments = /* @__PURE__ */ new Set();
+		  const destinationSegments = /* @__PURE__ */ new Set();
+		  try {
+		    sourceSegments = new Set((0, import_superstatic.sourceToRegex)(source).segments);
+		  } catch (err) {
+		    return {
+		      message: `${type} at index ${index} has invalid \`source\` pattern "${source}".`,
+		      link: "https://vercel.link/invalid-route-source-pattern"
+		    };
+		  }
+		  if (destination) {
+		    try {
+		      const { hostname, pathname, query } = (0, import_url.parse)(destination, true);
+		      (0, import_superstatic.sourceToRegex)(hostname || "").segments.forEach(
+		        (name) => destinationSegments.add(name)
+		      );
+		      (0, import_superstatic.sourceToRegex)(pathname || "").segments.forEach(
+		        (name) => destinationSegments.add(name)
+		      );
+		      for (const strOrArray of Object.values(query)) {
+		        const value = Array.isArray(strOrArray) ? strOrArray[0] : strOrArray;
+		        (0, import_superstatic.sourceToRegex)(value || "").segments.forEach(
+		          (name) => destinationSegments.add(name)
+		        );
+		      }
+		    } catch (err) {
+		    }
+		    const hasSegments = (0, import_superstatic.collectHasSegments)(has);
+		    for (const segment of destinationSegments) {
+		      if (!sourceSegments.has(segment) && !hasSegments.includes(segment)) {
+		        return {
+		          message: `${type} at index ${index} has segment ":${segment}" in \`destination\` property but not in \`source\` or \`has\` property.`,
+		          link: "https://vercel.link/invalid-route-destination-segment"
+		        };
+		      }
+		    }
+		  }
+		  return null;
+		}
+		function checkRedirect(r, index) {
+		  if (typeof r.permanent !== "undefined" && typeof r.statusCode !== "undefined") {
+		    return `Redirect at index ${index} cannot define both \`permanent\` and \`statusCode\` properties.`;
+		  }
+		  return null;
+		}
+		function createError(code, allErrors, link, action) {
+		  const errors = Array.isArray(allErrors) ? allErrors : [allErrors];
+		  const message = errors[0];
+		  const error = {
+		    name: "RouteApiError",
+		    code,
+		    message,
+		    link,
+		    action,
+		    errors
+		  };
+		  return error;
+		}
+		function notEmpty(value) {
+		  return value !== null && value !== void 0;
+		}
+		function getTransformedRoutes(vercelConfig) {
+		  const { cleanUrls, rewrites, redirects, headers, trailingSlash } = vercelConfig;
+		  let { routes = null } = vercelConfig;
+		  if (routes) {
+		    const hasNewProperties = typeof cleanUrls !== "undefined" || typeof trailingSlash !== "undefined" || typeof redirects !== "undefined" || typeof headers !== "undefined" || typeof rewrites !== "undefined";
+		    if (hasNewProperties) {
+		      const error = createError(
+		        "invalid_mixed_routes",
+		        "If `rewrites`, `redirects`, `headers`, `cleanUrls` or `trailingSlash` are used, then `routes` cannot be present.",
+		        "https://vercel.link/mix-routing-props",
+		        "Learn More"
+		      );
+		      return { routes, error };
+		    }
+		    return normalizeRoutes(routes);
+		  }
+		  if (typeof cleanUrls !== "undefined") {
+		    const normalized = normalizeRoutes(
+		      (0, import_superstatic.convertCleanUrls)(cleanUrls, trailingSlash)
+		    );
+		    if (normalized.error) {
+		      normalized.error.code = "invalid_clean_urls";
+		      return { routes, error: normalized.error };
+		    }
+		    routes = routes || [];
+		    routes.push(...normalized.routes || []);
+		  }
+		  if (typeof trailingSlash !== "undefined") {
+		    const normalized = normalizeRoutes((0, import_superstatic.convertTrailingSlash)(trailingSlash));
+		    if (normalized.error) {
+		      normalized.error.code = "invalid_trailing_slash";
+		      return { routes, error: normalized.error };
+		    }
+		    routes = routes || [];
+		    routes.push(...normalized.routes || []);
+		  }
+		  if (typeof redirects !== "undefined") {
+		    const code = "invalid_redirect";
+		    const regexErrorMessage = redirects.map((r, i) => checkRegexSyntax("Redirect", i, r.source)).find(notEmpty);
+		    if (regexErrorMessage) {
+		      return {
+		        routes,
+		        error: createError(
+		          "invalid_redirect",
+		          regexErrorMessage,
+		          "https://vercel.link/invalid-route-source-pattern",
+		          "Learn More"
+		        )
+		      };
+		    }
+		    const patternError = redirects.map((r, i) => checkPatternSyntax("Redirect", i, r)).find(notEmpty);
+		    if (patternError) {
+		      return {
+		        routes,
+		        error: createError(
+		          code,
+		          patternError.message,
+		          patternError.link,
+		          "Learn More"
+		        )
+		      };
+		    }
+		    const redirectErrorMessage = redirects.map(checkRedirect).find(notEmpty);
+		    if (redirectErrorMessage) {
+		      return {
+		        routes,
+		        error: createError(
+		          code,
+		          redirectErrorMessage,
+		          "https://vercel.link/redirects-json",
+		          "Learn More"
+		        )
+		      };
+		    }
+		    const normalized = normalizeRoutes((0, import_superstatic.convertRedirects)(redirects));
+		    if (normalized.error) {
+		      normalized.error.code = code;
+		      return { routes, error: normalized.error };
+		    }
+		    routes = routes || [];
+		    routes.push(...normalized.routes || []);
+		  }
+		  if (typeof headers !== "undefined") {
+		    const code = "invalid_header";
+		    const regexErrorMessage = headers.map((r, i) => checkRegexSyntax("Header", i, r.source)).find(notEmpty);
+		    if (regexErrorMessage) {
+		      return {
+		        routes,
+		        error: createError(
+		          code,
+		          regexErrorMessage,
+		          "https://vercel.link/invalid-route-source-pattern",
+		          "Learn More"
+		        )
+		      };
+		    }
+		    const patternError = headers.map((r, i) => checkPatternSyntax("Header", i, r)).find(notEmpty);
+		    if (patternError) {
+		      return {
+		        routes,
+		        error: createError(
+		          code,
+		          patternError.message,
+		          patternError.link,
+		          "Learn More"
+		        )
+		      };
+		    }
+		    const normalized = normalizeRoutes((0, import_superstatic.convertHeaders)(headers));
+		    if (normalized.error) {
+		      normalized.error.code = code;
+		      return { routes, error: normalized.error };
+		    }
+		    routes = routes || [];
+		    routes.push(...normalized.routes || []);
+		  }
+		  if (typeof rewrites !== "undefined") {
+		    const code = "invalid_rewrite";
+		    const regexErrorMessage = rewrites.map((r, i) => checkRegexSyntax("Rewrite", i, r.source)).find(notEmpty);
+		    if (regexErrorMessage) {
+		      return {
+		        routes,
+		        error: createError(
+		          code,
+		          regexErrorMessage,
+		          "https://vercel.link/invalid-route-source-pattern",
+		          "Learn More"
+		        )
+		      };
+		    }
+		    const patternError = rewrites.map((r, i) => checkPatternSyntax("Rewrite", i, r)).find(notEmpty);
+		    if (patternError) {
+		      return {
+		        routes,
+		        error: createError(
+		          code,
+		          patternError.message,
+		          patternError.link,
+		          "Learn More"
+		        )
+		      };
+		    }
+		    const normalized = normalizeRoutes((0, import_superstatic.convertRewrites)(rewrites));
+		    if (normalized.error) {
+		      normalized.error.code = code;
+		      return { routes, error: normalized.error };
+		    }
+		    routes = routes || [];
+		    routes.push({ handle: "filesystem" });
+		    routes.push(...normalized.routes || []);
+		  }
+		  return { routes, error: null };
+		}
+	} (dist$1));
+	return dist$1.exports;
+}
+
+requireDist$1();
+
+var dist = {};
+
+var isPlainObject = {};
+
+var hasRequiredIsPlainObject;
+
+function requireIsPlainObject () {
+	if (hasRequiredIsPlainObject) return isPlainObject;
+	hasRequiredIsPlainObject = 1;
+	Object.defineProperty(isPlainObject, "__esModule", { value: true });
+	const objConstructorString = Function.prototype.toString.call(Object);
+	function isPlainObject$1(value) {
+	    //base object
+	    if (typeof value !== 'object' ||
+	        value === null ||
+	        Object.prototype.toString.call(value) !== '[object Object]') {
+	        return false;
+	    }
+	    //get the prototype
+	    const proto = Object.getPrototypeOf(value);
+	    //no prototype === all good
+	    if (proto === null) {
+	        return true;
+	    }
+	    //has own prop 'constructor'
+	    if (!Object.prototype.hasOwnProperty.call(proto, 'constructor')) {
+	        return false;
+	    }
+	    // validate that the constructor is `Object`
+	    return (typeof proto.constructor === 'function' &&
+	        proto.constructor instanceof proto.constructor &&
+	        Function.prototype.toString.call(proto.constructor) === objConstructorString);
+	}
+	isPlainObject.default = isPlainObject$1;
+	return isPlainObject;
+}
+
+var encoders = {};
+
+var hasRequiredEncoders;
+
+function requireEncoders () {
+	if (hasRequiredEncoders) return encoders;
+	hasRequiredEncoders = 1;
+	Object.defineProperty(encoders, "__esModule", { value: true });
+	encoders.encoders = void 0;
+	const base_64_1 = require$$0$1;
+	const binary = (input) => {
+	    let binary = "";
+	    const bytes = new Uint8Array(input);
+	    const len = bytes.byteLength;
+	    for (let i = 0; i < len; i++) {
+	        const buffer = bytes[i];
+	        if (buffer)
+	            binary += String.fromCharCode(buffer);
+	    }
+	    return binary;
+	};
+	const hex = (input) => [...new Uint8Array(input)]
+	    .map((b) => b.toString(16).padStart(2, "0"))
+	    .join("");
+	// @see https://stackoverflow.com/questions/35155089/node-sha-256-base64-digest
+	// @see https://stackoverflow.com/questions/9267899/arraybuffer-to-base64-encoded-string
+	const base64 = (input) => (0, base_64_1.encode)(binary(input));
+	const base64url = (input) => base64(input).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+	encoders.encoders = {
+	    base64,
+	    base64url,
+	    hex,
+	    binary,
+	};
+	return encoders;
+}
+
+var hasRequiredDist;
+
+function requireDist () {
+	if (hasRequiredDist) return dist;
+	hasRequiredDist = 1;
+	var __importDefault = (dist && dist.__importDefault) || function (mod) {
+	    return (mod && mod.__esModule) ? mod : { "default": mod };
+	};
+	Object.defineProperty(dist, "__esModule", { value: true });
+	dist.deterministicString = void 0;
+	const node_crypto_1 = crypto$1;
+	const isPlainObject_1 = __importDefault(requireIsPlainObject());
+	const encoders_1 = requireEncoders();
+	/** Creates a deterministic hash for all inputs. */
+	async function deterministicHash(input, algorithm = "SHA-1", output = "hex") {
+	    const encoder = new TextEncoder();
+	    const data = encoder.encode(deterministicString(input));
+	    const hash = await node_crypto_1.webcrypto.subtle.digest(algorithm, data);
+	    return encoders_1.encoders[output](hash);
+	}
+	dist.default = deterministicHash;
+	function deterministicString(input) {
+	    if (typeof input === 'string') {
+	        //wrap in quotes (and escape queotes) to differentiate from stringified primitives
+	        return JSON.stringify(input);
+	    }
+	    else if (typeof input === 'symbol' || typeof input === 'function') {
+	        //use `toString` for an accurate representation of these
+	        return input.toString();
+	    }
+	    else if (typeof input === 'bigint') {
+	        //bigint turns into a string int, so I need to differentiate it from a normal int
+	        return `${input}n`;
+	    }
+	    else if (input === globalThis || input === undefined || input === null || typeof input === 'boolean' || typeof input === 'number' || typeof input !== 'object') {
+	        //cast to string for any of these
+	        return `${input}`;
+	    }
+	    else if (input instanceof Date) {
+	        //using timestamp for dates
+	        return `(${input.constructor.name}:${input.getTime()})`;
+	    }
+	    else if (input instanceof RegExp || input instanceof Error || input instanceof WeakMap || input instanceof WeakSet) {
+	        //use simple `toString`. `WeakMap` and `WeakSet` are non-iterable, so this is the best I can do
+	        return `(${input.constructor.name}:${input.toString()})`;
+	    }
+	    else if (input instanceof Set) {
+	        //add the constructor as a key
+	        let ret = `(${input.constructor.name}:[`;
+	        //add all unique values
+	        for (const val of input.values()) {
+	            ret += `${deterministicString(val)},`;
+	        }
+	        ret += '])';
+	        return ret;
+	    }
+	    else if (Array.isArray(input) ||
+	        input instanceof Int8Array ||
+	        input instanceof Uint8Array ||
+	        input instanceof Uint8ClampedArray ||
+	        input instanceof Int16Array ||
+	        input instanceof Uint16Array ||
+	        input instanceof Int32Array ||
+	        input instanceof Uint32Array ||
+	        input instanceof Float32Array ||
+	        input instanceof Float64Array ||
+	        input instanceof BigInt64Array ||
+	        input instanceof BigUint64Array) {
+	        //add the constructor as a key
+	        let ret = `(${input.constructor.name}:[`;
+	        //add all key/value pairs
+	        for (const [k, v] of input.entries()) {
+	            ret += `(${k}:${deterministicString(v)}),`;
+	        }
+	        ret += '])';
+	        return ret;
+	    }
+	    else if (input instanceof ArrayBuffer || input instanceof SharedArrayBuffer) {
+	        //each typed array must be in multiples of their byte size.
+	        //see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray#typedarray_objects
+	        if (input.byteLength % 8 === 0) {
+	            return deterministicString(new BigUint64Array(input));
+	        }
+	        else if (input.byteLength % 4 === 0) {
+	            return deterministicString(new Uint32Array(input));
+	        }
+	        else if (input.byteLength % 2 === 0) {
+	            return deterministicString(new Uint16Array(input));
+	        }
+	        else {
+	            /** @todo - Change this to a system that breaks it down into parts. E.g. byteLength of 17 = BigUint64Array*2 and Uint8Array */
+	            let ret = '(';
+	            for (let i = 0; i < input.byteLength; i++) {
+	                ret += `${deterministicString(new Uint8Array(input.slice(i, i + 1)))},`;
+	            }
+	            ret += ')';
+	            return ret;
+	        }
+	    }
+	    else if (input instanceof Map || (0, isPlainObject_1.default)(input)) {
+	        //all key/values will be put here for sorting by key
+	        const sortable = [];
+	        //get key/value pairs
+	        const entries = (input instanceof Map
+	            ? input.entries()
+	            : Object.entries(input));
+	        //add all key value pairs
+	        for (const [k, v] of entries) {
+	            sortable.push([deterministicString(k), deterministicString(v)]);
+	        }
+	        //if not a map, get Symbol keys and add them
+	        if (!(input instanceof Map)) {
+	            const symbolKeys = Object.getOwnPropertySymbols(input);
+	            //convert each symbol key to a key/value pair
+	            for (let i = 0; i < symbolKeys.length; i++) {
+	                sortable.push([
+	                    deterministicString(symbolKeys[i]),
+	                    deterministicString(
+	                    //have to ignore because `noImplicitAny` is `true` but this is implicitly `any`
+	                    //@ts-ignore
+	                    input[symbolKeys[i]])
+	                ]);
+	            }
+	        }
+	        //sort alphabetically by keys
+	        sortable.sort(([a], [b]) => a.localeCompare(b));
+	        //add the constructor as a key
+	        let ret = `(${input.constructor.name}:[`;
+	        //add all of the key/value pairs
+	        for (const [k, v] of sortable) {
+	            ret += `(${k}:${v}),`;
+	        }
+	        ret += '])';
+	        return ret;
+	    }
+	    //a class/non-plain object
+	    const allEntries = [];
+	    for (const k in input) {
+	        allEntries.push([
+	            deterministicString(k),
+	            deterministicString(
+	            //have to ignore because `noImplicitAny` is `true` but this is implicitly `any`
+	            //@ts-ignore
+	            input[k])
+	        ]);
+	    }
+	    //get all own property symbols
+	    const symbolKeys = Object.getOwnPropertySymbols(input);
+	    //convert each symbol key to a key/value pair
+	    for (let i = 0; i < symbolKeys.length; i++) {
+	        allEntries.push([
+	            deterministicString(symbolKeys[i]),
+	            deterministicString(
+	            //have to ignore because `noImplicitAny` is `true` but this is implicitly `any`
+	            //@ts-ignore
+	            input[symbolKeys[i]])
+	        ]);
+	    }
+	    //sort alphabetically by keys
+	    allEntries.sort(([a], [b]) => a.localeCompare(b));
+	    //add the constructor as a key
+	    let ret = `(${input.constructor.name}:[`;
+	    //add all of the key/value pairs
+	    for (const [k, v] of allEntries) {
+	        ret += `(${k}:${v}),`;
+	    }
+	    ret += '])';
+	    return ret;
+	}
+	dist.deterministicString = deterministicString;
+	return dist;
+}
+
+requireDist();
 
 nodePath.posix.join;
 

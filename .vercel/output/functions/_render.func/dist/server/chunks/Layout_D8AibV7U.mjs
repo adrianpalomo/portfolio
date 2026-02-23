@@ -1,6 +1,5 @@
-import { d as createAstro, c as createComponent, b as addAttribute, e as renderScript, a as renderTemplate, m as maybeRenderHead, u as unescapeHTML, r as renderComponent, h as renderHead, g as renderSlot } from './astro/server_D5k8374Y.mjs';
+import { d as createAstro, c as createComponent, b as addAttribute, e as renderScript, a as renderTemplate, m as maybeRenderHead, u as unescapeHTML, r as renderComponent, h as renderHead, g as renderSlot } from './astro/server_D5FaFTUc.mjs';
 /* empty css                                        */
-import 'clsx';
 /* empty css                               */
 
 const $$Astro$2 = createAstro("https://adrianpalomo.com");
