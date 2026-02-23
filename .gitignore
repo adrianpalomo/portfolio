@@ -1,5 +1,5 @@
 # build output
-/dist
+dist/
 
 # generated types
 .astro/
@@ -22,3 +22,14 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# vercel
+.vercel
+
+# environment variables
+.env
+
+# PWA
+dev-sw.js
+sw.js
+workbox-*.js

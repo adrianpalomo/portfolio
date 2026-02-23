@@ -1,0 +1,1118 @@
+---
+description:
+alwaysApply: true
+---
+
+console\.log\s*\(([\s\S]*?)\)\s\*;
+
+# Prowess - Instrucciones Globales del Proyecto
+
+Prowess es una aplicación web de seguimiento fitness personalizada que permite a usuarios registrar entrenamientos, seguir dietas personalizadas, visualizar progreso y recibir feedback semanal. La plataforma tiene dos áreas principales: una zona de usuario mobile-first y un área administrativa completamente dinámica.
+
+## Características principales
+
+- **Seguimiento de entrenamientos**: Registro detallado de ejercicios, series, repeticiones y progreso personal.
+- **Gestión de dietas personalizadas**: Planes nutricionales adaptados con seguimiento de comidas y macronutrientes.
+- **Visualización de progreso**: Gráficos y estadísticas para monitorear evolución física y nutricional.
+- **Feedback semanal**: Sistema de comunicación bidireccional entre usuarios y coaches.
+- **Área administrativa dinámica**: Panel de control completamente configurable para gestión de usuarios y contenido.
+- **Sistema de impersonación**: Los administradores pueden ver la aplicación como cualquier usuario.
+- **Split View**: Vista dividida con lista lateral y detalle principal para navegación eficiente.
+- **Sistema de filtros avanzado**: Listas de vista personalizables con filtros guardados y anclados.
+
+## Arquitectura de la Aplicación
+
+### Área de Usuario (Mobile-First)
+
+- **Diseño prioritario móvil**: 99% de usuarios acceden desde dispositivos móviles
+- **Navegación adaptativa**: Header superior en desktop, navegación inferior fija en móvil
+- **Detección automática de dispositivo**: JavaScript que adapta la interfaz según el tipo de dispositivo
+- **Acceso único**: Autenticación exclusivamente con Google OAuth
+- **Funcionalidades principales**:
+  - Dashboard personalizado con estadísticas y enlaces rápidos
+  - Cuaderno de entrenamiento para registrar actividades
+  - Seguimiento de dietas y comidas
+  - Visualización de progreso personal
+  - Formularios de feedback semanal
+  - Gráficos y visualizaciones de progreso
+- **Loading states**: Overlay de carga durante navegación con transiciones suaves
+- **Impersonación**: Barra superior visible cuando un admin está impersonando
+
+### Área de Coach/Admin (Sistema Dinámico)
+
+- **Configuración centralizada**: Todo definido en `src/lib/defaultConfig.ts`
+- **Rutas dinámicas**: Patrón `[objectName]` que se resuelve contra configuraciones
+- **Sin hardcoding**: Cero elementos estáticos, todo configurable
+- **Gestión completa**: CRUD para todas las entidades (usuarios, dietas, entrenamientos, etc.)
+- **Sistema de relaciones**: Tablas relacionadas automáticamente configurables
+- **Permisos granulares**: Control de acceso por rol (COACH/ADMIN)
+- **Split View**: Vista dividida con lista lateral y contenido principal
+- **Sistema de tabs**: Pestañas configurables en vistas de detalle
+- **Filtros avanzados**: Sistema de listas de vista con filtros guardados y anclados
+- **Colores personalizados**: Cada organización puede tener su color primario personalizado
+
+## Stack Tecnológico
+
+- **Frontend**: Astro 5.x, TypeScript, Tailwind CSS 4
+- **Backend**: Supabase (PostgreSQL + Auth + Storage)
+- **Autenticación**: Google OAuth exclusivamente (PKCE flow)
+- **Hosting**: Vercel (Server-side rendering)
+- **Componentes**: Sistema de componentes reutilizables en Astro
+- **React**: Integrado para componentes interactivos (toast, split view controller)
+- **Librerías clave**:
+  - Chart.js para gráficos
+  - Quill para editores de texto enriquecido
+  - SortableJS para drag & drop
+  - CropperJS para edición de imágenes
+  - jsPDF para generación de PDFs
+
+## Estructura de Componentes
+
+### Componentes Base Reutilizables
+
+#### Button.astro (`src/components/Private/Components/Button.astro`)
+
+```astro
+// Uso del componente Button
+<Button
+  variant="brand|success|danger|warning|info|bare|base|error"
+  size="sm|md|lg|full"
+  type="button|submit|reset"
+  viewer="coach|user"
+  icon="IconName"
+  iconPosition="left|right"
+  onlyIcon={boolean}
+  outline={boolean}
+  disabled={boolean}
+  href="/optional/link"
+  target="_blank"
+  class="additional-classes"
+  id="button-id"
+  onClick="javascript:function()"
+>
+  Texto del botón
+</Button>
+```
+
+**Características**:
+
+- Variantes de color predefinidas
+- Tamaños configurables
+- Soporte para iconos dinámicos desde `src/components/icons/`
+- Estilos diferentes según `viewer` (coach vs user)
+- Puede ser botón o enlace según `href`
+
+#### BaseForm.astro (`src/components/Private/Forms/Base.astro`)
+
+```astro
+// Wrapper estándar para todos los formularios
+<BaseForm
+  title="Título del Formulario"
+  description="Descripción del formulario"
+>
+  <!-- Contenido del formulario -->
+</BaseForm>
+```
+
+**Características**:
+
+- Contenedor estandarizado con bordes y espaciado
+- Header con título y descripción
+- Fondo oscuro consistente con el tema
+
+#### DataTable.astro (`src/components/Private/DataTable.astro`)
+
+```astro
+// Tabla de datos con funcionalidades completas
+<DataTable
+  title="Título de la tabla"
+  data={tableData}
+  columns={tableConfig.columns}
+  actions={tableConfig.actions}
+  buttons={tableConfig.buttons}
+  searchPlaceholder="Buscar..."
+  emptyMessage="No hay datos"
+  maxRows={number}
+  isFilterable={boolean}
+  tableName="TableName"
+  filterableFields={filterableFields}
+  listViews={listViews}
+  currentListView={currentListView}
+  activeFilters={activeFilters}
+  highlightedRowId={id}
+  isSplitView={boolean}
+/>
+```
+
+**Características principales**:
+
+- Búsqueda en tiempo real
+- Ordenamiento por columnas
+- Acciones por fila (editar, eliminar, duplicar, etc.)
+- Botones de cabecera
+- Sistema de filtros avanzado con operadores (equals, contains, greater_than, etc.)
+- Listas de vista guardadas y ancladas
+- Resaltado de fila activa en Split View
+- Paginación y límite de filas
+- Transiciones con Astro View Transitions
+- Permisos por rol en columnas, acciones y botones
+
+#### Tabs.astro (`src/components/Private/Components/Tabs.astro`)
+
+```astro
+<Tabs variant="default|pills|underline" viewer="coach|user">
+  <Tab label="Tab 1" tabKey="tab1"> Contenido del tab 1 </Tab>
+  <Tab label="Tab 2" tabKey="tab2"> Contenido del tab 2 </Tab>
+</Tabs>
+```
+
+**Características**:
+
+- Variantes visuales (default, pills, underline)
+- Navegación por teclado (flechas, Home, End)
+- Sincronización con URL (`?tab=tabKey`)
+- Estilos adaptados según viewer
+
+#### SplitViewMainContent.astro (`src/components/Private/SplitViewMainContent.astro`)
+
+Componente que muestra el contenido principal en la vista dividida. Incluye:
+
+- DataHeader con información del registro
+- Tabs configurables para organizar contenido
+- Tablas relacionadas
+- Widgets especializados (overview summary, etc.)
+- Formularios específicos (ProgressForm, etc.)
+
+### Sistema de Iconos
+
+- **Ubicación**: `src/components/icons/`
+- **Uso**: Se importan dinámicamente en Button.astro por nombre
+- **Formato**: Componentes Astro individuales (.astro)
+- **Iconos disponibles**: ArrowBack, Bell, Chart, Chevron, Clone, Close, Copy, Drag, Edit, FilterFilled, FilterOutline, Food, Form, Github, Google, Gym, Home, Instagram, ListAdd, LogoMC, Logout, Mail, Menu, More, NoDocs, Pause, Payment, Phone, PinFilled, PinOutline, Play, Plus, PlusCalendar, Relation, RowInsertBottom, Search, Send, Settings, Share, SidebarClose, SidebarOpen, Stop, Subscription, TableInsert, Tiktok, Trash, User, Web, WhatsApp, X, Youtube
+
+## Configuración Dinámica del Área de Coach
+
+### defaultConfig.ts - Configuración Central
+
+```typescript
+// Cada tabla tiene su configuración completa
+export const defaultConfig = {
+  TableName: {
+    title: "Título de la Tabla",
+    singularTitle?: "Título Singular",
+    icon?: "IconName",
+    gender?: "male" | "female" | "other",
+    query: "tabla_supabase",
+    select: "campos, a, seleccionar",
+    filter?: "filtro_base",
+    showInMenu?: boolean,
+    allowedRoles?: string[], // Roles que pueden acceder
+    orderBy?: "campo_orden",
+    orderDirection?: "asc" | "desc",
+    columns: DataTableColumn[], // Columnas a mostrar
+    actions: DataTableAction[], // Acciones por fila
+    buttons: DataTableButton[], // Botones de cabecera
+    relations: { // Tablas relacionadas
+      relationName: RelationConfig
+    },
+    dataHeader: DataHeaderConfig, // Configuración del header de detalle
+    formConfig?: FormConfig, // Configuración para formulario genérico
+    additionalFilters?: RelationFilter[], // Filtros adicionales con operadores
+    filterableFields?: Array<{
+      key: string;
+      label: string;
+      type: "text" | "date" | "boolean" | "picklist";
+      options?: Array<{ label: string; value: string | boolean }>;
+    }>,
+    detailTabs?: DetailTabConfig[] // Tabs en vista de detalle
+  }
+}
+```
+
+### Interfaces Principales
+
+#### DataTableColumn
+
+```typescript
+interface DataTableColumn {
+  key: string;
+  label: string;
+  sortable?: boolean;
+  type?: "text" | "date" | "badge" | "link" | "email" | "phone" | "url";
+  badge?: (value: any) => { text: string; variant: string };
+  dateFormat?: "short" | "long";
+  link?: (row: any) => string;
+  visible?: boolean;
+  keepInSplitView?: boolean; // Si se muestra en la lista lateral del Split View
+  allowedRoles?: string[]; // Roles que pueden ver esta columna
+  width?: string; // Ancho de la columna
+}
+```
+
+#### DataTableAction
+
+```typescript
+interface DataTableAction {
+  label: string | ((row: any) => string);
+  href?: (row: any) => string | null;
+  variant?:
+    | "brand"
+    | "success"
+    | "error"
+    | "danger"
+    | "warning"
+    | "info"
+    | "bare"
+    | "base";
+  icon?: string;
+  outline?: boolean;
+  allowedRoles?: string[];
+  requireOwnership?: boolean; // Solo si owner_id === coach_id
+  isDelete?: boolean;
+  deleteConfig?: {
+    itemName: (row: any) => string;
+    tableName: string;
+    endpoint?: (row: any) => string;
+    confirmTitle?: string;
+    confirmMessage?: (row: any) => string;
+  };
+  isDuplicate?: boolean;
+  duplicateConfig?: {
+    /* similar a deleteConfig */
+  };
+  confirmAction?: {
+    title: string;
+    message: (row: any) => string;
+    confirmText: string;
+    apiEndpoint: string;
+    apiMethod: "POST" | "PUT" | "PATCH" | "DELETE";
+    apiBody: (row: any) => any;
+    successMessage: string;
+    onSuccess?: "reload" | "redirect";
+    redirectUrl?: string;
+  };
+}
+```
+
+#### RelationConfig
+
+```typescript
+interface RelationConfig {
+  title: string;
+  query: string;
+  select: string;
+  filter: string; // Filtro principal por ID del registro actual
+  additionalFilters?: RelationFilter[]; // Filtros adicionales con operadores
+  orderBy?: string;
+  orderDirection?: "asc" | "desc";
+  columns: DataTableColumn[];
+  actions?: DataTableAction[];
+  buttons?: DataTableButton[];
+  maxRows?: number;
+}
+```
+
+#### RelationFilter
+
+```typescript
+interface RelationFilter {
+  field: string;
+  operator: "eq" | "neq" | "gt" | "lt" | "gte" | "lte" | "in" | "is";
+  value: any;
+}
+```
+
+Operadores disponibles:
+
+- `eq` - Igual a
+- `neq` - No igual a
+- `gt` - Mayor que
+- `lt` - Menor que
+- `gte` - Mayor o igual que
+- `lte` - Menor o igual que
+- `in` - Está en (array)
+- `is` - Es (para null, true, false)
+
+#### DataHeaderConfig
+
+```typescript
+interface DataHeaderConfig {
+  parentField?: string; // Campo que contiene la información del padre
+  parentDisplay?: (data: any) => string; // Función para formatear el nombre del padre
+  parentFallback?: string; // Texto fallback si no hay padre
+  fields?: DataHeaderField[]; // Campos que se muestran en el header
+  buttons?: DataTableButton[]; // Botones que se muestran en el header
+  sections?: { label: string; value: string }[]; // Secciones que se muestran en el header
+}
+```
+
+#### DataHeaderField
+
+```typescript
+interface DataHeaderField {
+  label: string;
+  key: string;
+  type?:
+    | "text"
+    | "date"
+    | "datetime"
+    | "badge"
+    | "link"
+    | "email"
+    | "phone"
+    | "url";
+  badge?: (value: any) => { text: string; variant: string };
+  dateFormat?: "short" | "long";
+  link?: (row: any) => string;
+  visible?: boolean;
+  editable?: boolean;
+  section?: string;
+  allowedRoles?: string[];
+}
+```
+
+#### FormConfig (Formularios Genéricos)
+
+```typescript
+interface FormConfig {
+  fields: FormField[];
+  sections?: FormSection[];
+  apiEndpoint: string; // Endpoint para crear/actualizar
+}
+
+interface FormField {
+  name: string; // Nombre del campo en la BD
+  label: string; // Etiqueta visible
+  type:
+    | "text"
+    | "number"
+    | "email"
+    | "select"
+    | "textarea"
+    | "checkbox"
+    | "date";
+  placeholder?: string;
+  required?: boolean;
+  options?: Array<{ value: string; label: string }>;
+  optionsEndpoint?: string; // Endpoint para cargar opciones dinámicamente
+  optionLabelKey?: string;
+  optionValueKey?: string;
+  defaultValue?: any;
+  min?: number;
+  max?: number;
+  step?: number;
+  rows?: number; // Para textarea
+  section?: string;
+  colSpan?: 1 | 2; // Ancho del campo
+}
+
+interface FormSection {
+  name: string;
+  title: string;
+  columns?: 1 | 2; // Número de columnas
+}
+```
+
+#### DetailTabConfig
+
+```typescript
+interface DetailTabConfig {
+  key: string;
+  label: string;
+  description?: string;
+  relations?: string[]; // Nombres de relaciones a mostrar
+  widgets?: string[]; // Widgets especializados (ej: "overviewSummary")
+  allowedRoles?: string[];
+}
+```
+
+### Rutas Dinámicas
+
+El sistema de rutas dinámicas funciona con el patrón `[objectName]`:
+
+- `/coach/[objectName]` - Lista de registros
+  - Soporta filtros y listas de vista
+  - Búsqueda y ordenamiento
+  - Paginación
+- `/coach/[objectName]/[id]` - Vista de detalle
+  - Split View con lista lateral y contenido principal
+  - Tabs configurables
+  - Tablas relacionadas
+  - DataHeader con información del registro
+- `/coach/[objectName]/[id]/edit` - Edición
+  - Redirige a builder con parámetro `?id=xxx`
+- `/coach/[objectName]/builder` - Creación/Edición
+  - Determina si usar formulario adhoc o genérico
+  - Si tiene `?id=xxx`, carga datos para edición
+- `/coach/[objectName]/[id]/[relatedTable]/relatedList.astro` - Lista de relación específica
+
+### Sistema de Formularios
+
+#### Formularios Adhoc (Específicos)
+
+Formularios especializados para entidades específicas, definidos en `AvailableForms` enum:
+
+- `Diet` - `DietInitialForm.astro` - Creación de dietas
+- `Plan` - `WorkoutForm.astro` - Planes de entrenamiento
+- `Exercise` - `ExerciseForm.astro` - Ejercicios
+- `Meal` - `MealForm.astro` - Comidas
+- `Payment` - `Payment.astro` - Pagos
+- `Subscription` - `Subscription.astro` - Suscripciones
+- `LicenseUnit` - `LicenseUnitForm.astro` - Unidades de licencia
+- `Recipes` - `Recipes.astro` - Recetas
+- `ReferralCodes` - `ReferralCodes.astro` - Códigos de referido (solo creación)
+- `Forms` - `FormsBuilder.astro` - Constructor de formularios personalizados
+
+**Lógica de selección**:
+
+1. Si `objectName` está en `AvailableForms` y no es `ReferralCodes` con ID → usar formulario adhoc
+2. Si `ReferralCodes` tiene ID → usar formulario genérico
+3. Si tiene `formConfig` en `defaultConfig` → usar formulario genérico
+4. Si no cumple ninguna → redirigir a dashboard
+
+#### Formularios Genéricos
+
+Formularios generados automáticamente desde `FormConfig` en `defaultConfig`. Se usan cuando:
+
+- La entidad tiene `formConfig` definido
+- No hay formulario adhoc disponible
+- Se necesita un formulario simple y estándar
+
+### Sistema de Permisos y Roles
+
+#### Roles Disponibles
+
+- `ADMIN` - Acceso completo a todo
+- `COACH` - Acceso a gestión de usuarios y contenido
+- `USER` - Solo acceso al área de usuario
+
+**Nota**: Los roles `COACH_ADMIN` se generan automáticamente cuando un COACH tiene `isAdmin: true`.
+
+#### Función canUserSeeElement
+
+```typescript
+function canUserSeeElement(
+  userRole: string | undefined,
+  isAdmin: boolean,
+  allowedRoles?: string[],
+): boolean;
+```
+
+**Lógica**:
+
+- Si no hay `allowedRoles` → todos pueden ver
+- Si `userRole === "ADMIN"` → puede ver todo
+- Si `isAdmin && userRole === "COACH"` → se trata como `COACH_ADMIN`
+- Si el rol del usuario está en `allowedRoles` → puede ver
+
+#### Uso en Configuración
+
+```typescript
+// Columna solo visible para ADMIN
+columns: [
+  {
+    key: "sensitive_field",
+    label: "Campo Sensible",
+    allowedRoles: ["ADMIN"],
+  },
+];
+
+// Acción solo para COACH y ADMIN
+actions: [
+  {
+    label: "Editar",
+    allowedRoles: ["COACH", "ADMIN"],
+  },
+];
+```
+
+### Sistema de Split View
+
+Vista dividida que muestra una lista lateral y el contenido principal. Implementado en `/coach/[objectName]/[id]/index.astro`.
+
+**Características**:
+
+- Lista lateral con columnas marcadas con `keepInSplitView: true`
+- Contenido principal con `SplitViewMainContent`
+- Resaltado de fila activa
+- Navegación sin recargar página completa
+- Controlador React (`SplitViewController.tsx`) para sincronización
+- Divider redimensionable (implementado en el controlador)
+
+**Componentes involucrados**:
+
+- `SplitViewMainContent.astro` - Contenido principal
+- `SplitViewController.tsx` - Controlador React para interacciones
+- `DataTable.astro` - Lista lateral con `isSplitView={true}`
+
+### Sistema de Filtros y Listas de Vista
+
+Sistema avanzado de filtrado con listas de vista guardadas y ancladas.
+
+#### Filtros Dinámicos
+
+Los filtros se configuran en `filterableFields`:
+
+```typescript
+filterableFields: [
+  {
+    key: "status",
+    label: "Estado",
+    type: "picklist",
+    options: [
+      { label: "Activo", value: "ACTIVE" },
+      { label: "Inactivo", value: "INACTIVE" },
+    ],
+  },
+  {
+    key: "created_at",
+    label: "Fecha de creación",
+    type: "date",
+  },
+  {
+    key: "is_active",
+    label: "Activo",
+    type: "boolean",
+  },
+];
+```
+
+#### Operadores de Filtro
+
+- `equals` - Igual a
+- `not_equals` - No igual a
+- `contains` - Contiene (case-insensitive)
+- `not_contains` - No contiene
+- `greater_than` - Mayor que
+- `less_than` - Menor que
+
+#### Listas de Vista
+
+Las listas de vista se guardan en la tabla `TableFilters`:
+
+- `id` - ID único
+- `name` - Nombre de la vista
+- `developer_name` - Nombre técnico (usado en URL)
+- `table_name` - Nombre de la tabla
+- `filters` - Array de filtros aplicados
+- `logical_operator` - "AND" o "OR"
+- `is_pinned` - Si está anclada (se carga por defecto)
+- `profile_id` - Usuario que creó la vista
+- `created_at`, `updated_at` - Timestamps
+
+**Vista "Recientes"**:
+
+- Se muestra cuando no hay lista de vista activa
+- Muestra registros con `last_viewed_date` más reciente
+- Se accede con `?listView=RECENT`
+
+### Sistema de Impersonación
+
+Permite a los administradores ver la aplicación como cualquier usuario.
+
+#### Flujo de Impersonación
+
+1. **Inicio**: Admin hace clic en botón "Vista usuario" en `DataHeader`
+2. **API Call**: Se llama a `/api/auth/impersonate` con `targetUserId`
+3. **Generación de Token**: Se genera un magic link usando `supabaseAdmin.auth.admin.generateLink`
+4. **Auditoría**: Se guarda sesión en tabla `impersonation_sessions`
+5. **Redirección**: Se redirige a `/user/impersonate-init` con tokens
+6. **Inicialización**: La página verifica el token y establece cookies de sesión
+7. **Sesión**: Se guarda información en `sessionStorage` para mostrar barra de impersonación
+8. **Navegación**: Usuario puede navegar normalmente como el usuario objetivo
+
+#### Componentes Involucrados
+
+- `ImpersonationBar.astro` - Barra superior que muestra información de impersonación
+- `/api/auth/impersonate` - Endpoint para iniciar impersonación
+- `/api/auth/end-impersonation` - Endpoint para terminar impersonación
+- `/api/auth/set-impersonation-cookies` - Establece cookies de sesión
+- `/user/impersonate-init` - Página de inicialización
+
+#### Restauración de Sesión
+
+La sesión original del admin se guarda en `sessionStorage` como `admin-original-session` y se restaura al terminar la impersonación.
+
+### Sistema de Colores Personalizados
+
+Cada organización puede tener su color primario personalizado almacenado en `organization.primary_color`.
+
+#### Implementación
+
+1. **Base de Datos**: Campo `primary_color` en tabla `Organization`
+2. **Middleware**: Se carga en `Astro.locals.organization`
+3. **Layout**: Se aplica como variable CSS `--color-theme-primary`
+4. **Sincronización**:
+   - Se aplica desde DB al cargar página
+   - Se guarda en `localStorage` para evitar flash
+   - Se re-aplica en cada navegación
+
+#### Función Global
+
+```javascript
+window.applyOrgPrimaryColor = function (color) {
+  if (color && /^#[0-9A-Fa-f]{6}$/.test(color)) {
+    document.documentElement.style.setProperty(
+      "--color-theme-primary",
+      color,
+      "important",
+    );
+    localStorage.setItem("organization-primary-color", color);
+  }
+};
+```
+
+## Sistema de Estilos
+
+### Variables CSS Globales (`src/styles/global.css`)
+
+#### Coach (Área Administrativa)
+
+```css
+--color-theme-background: #888888;
+--color-theme-primary: #f02b2b; /* Puede ser sobrescrito por organización */
+--color-theme-secondary: #f0cd07;
+--color-theme-success: #158b00;
+--color-theme-completed: #3b82f6;
+--color-theme-draft: #fde68a;
+--color-theme-text-light: #dfdfdf;
+--color-theme-text-light-hover: #c7c7c7;
+--color-theme-background-1: #0f0f0f;
+--color-theme-background-2: #121212;
+--color-theme-background-3: #202020;
+--color-theme-background-4: #161616;
+```
+
+#### User (Área de Usuario)
+
+Usa las mismas variables que Coach, pero con clases específicas para diferenciación visual.
+
+### Clases Utility Predefinidas
+
+#### Botones
+
+- `.btn-primary` - Botón primario (coach)
+- `.btn-primary-user` - Botón primario (user)
+- `.btn-secondary` - Botón secundario (coach)
+- `.btn-secondary-user` - Botón secundario (user)
+- `.btn-outline-user` - Botón outline (user)
+
+#### Cards
+
+- `.card-user` - Card básica (user)
+- `.card-user-elevated` - Card elevada (user)
+
+#### Inputs
+
+- `.input-user` - Input estilizado (user)
+
+#### Navegación
+
+- `.nav-link-active` - Link activo
+- `.nav-link-inactive` - Link inactivo
+
+#### Utilidades
+
+- `.scrollbar-hide` - Oculta scrollbar
+
+## Mejores Prácticas de Desarrollo
+
+### Estructura y Organización
+
+- **Responsabilidades separadas**: Máximo 300 líneas por archivo
+- **Componentes reutilizables**: Usar componentes base (Button, BaseForm, etc.)
+- **Configuración centralizada**: Todo en defaultConfig.ts para el área de coach
+- **Mobile-first**: Priorizar diseño móvil, especialmente en área de usuario
+- **Separación de concerns**: Lógica de negocio en servicios, presentación en componentes
+
+### Estilo y CSS
+
+- **Variables exclusivamente**: Usar solo colores de global.css
+- **Tailwind CSS prioritario**: `text-[var(--color-theme-text-light)]` sobre CSS custom
+- **Orden lógico**: Layout → Spacing → Typography → Colors → Effects
+- **Child selectors**: Aprovechar `*:` variants cuando sea apropiado
+- **No inline styles**: Excepto para valores dinámicos (como colores de organización)
+
+### Código y Nomenclatura
+
+- **Inglés en código**: Variables, funciones y comentarios en inglés
+- **camelCase**: Para variables y funciones JavaScript/TypeScript
+- **PascalCase**: Para componentes y tipos
+- **kebab-case**: Para nombres de archivos de componentes Astro
+- **No emojis**: Ni en código ni en comentarios
+- **Documentación clara**: Solo a nivel de función/método, no línea por línea
+
+### Eventos y Lifecycle
+
+- **Astro transitions**: Usar `document.addEventListener("astro:page-load", () => {})`
+- **NO usar**: `document.addEventListener("DOMContentLoaded", ...)` - usar eventos de Astro
+- **Cleanup**: Limpiar event listeners en componentes que se desmontan
+
+### Detección de Dispositivos (Área Usuario)
+
+```javascript
+function isMobileDevice() {
+  const hasTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+  const mobileRegex =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+  const isMobileUA = mobileRegex.test(navigator.userAgent);
+  const isSmallScreen = window.innerWidth <= 1024;
+  return (hasTouch && isMobileUA) || (hasTouch && isSmallScreen);
+}
+```
+
+### Manejo de Errores
+
+- **Try-catch**: En operaciones asíncronas críticas
+- **Toast notifications**: Usar `showNotification` de `toastHelper.ts` para feedback
+- **Logging**: Usar `console.error` para errores, no `console.log`
+- **Validación**: Validar datos antes de enviar a API
+
+### APIs y Endpoints
+
+- **Estructura**: Todos los endpoints en `src/pages/api/`
+- **Tipos**: Usar `APIRoute` de Astro
+- **Autenticación**: Verificar tokens en cada endpoint protegido
+- **Respuestas**: Siempre retornar JSON con estructura consistente
+- **Errores**: Retornar códigos HTTP apropiados (400, 401, 403, 404, 500)
+
+## Flujo de Trabajo para Nuevas Funcionalidades
+
+### Área de Coach
+
+1. **Definir configuración** en `defaultConfig.ts`
+   - Agregar entrada con todas las propiedades necesarias
+   - Configurar columnas, acciones, botones
+   - Definir relaciones si aplica
+   - Configurar filtros si se necesita sistema de filtrado
+2. **Las rutas dinámicas automáticamente funcionarán**
+   - `/coach/[objectName]` - Lista
+   - `/coach/[objectName]/[id]` - Detalle
+   - `/coach/[objectName]/builder` - Creación
+3. **Crear formulario específico** si es necesario
+   - Agregar a `AvailableForms` enum
+   - Crear componente en `src/components/Private/Forms/`
+   - Importar en `builder.astro`
+4. **Configurar relaciones** si aplica
+   - Agregar en `relations` del objeto
+   - Configurar filtros y columnas de la relación
+5. **Agregar permisos** si es necesario
+   - Usar `allowedRoles` en columnas, acciones, botones
+6. **Probar** todas las funcionalidades CRUD
+
+### Área de Usuario
+
+1. **Crear página** en `src/pages/user/`
+2. **Usar `UserLayout.astro`** como layout
+3. **Implementar diseño mobile-first**
+   - Priorizar experiencia móvil
+   - Usar detección de dispositivos
+4. **Usar componentes base** cuando sea posible
+   - Button, Card, etc.
+5. **Agregar a navegación** si es necesario
+   - Actualizar `UserHeader.astro` con nuevo enlace
+
+### Nuevos Componentes
+
+1. **Ubicar** en estructura apropiada
+   - `Private/` para área de coach
+   - `User/` para área de usuario
+   - `icons/` para iconos
+2. **Seguir patrón** de props de componentes existentes
+3. **Usar variables CSS** del sistema
+4. **Documentar props** claramente en comentarios
+5. **Probar** en diferentes dispositivos si es componente de usuario
+
+### Nuevas APIs
+
+1. **Crear endpoint** en `src/pages/api/`
+2. **Verificar autenticación** si es necesario
+3. **Validar datos** de entrada
+4. **Manejar errores** apropiadamente
+5. **Retornar respuestas** consistentes
+6. **Documentar** parámetros y respuestas
+
+## Configuración SEO
+
+### Dominios
+
+- **Producción**: `prowessapp.com` - Indexación habilitada
+- **Desarrollo**: `my-coach.es` - Indexación bloqueada
+- **Local/Staging**: Indexación bloqueada automáticamente
+
+### Configuración Automática
+
+- `robots.txt` dinámico por dominio (`src/pages/robots.txt.ts`)
+- Meta tags robots según ambiente
+- Headers HTTP `X-Robots-Tag` configurados en middleware
+- Headers de seguridad adicionales en dominios de desarrollo
+
+## Notas Técnicas
+
+### Errores Conocidos
+
+- `Cannot find module '@/xxx/xxxx.astro'` es un bug conocido de Astro - NO intentar solucionarlo
+- Los imports dinámicos de iconos pueden fallar silenciosamente - siempre verificar existencia
+
+### Autenticación
+
+- **Solo Google OAuth**: No implementar otros métodos
+- **PKCE Flow**: Usado para seguridad adicional
+- **Middleware**: Manejo automático en `src/middleware/index.ts`
+- **Refresh Tokens**: Se renuevan automáticamente cuando expiran
+- **Perfiles**: Datos adicionales en tabla `Profile` de Supabase
+- **Cookies**: `sb-access-token` y `sb-refresh-token` con httpOnly
+
+### Performance
+
+- **Lazy loading**: Implementado automáticamente por Astro
+- **Imágenes optimizadas**: Usar formato WebP cuando sea posible
+- **Transiciones**: Astro View Transitions habilitadas
+- **Code splitting**: Automático con Astro
+- **Loading states**: Overlays de carga durante navegación
+
+### Base de Datos
+
+- **Supabase PostgreSQL**: Base de datos principal
+- **RLS (Row Level Security)**: Configurado en Supabase
+- **Storage**: Para archivos e imágenes (avatars, etc.)
+- **Realtime**: Disponible pero no usado actualmente
+
+### Variables de Entorno
+
+- `SUPABASE_URL` - URL de Supabase
+- `SUPABASE_ANON_KEY` - Clave anónima
+- `SUPABASE_SERVICE_ROLE_KEY` - Clave de servicio (solo backend)
+- `PUBLIC_SUPABASE_URL` - URL pública (opcional)
+- `PUBLIC_SUPABASE_ANON_KEY` - Clave pública (opcional)
+
+## Extensibilidad
+
+### Agregar Nueva Tabla/Entidad
+
+1. **Crear configuración** en `defaultConfig.ts`
+   - Definir todas las propiedades necesarias
+   - Configurar columnas, acciones, botones
+2. **Agregar a enums** en `src/types/EnumValues.ts` si necesita formulario adhoc
+3. **Crear formulario especializado** si es necesario
+   - Agregar a `AvailableForms`
+   - Crear componente en `Forms/`
+4. **Las rutas dinámicas funcionarán automáticamente**
+5. **Configurar relaciones** si tiene tablas relacionadas
+6. **Agregar permisos** según necesidad
+
+### Nuevos Roles de Usuario
+
+1. **Actualizar enum** en tipos (si existe)
+2. **Modificar middleware** de autenticación si es necesario
+3. **Ajustar configuraciones** de acceso en defaultConfig.ts
+4. **Actualizar función** `canUserSeeElement` si se necesita lógica especial
+
+### Nuevos Tipos de Filtros
+
+1. **Agregar tipo** en `filterableFields` type
+2. **Implementar UI** en `DataTable.astro` para el nuevo tipo
+3. **Implementar lógica** de filtrado en páginas de lista
+4. **Probar** con diferentes operadores
+
+### Nuevos Widgets en Tabs
+
+1. **Agregar widget** a `widgets` array en `DetailTabConfig`
+2. **Implementar lógica** en `SplitViewMainContent.astro`
+3. **Crear componente** si es necesario
+4. **Documentar** uso y props
+
+## Sistema de Enums y Opciones
+
+Los enums y opciones se definen en `src/types/EnumValues.ts`:
+
+- `genderOptions` - Género (MAN, WOMAN, OTHER)
+- `bodyTypeOptions` - Tipo de cuerpo
+- `currentExerciseOptions` - Días de ejercicio por semana
+- `workActivityOptions` - Actividad laboral
+- `fitnessGoalOptions` - Objetivo fitness
+- `paymentMethodOptions` - Método de pago
+- `paymentStatusOptions` - Estado de pago
+- `referralCodeStatusOptions` - Estado de código de referido
+- `planDietStatusOptions` - Estado de dieta/plan
+- `subscriptionStatusOptions` - Estado de suscripción
+- `mealTypeOptions` - Tipo de comida
+- `muscleGroupOptions` - Grupos musculares
+- `formTypeOptions` - Tipo de formulario (INITIAL, WEEKLY)
+- `progressStatusOptions` - Estado de progreso
+
+## Sistema de Layouts
+
+### CoachLayout.astro
+
+Layout principal para área de coach/admin:
+
+- Header con navegación
+- Sidebar con menú dinámico
+- Main content area
+- Toast provider
+- Confirm modal
+- Page loader para transiciones
+- Sistema de colores personalizados
+
+### UserLayout.astro
+
+Layout principal para área de usuario:
+
+- Header adaptativo (desktop/mobile)
+- Navegación inferior fija en móvil
+- Main content con padding adaptativo
+- Toast provider
+- Confirm modal
+- Loading overlay para navegación
+- Impersonation bar si aplica
+
+## Archivos y Servicios Clave
+
+### Servicios
+
+- `src/lib/supabase.ts` - Cliente de Supabase base
+- `src/lib/apiAuth.ts` - Utilidades de autenticación
+- `src/lib/dietService.ts` - Servicios específicos de dietas
+- `src/lib/deleteService.ts` - Servicios de eliminación
+- `src/lib/toastHelper.ts` - Utilidades para notificaciones
+- `src/lib/tokenRefresh.ts` - Renovación de tokens
+- `src/lib/layoutConfig.ts` - Utilidades de configuración de layout
+
+### Utilidades de Layout
+
+- `generateDataHeaderFields` - Genera campos del header
+- `generateDataHeaderSections` - Genera secciones del header
+- `getRecordName` - Obtiene nombre del registro
+- `generateBreadcrumbs` - Genera breadcrumbs
+
+## Sistema de Navegación en Split View
+
+### Cómo Funciona la Navegación Parcial
+
+Cuando el usuario hace click en un registro del DataTable en modo Split View:
+
+1. **SplitViewController** captura el click y hace `preventDefault()` + `stopPropagation()`
+2. **PrivateHeader** NO muestra el spinner general (excluye `[data-split-view-sidebar]`)
+3. **SplitViewController** muestra el skeleton loading (transparente, sin fondo)
+4. Hace fetch a la misma URL con parámetro `?partial=main`
+5. El servidor detecta `isPartialRequest` y renderiza solo `SplitViewMainContent`
+6. Reemplaza el contenido del `[data-main-content]` con el nuevo HTML
+7. Ejecuta los scripts y dispara evento `astro:page-load`
+8. Oculta el skeleton loading
+
+### Requisitos para Scripts y Gráficas en Split View
+
+**IMPORTANTE**: Los scripts dentro de `SplitViewMainContent.astro` DEBEN:
+
+1. **Usar el evento astro:page-load**:
+
+```javascript
+document.addEventListener("astro:page-load", () => {
+  // Tu código aquí
+});
+```
+
+2. **NO usar IIFE directos**: Astro compila los scripts como externos, necesitan el evento
+
+```javascript
+// ❌ INCORRECTO
+(async () => {
+  // código
+})();
+
+// ✅ CORRECTO
+document.addEventListener("astro:page-load", async () => {
+  // código
+});
+```
+
+3. **Para scripts con Chart.js**: Incluir `waitForChart` si es necesario
+
+```javascript
+const waitForChart = async (attempts = 10) => {
+  for (let i = 0; i < attempts; i++) {
+    if (window.Chart) return true;
+    await new Promise((res) => setTimeout(res, 200));
+  }
+  return false;
+};
+```
+
+4. **Colocar scripts DENTRO del div principal**:
+
+```astro
+<div data-main-content>
+  <!-- Contenido -->
+
+  {/* Scripts aquí dentro, no fuera */}
+  <script>
+    document.addEventListener("astro:page-load", () => {
+      // Código
+    });
+  </script>
+</div>
+```
+
+### Sistema de Loading States
+
+#### Spinner General de Página (CoachLayout)
+
+- **Ubicación**: `#page-loader` en CoachLayout.astro
+- **Cuándo se activa**: Navegación completa entre páginas (sidebar, menú usuario)
+- **Cuándo NO se activa**: Clicks dentro de `[data-split-view-sidebar]`
+- **Cómo se oculta**: Automáticamente con transiciones de Astro
+- **Clases**: `pointer-events-none opacity-0` (inactivo) → sin estas clases (activo)
+
+#### Skeleton Loading (Split View)
+
+- **Ubicación**: Generado dinámicamente por `SplitViewController.tsx`
+- **Cuándo se activa**: Navegación parcial en split view
+- **Estilo**: Sin fondo (transparente), solo bloques animados
+- **Cómo funciona**:
+  - Agrega `[data-split-loading]` con HTML de skeleton
+  - Oculta contenido actual con `split-loading-active`
+  - Se remueve al completar la carga
+
+#### Exclusión de Split View Sidebar
+
+En `PrivateHeader.astro`, los listeners del sidebar verifican:
+
+```javascript
+if (target.closest("[data-split-view-sidebar]")) {
+  return; // No mostrar spinner general
+}
+```
+
+### Ejecución de Scripts en Navegación Parcial
+
+El `SplitViewController` maneja los scripts así:
+
+1. **Extrae scripts del HTML**: Separa externos de inline
+2. **Filtra scripts innecesarios**:
+   - Scripts de componentes Astro (`.astro?astro`) - ya cargados
+   - Chart.js si ya está en `window.Chart`
+3. **Elimina scripts del HTML antes de insertar**
+4. **Inserta el HTML sin scripts**
+5. **Re-inserta scripts en orden**: Primero externos, luego inline
+6. **Dispara evento**: `document.dispatchEvent(new Event("astro:page-load"))`
+7. **Resultado**: Los listeners de scripts se ejecutan correctamente
+
+### Columnas en Split View
+
+Para que un registro sea clickeable en el DataTable del split view:
+
+- Al menos UNA columna con `keepInSplitView: true` DEBE tener `link` definido:
+
+```typescript
+{
+  key: "name",
+  title: "Nombre",
+  link: (row: any) => `/coach/TableName/${row.id}`,
+  keepInSplitView: true,
+}
+```
+
+Esta documentación debe mantenerse actualizada con cualquier cambio significativo en la arquitectura o patrones de desarrollo.
+
+pg_dump-17 "postgresql://postgres.wjqoumaugyewgudojtbc:WeBOvxyLe4NBks7x@aws-1-eu-west-3.pooler.supabase.com:5432/postgres" --data-only > prod_data.sql
