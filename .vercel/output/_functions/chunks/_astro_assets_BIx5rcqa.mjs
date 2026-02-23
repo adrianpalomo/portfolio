@@ -1,10 +1,9 @@
 import { j as joinPaths, i as isRemotePath } from './path_tbLlI_c1.mjs';
-import { A as AstroError, ag as ExpectedImage, ah as LocalImageUsedWrongly, ai as MissingImageDimension, aj as UnsupportedImageFormat, ak as IncompatibleDescriptorOptions, al as UnsupportedImageConversion, am as toStyleString, an as NoImageMetadata, ao as FailedToFetchRemoteImageDimensions, ap as ExpectedImageOptions, aq as ExpectedNotESMImage, ar as InvalidImageService, d as createAstro, c as createComponent, as as ImageMissingAlt, m as maybeRenderHead, b as addAttribute, s as spreadAttributes, a as renderTemplate, at as ExperimentalFontsNotEnabled, au as FontFamilyNotFound, u as unescapeHTML } from './astro/server_y9OgIksR.mjs';
+import { A as AstroError, ah as ExpectedImage, ai as LocalImageUsedWrongly, aj as MissingImageDimension, ak as UnsupportedImageFormat, al as IncompatibleDescriptorOptions, am as UnsupportedImageConversion, an as toStyleString, ao as NoImageMetadata, ap as FailedToFetchRemoteImageDimensions, aq as ExpectedImageOptions, ar as ExpectedNotESMImage, as as InvalidImageService, d as createAstro, c as createComponent, at as ImageMissingAlt, m as maybeRenderHead, b as addAttribute, s as spreadAttributes, a as renderTemplate, au as ExperimentalFontsNotEnabled, av as FontFamilyNotFound, u as unescapeHTML } from './astro/server_D5k8374Y.mjs';
 import { D as DEFAULT_OUTPUT_FORMAT, a as VALID_SUPPORTED_FORMATS, b as DEFAULT_HASH_PROPS } from './consts_BmVDRGlB.mjs';
 import { i as isRemoteAllowed, t as typeHandlers, a as types } from './index_CZWCDbwp.mjs';
 import * as mime from 'mrmime';
 import 'clsx';
-import 'piccolore';
 
 const DEFAULT_RESOLUTIONS = [
   640,
@@ -472,7 +471,7 @@ async function getConfiguredImageService() {
   if (!globalThis?.astroAsset?.imageService) {
     const { default: service } = await import(
       // @ts-expect-error
-      './sharp_zPmLhns9.mjs'
+      './sharp_DTiGty2W.mjs'
     ).catch((e) => {
       const error = new AstroError(InvalidImageService);
       error.cause = e;

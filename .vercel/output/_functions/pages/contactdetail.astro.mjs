@@ -1,9 +1,8 @@
-import { d as createAstro, c as createComponent, m as maybeRenderHead, s as spreadAttributes, a as renderTemplate, r as renderComponent, e as renderScript } from '../chunks/astro/server_y9OgIksR.mjs';
-import 'piccolore';
+import { d as createAstro, c as createComponent, m as maybeRenderHead, s as spreadAttributes, a as renderTemplate, r as renderComponent, e as renderScript } from '../chunks/astro/server_D5k8374Y.mjs';
 import 'clsx';
-import { $ as $$Github } from '../chunks/Github_AVJKgaqL.mjs';
-import { $ as $$PageHeader } from '../chunks/PageHeader_CEbw7qvC.mjs';
-import { $ as $$Layout } from '../chunks/Layout_B_zPXMdI.mjs';
+import { $ as $$Github } from '../chunks/Github_D--r5zeG.mjs';
+import { $ as $$PageHeader } from '../chunks/PageHeader_JXvWjokx.mjs';
+import { $ as $$Layout } from '../chunks/Layout_Ce_E4fCl.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Astro$2 = createAstro("https://adrianpalomo.com");

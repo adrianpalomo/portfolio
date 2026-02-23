@@ -1,7 +1,6 @@
-import { o as decryptString, p as createSlotValueFromString, q as isAstroComponentFactory, r as renderComponent, a as renderTemplate, t as ROUTE_TYPE_HEADER, v as REROUTE_DIRECTIVE_HEADER, A as AstroError, w as i18nNoLocaleFoundInPath, x as ResponseSentError, y as ActionNotFoundError, M as MiddlewareNoDataOrNextCalled, z as MiddlewareNotAResponse, B as originPathnameSymbol, C as RewriteWithBodyUsed, G as GetStaticPathsRequired, I as InvalidGetStaticPathsReturn, D as InvalidGetStaticPathsEntry, E as GetStaticPathsExpectedParams, F as GetStaticPathsInvalidRouteParam, P as PageNumberParamNotFound, H as DEFAULT_404_COMPONENT, N as NoMatchingStaticPathFound, J as PrerenderDynamicEndpointPathCollide, K as ReservedSlotName, L as renderSlotToString, O as renderJSX, Q as chunkToString, S as isRenderInstruction, T as ForbiddenRewrite, V as SessionStorageInitError, W as SessionStorageSaveError, X as ASTRO_VERSION, Y as CspNotEnabled, Z as LocalsReassigned, _ as generateCspDigest, $ as PrerenderClientAddressNotAvailable, a0 as clientAddressSymbol, a1 as ClientAddressNotAvailable, a2 as StaticClientAddressNotAvailable, a3 as AstroResponseHeadersReassigned, a4 as responseSentSymbol$1, a5 as renderPage, a6 as REWRITE_DIRECTIVE_HEADER_KEY, a7 as REWRITE_DIRECTIVE_HEADER_VALUE, a8 as renderEndpoint, a9 as LocalsNotAnObject, aa as REROUTABLE_STATUS_CODES, ab as nodeRequestAbortControllerCleanupSymbol } from './astro/server_y9OgIksR.mjs';
-import colors from 'piccolore';
+import { o as decryptString, p as createSlotValueFromString, q as isAstroComponentFactory, r as renderComponent, a as renderTemplate, t as ROUTE_TYPE_HEADER, v as REROUTE_DIRECTIVE_HEADER, A as AstroError, w as i18nNoLocaleFoundInPath, x as ResponseSentError, y as s, z as ActionNotFoundError, M as MiddlewareNoDataOrNextCalled, B as MiddlewareNotAResponse, C as originPathnameSymbol, D as RewriteWithBodyUsed, G as GetStaticPathsRequired, I as InvalidGetStaticPathsReturn, E as InvalidGetStaticPathsEntry, F as GetStaticPathsExpectedParams, H as GetStaticPathsInvalidRouteParam, P as PageNumberParamNotFound, J as DEFAULT_404_COMPONENT, N as NoMatchingStaticPathFound, K as PrerenderDynamicEndpointPathCollide, L as ReservedSlotName, O as renderSlotToString, Q as renderJSX, S as chunkToString, T as isRenderInstruction, V as ForbiddenRewrite, W as SessionStorageInitError, X as SessionStorageSaveError, Y as ASTRO_VERSION, Z as CspNotEnabled, _ as LocalsReassigned, $ as generateCspDigest, a0 as PrerenderClientAddressNotAvailable, a1 as clientAddressSymbol, a2 as ClientAddressNotAvailable, a3 as StaticClientAddressNotAvailable, a4 as AstroResponseHeadersReassigned, a5 as responseSentSymbol$1, a6 as renderPage, a7 as REWRITE_DIRECTIVE_HEADER_KEY, a8 as REWRITE_DIRECTIVE_HEADER_VALUE, a9 as renderEndpoint, aa as LocalsNotAnObject, ab as REROUTABLE_STATUS_CODES, ac as nodeRequestAbortControllerCleanupSymbol } from './astro/server_D5k8374Y.mjs';
 import 'clsx';
-import { A as ActionError, d as deserializeActionResult, s as serializeActionResult, a as ACTION_RPC_ROUTE_PATTERN, b as ACTION_QUERY_PARAMS, g as getActionQueryString, D as DEFAULT_404_ROUTE, c as default404Instance, N as NOOP_MIDDLEWARE_FN, e as ensure404Route } from './astro-designed-error-pages_OuGR0unV.mjs';
+import { A as ActionError, d as deserializeActionResult, s as serializeActionResult, a as ACTION_RPC_ROUTE_PATTERN, b as ACTION_QUERY_PARAMS, g as getActionQueryString, D as DEFAULT_404_ROUTE, c as default404Instance, N as NOOP_MIDDLEWARE_FN, e as ensure404Route } from './astro-designed-error-pages_D8I4O81s.mjs';
 import 'es-module-lexer';
 import buffer from 'node:buffer';
 import crypto$1 from 'node:crypto';
@@ -763,7 +762,7 @@ function getEventPrefix({ level, label }) {
   const timestamp = `${dateTimeFormat.format(/* @__PURE__ */ new Date())}`;
   const prefix = [];
   if (level === "error" || level === "warn") {
-    prefix.push(colors.bold(timestamp));
+    prefix.push(s.bold(timestamp));
     prefix.push(`[${level.toUpperCase()}]`);
   } else {
     prefix.push(timestamp);
@@ -772,15 +771,15 @@ function getEventPrefix({ level, label }) {
     prefix.push(`[${label}]`);
   }
   if (level === "error") {
-    return colors.red(prefix.join(" "));
+    return s.red(prefix.join(" "));
   }
   if (level === "warn") {
-    return colors.yellow(prefix.join(" "));
+    return s.yellow(prefix.join(" "));
   }
   if (prefix.length === 1) {
-    return colors.dim(prefix[0]);
+    return s.dim(prefix[0]);
   }
-  return colors.dim(prefix[0]) + " " + colors.blue(prefix.splice(1).join(" "));
+  return s.dim(prefix[0]) + " " + s.blue(prefix.splice(1).join(" "));
 }
 class Logger {
   options;
@@ -2701,14 +2700,14 @@ class RenderContext {
         if (this.isPrerendered) {
           pipeline.logger.warn(
             "session",
-            `context.session was used when rendering the route ${colors.green(this.routePattern)}, but it is not available on prerendered routes. If you need access to sessions, make sure that the route is server-rendered using \`export const prerender = false;\` or by setting \`output\` to \`"server"\` in your Astro config to make all your routes server-rendered by default. For more information, see https://docs.astro.build/en/guides/sessions/`
+            `context.session was used when rendering the route ${s.green(this.routePattern)}, but it is not available on prerendered routes. If you need access to sessions, make sure that the route is server-rendered using \`export const prerender = false;\` or by setting \`output\` to \`"server"\` in your Astro config to make all your routes server-rendered by default. For more information, see https://docs.astro.build/en/guides/sessions/`
           );
           return void 0;
         }
         if (!renderContext.session) {
           pipeline.logger.warn(
             "session",
-            `context.session was used when rendering the route ${colors.green(this.routePattern)}, but no storage configuration was provided. Either configure the storage manually or use an adapter that provides session storage. For more information, see https://docs.astro.build/en/guides/sessions/`
+            `context.session was used when rendering the route ${s.green(this.routePattern)}, but no storage configuration was provided. Either configure the storage manually or use an adapter that provides session storage. For more information, see https://docs.astro.build/en/guides/sessions/`
           );
           return void 0;
         }
@@ -2903,14 +2902,14 @@ class RenderContext {
         if (this.isPrerendered) {
           pipeline.logger.warn(
             "session",
-            `Astro.session was used when rendering the route ${colors.green(this.routePattern)}, but it is not available on prerendered pages. If you need access to sessions, make sure that the page is server-rendered using \`export const prerender = false;\` or by setting \`output\` to \`"server"\` in your Astro config to make all your pages server-rendered by default. For more information, see https://docs.astro.build/en/guides/sessions/`
+            `Astro.session was used when rendering the route ${s.green(this.routePattern)}, but it is not available on prerendered pages. If you need access to sessions, make sure that the page is server-rendered using \`export const prerender = false;\` or by setting \`output\` to \`"server"\` in your Astro config to make all your pages server-rendered by default. For more information, see https://docs.astro.build/en/guides/sessions/`
           );
           return void 0;
         }
         if (!renderContext.session) {
           pipeline.logger.warn(
             "session",
-            `Astro.session was used when rendering the route ${colors.green(this.routePattern)}, but no storage configuration was provided. Either configure the storage manually or use an adapter that provides session storage. For more information, see https://docs.astro.build/en/guides/sessions/`
+            `Astro.session was used when rendering the route ${s.green(this.routePattern)}, but no storage configuration was provided. Either configure the storage manually or use an adapter that provides session storage. For more information, see https://docs.astro.build/en/guides/sessions/`
           );
           return void 0;
         }

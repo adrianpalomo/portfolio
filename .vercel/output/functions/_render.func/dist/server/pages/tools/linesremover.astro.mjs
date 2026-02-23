@@ -1,7 +1,6 @@
-import { c as createComponent, a as renderTemplate, r as renderComponent, m as maybeRenderHead, e as renderScript } from '../../chunks/astro/server_y9OgIksR.mjs';
-import 'piccolore';
-import { $ as $$BasicLayout } from '../../chunks/BasicLayout_CZ70WYKu.mjs';
-import { $ as $$Copy2, a as $$Trash } from '../../chunks/Trash_D9xXYXVr.mjs';
+import { c as createComponent, a as renderTemplate, r as renderComponent, m as maybeRenderHead, e as renderScript } from '../../chunks/astro/server_D5k8374Y.mjs';
+import { $ as $$BasicLayout } from '../../chunks/BasicLayout_BtS-D3GL.mjs';
+import { $ as $$Copy2, a as $$Trash } from '../../chunks/Trash_ZycwYq1f.mjs';
 /* empty css                                           */
 export { renderers } from '../../renderers.mjs';
 

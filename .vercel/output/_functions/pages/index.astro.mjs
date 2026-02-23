@@ -1,12 +1,11 @@
-import { d as createAstro, c as createComponent, m as maybeRenderHead, s as spreadAttributes, a as renderTemplate, b as addAttribute, r as renderComponent, i as renderTransition, e as renderScript } from '../chunks/astro/server_y9OgIksR.mjs';
-import 'piccolore';
+import { d as createAstro, c as createComponent, m as maybeRenderHead, s as spreadAttributes, a as renderTemplate, b as addAttribute, r as renderComponent, i as renderTransition, e as renderScript } from '../chunks/astro/server_D5k8374Y.mjs';
 import 'clsx';
 import { c as certifications } from '../chunks/certifications_BQ4xoOyt.mjs';
 /* empty css                                 */
-import { $ as $$Github } from '../chunks/Github_AVJKgaqL.mjs';
-import { g as getCollection } from '../chunks/_astro_content_CEn84oQ1.mjs';
+import { $ as $$Github } from '../chunks/Github_D--r5zeG.mjs';
+import { g as getCollection } from '../chunks/_astro_content_D4UjJ2Qc.mjs';
 /* empty css                                 */
-import { $ as $$Layout } from '../chunks/Layout_B_zPXMdI.mjs';
+import { $ as $$Layout } from '../chunks/Layout_Ce_E4fCl.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Astro$4 = createAstro("https://adrianpalomo.com");

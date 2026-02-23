@@ -1,7 +1,6 @@
-import { d as createAstro, c as createComponent, m as maybeRenderHead, a as renderTemplate, r as renderComponent, b as addAttribute } from '../chunks/astro/server_y9OgIksR.mjs';
-import 'piccolore';
-import { $ as $$PageHeader } from '../chunks/PageHeader_CEbw7qvC.mjs';
-import { $ as $$Layout } from '../chunks/Layout_B_zPXMdI.mjs';
+import { d as createAstro, c as createComponent, m as maybeRenderHead, a as renderTemplate, r as renderComponent, b as addAttribute } from '../chunks/astro/server_D5k8374Y.mjs';
+import { $ as $$PageHeader } from '../chunks/PageHeader_JXvWjokx.mjs';
+import { $ as $$Layout } from '../chunks/Layout_Ce_E4fCl.mjs';
 import 'clsx';
 export { renderers } from '../renderers.mjs';
 
