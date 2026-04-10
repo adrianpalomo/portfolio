@@ -177,8 +177,9 @@ const defaultAssets = [
             >
               <p class="text-sm text-gray-400">
                 Calcula horizontes de inversión. Rellena 2 de los 3 campos
-                (inversión mensual, dinero objetivo y tiempo) y se calculará el
-                tercero automáticamente.
+                (inversión mensual, dinero objetivo y horizonte temporal) y se
+                calculará el tercero automáticamente. Puedes definir durante
+                cuántos años aportas y cuánto retiras después.
               </p>
 
               <!-- Modo de cálculo -->
@@ -236,6 +237,63 @@ const defaultAssets = [
                     >Usa meses o fecha. La fecha prevalece si ambas están
                     rellenas.</small
                   >
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                <div class="flex flex-col gap-2">
+                  <label
+                    for="hz-invest-years"
+                    class="text-sm font-medium text-gray-300"
+                    >Años aportando</label
+                  >
+                  <input
+                    id="hz-invest-years"
+                    type="number"
+                    min="0"
+                    step="1"
+                    placeholder="Ej. 20"
+                    class="rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-sm text-gray-100 placeholder-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  />
+                  <small class="text-xs text-purple-400"
+                    >Si está vacío, se aporta durante todo el horizonte. Si el
+                    valor supera los años del horizonte, se interpreta como
+                    meses.</small
+                  >
+                </div>
+                <div class="flex flex-col gap-2">
+                  <label
+                    for="hz-withdrawal"
+                    class="text-sm font-medium text-gray-300"
+                    >Retirada tras aportar (&euro;)</label
+                  >
+                  <input
+                    id="hz-withdrawal"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value="0"
+                    placeholder="Ej. 1000"
+                    class="rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-sm text-gray-100 placeholder-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  />
+                  <small
+                    id="hz-withdrawal-breakeven"
+                    class="text-xs text-cyan-300"
+                  ></small>
+                </div>
+                <div class="flex flex-col gap-2">
+                  <label
+                    for="hz-withdrawal-period"
+                    class="text-sm font-medium text-gray-300"
+                    >Periodicidad retirada</label
+                  >
+                  <select
+                    id="hz-withdrawal-period"
+                    class="rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-sm text-gray-100 focus:border-purple-500 focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  >
+                    <option value="monthly">Mensual</option>
+                    <option value="yearly">Anual</option>
+                  </select>
                 </div>
               </div>
 
@@ -354,7 +412,11 @@ const defaultAssets = [
                         >
                         <th
                           class="px-3 py-2 text-right text-xs font-medium text-gray-300"
-                          >Invertido</th
+                          >Aportado</th
+                        >
+                        <th
+                          class="px-3 py-2 text-right text-xs font-medium text-amber-300"
+                          >Retirado acum.</th
                         >
                         <th
                           class="px-3 py-2 text-right text-xs font-medium text-green-400"
@@ -376,6 +438,14 @@ const defaultAssets = [
                           class="px-3 py-2 text-right text-xs font-medium text-emerald-400"
                           >% Ganancia</th
                         >
+                        <th
+                          class="px-3 py-2 text-right text-xs font-medium text-cyan-400"
+                          >% vs año anterior</th
+                        >
+                        <th
+                          class="px-3 py-2 text-right text-xs font-medium text-cyan-300"
+                          >&euro; vs año anterior</th
+                        >
                       </tr>
                     </thead>
                     <tbody id="hz-table-body" class="divide-y divide-gray-700"
@@ -390,6 +460,10 @@ const defaultAssets = [
                   </h4>
                   <div class="relative" style="height:350px">
                     <canvas id="hz-chart" class="h-full w-full"></canvas>
+                    <div
+                      id="hz-chart-tooltip"
+                      class="pointer-events-none absolute hidden rounded-md border border-gray-600 bg-gray-900/95 px-2 py-1 text-xs text-gray-100 shadow-lg"
+                    ></div>
                   </div>
                   <div
                     id="hz-chart-legend"
@@ -2785,11 +2859,44 @@ const defaultAssets = [
     const exportData = () => {
       try {
         const rows = getRows({ strict: false });
+        const hzMonthlyInput = document.getElementById("hz-monthly");
+        const hzTargetInput = document.getElementById("hz-target");
+        const hzMonthsInput = document.getElementById("hz-months");
+        const hzDateInput = document.getElementById("hz-date");
+        const hzInitialInput = document.getElementById("hz-initial");
+        const hzRvPctInput = document.getElementById("hz-rv-pct");
+        const hzRvTaeInput = document.getElementById("hz-rv-tae");
+        const hzRfTaeInput = document.getElementById("hz-rf-tae");
+        const hzInvestYearsInput = document.getElementById("hz-invest-years");
+        const hzWithdrawalInput = document.getElementById("hz-withdrawal");
+        const hzWithdrawalPeriodInput = document.getElementById(
+          "hz-withdrawal-period",
+        );
+        const hzPanel = document.getElementById("horizon-panel");
+        const hzRvLabel = document.getElementById("hz-rv-label");
+
+        const horizonState = {
+          monthly: hzMonthlyInput?.value || "",
+          target: hzTargetInput?.value || "",
+          months: hzMonthsInput?.value || "",
+          date: hzDateInput?.value || "",
+          initial: hzInitialInput?.value || "",
+          rvPct: hzRvPctInput?.value || "",
+          rvMode: hzRvLabel?.textContent?.includes("€") ? "eur" : "pct",
+          rvTae: hzRvTaeInput?.value || "",
+          rfTae: hzRfTaeInput?.value || "",
+          investYears: hzInvestYearsInput?.value || "",
+          withdrawal: hzWithdrawalInput?.value || "",
+          withdrawalPeriod: hzWithdrawalPeriodInput?.value || "monthly",
+          open: hzPanel ? !hzPanel.classList.contains("hidden") : false,
+        };
+
         const data = {
-          version: "1.0",
+          version: "1.1",
           budget: budgetInput.value || "",
           margin: marginInput.value || "",
           allowTransfers: transfersEnabled(),
+          horizon: horizonState,
           assets: rows.map((row) => ({
             name: row.name,
             isin: row.isin || "",
@@ -2832,6 +2939,106 @@ const defaultAssets = [
           if (data.margin !== undefined) marginInput.value = data.margin || "";
           if (typeof data.allowTransfers !== "undefined") {
             setTransfersToggle(Boolean(data.allowTransfers));
+          }
+
+          // Cargar calculadora de horizontes
+          if (data.horizon && typeof data.horizon === "object") {
+            const hzState = data.horizon;
+            const hzMonthlyInput = document.getElementById("hz-monthly");
+            const hzTargetInput = document.getElementById("hz-target");
+            const hzMonthsInput = document.getElementById("hz-months");
+            const hzDateInput = document.getElementById("hz-date");
+            const hzInitialInput = document.getElementById("hz-initial");
+            const hzRvPctInput = document.getElementById("hz-rv-pct");
+            const hzRvTaeInput = document.getElementById("hz-rv-tae");
+            const hzRfTaeInput = document.getElementById("hz-rf-tae");
+            const hzInvestYearsInput = document.getElementById("hz-invest-years");
+            const hzWithdrawalInput = document.getElementById("hz-withdrawal");
+            const hzWithdrawalPeriodInput = document.getElementById(
+              "hz-withdrawal-period",
+            );
+            const hzPanel = document.getElementById("horizon-panel");
+            const hzToggle = document.getElementById("horizon-toggle");
+            const hzRvLabel = document.getElementById("hz-rv-label");
+            const hzModeToggle = document.getElementById("hz-rv-mode-toggle");
+
+            // Ajustar modo RV (% o €) para que el cálculo use la misma configuración importada
+            const currentMode = hzRvLabel?.textContent?.includes("€")
+              ? "eur"
+              : "pct";
+            const targetMode = hzState.rvMode === "eur" ? "eur" : "pct";
+            if (hzModeToggle && currentMode !== targetMode) {
+              hzModeToggle.click();
+            }
+
+            if (hzMonthlyInput && hzState.monthly !== undefined) {
+              hzMonthlyInput.value = hzState.monthly;
+            }
+            if (hzTargetInput && hzState.target !== undefined) {
+              hzTargetInput.value = hzState.target;
+            }
+            if (hzMonthsInput && hzState.months !== undefined) {
+              hzMonthsInput.value = hzState.months;
+            }
+            if (hzDateInput && hzState.date !== undefined) {
+              hzDateInput.value = hzState.date;
+            }
+            if (hzInitialInput && hzState.initial !== undefined) {
+              hzInitialInput.value = hzState.initial;
+            }
+            if (hzRvPctInput && hzState.rvPct !== undefined) {
+              hzRvPctInput.value = hzState.rvPct;
+            }
+            if (hzRvTaeInput && hzState.rvTae !== undefined) {
+              hzRvTaeInput.value = hzState.rvTae;
+            }
+            if (hzRfTaeInput && hzState.rfTae !== undefined) {
+              hzRfTaeInput.value = hzState.rfTae;
+            }
+            if (hzInvestYearsInput && hzState.investYears !== undefined) {
+              hzInvestYearsInput.value = hzState.investYears;
+            }
+            if (hzWithdrawalInput && hzState.withdrawal !== undefined) {
+              hzWithdrawalInput.value = hzState.withdrawal;
+            }
+            if (
+              hzWithdrawalPeriodInput &&
+              (hzState.withdrawalPeriod === "monthly" ||
+                hzState.withdrawalPeriod === "yearly")
+            ) {
+              hzWithdrawalPeriodInput.value = hzState.withdrawalPeriod;
+            }
+
+            if (
+              typeof hzState.open === "boolean" &&
+              hzPanel &&
+              hzToggle &&
+              hzState.open === hzPanel.classList.contains("hidden")
+            ) {
+              hzToggle.click();
+            }
+
+            localStorage.setItem(
+              "horizonCalcState",
+              JSON.stringify({
+                monthly: hzMonthlyInput?.value || "",
+                target: hzTargetInput?.value || "",
+                months: hzMonthsInput?.value || "",
+                date: hzDateInput?.value || "",
+                initial: hzInitialInput?.value || "",
+                rvPct: hzRvPctInput?.value || "",
+                rvMode: targetMode,
+                rvTae: hzRvTaeInput?.value || "",
+                rfTae: hzRfTaeInput?.value || "",
+                investYears: hzInvestYearsInput?.value || "",
+                withdrawal: hzWithdrawalInput?.value || "",
+                withdrawalPeriod: hzWithdrawalPeriodInput?.value || "monthly",
+                open: hzPanel ? !hzPanel.classList.contains("hidden") : false,
+              }),
+            );
+
+            // Fuerza recálculo de la sección de horizontes con los valores importados
+            hzMonthlyInput?.dispatchEvent(new Event("input", { bubbles: true }));
           }
 
           // Limpiar y recrear filas
@@ -2941,6 +3148,14 @@ const defaultAssets = [
       const rvModeToggle = document.getElementById("hz-rv-mode-toggle");
       const rvTaeInput = document.getElementById("hz-rv-tae");
       const rfTaeInput = document.getElementById("hz-rf-tae");
+      const investYearsInput = document.getElementById("hz-invest-years");
+      const withdrawalInput = document.getElementById("hz-withdrawal");
+      const withdrawalPeriodInput = document.getElementById(
+        "hz-withdrawal-period",
+      );
+      const withdrawalBreakevenEl = document.getElementById(
+        "hz-withdrawal-breakeven",
+      );
 
       // RV mode: 'pct' or 'eur'
       let rvMode = "pct";
@@ -2970,8 +3185,95 @@ const defaultAssets = [
       const summaryDiv = document.getElementById("hz-summary");
       const tableBody = document.getElementById("hz-table-body");
       const canvas = document.getElementById("hz-chart");
+      const chartTooltip = document.getElementById("hz-chart-tooltip");
       const legendDiv = document.getElementById("hz-chart-legend");
       const errorDiv = document.getElementById("hz-error");
+
+      const chartState = {
+        sampled: [],
+        totalMonths: 0,
+        yMax: 0,
+        plot: { ml: 0, mt: 0, cw: 0, ch: 0 },
+      };
+
+      const hideChartTooltip = () => {
+        if (!chartTooltip) return;
+        chartTooltip.classList.add("hidden");
+      };
+
+      const showChartTooltip = (eventPoint) => {
+        if (!chartTooltip || !chartState.sampled.length) return;
+
+        const rect = canvas.getBoundingClientRect();
+        const x = eventPoint.clientX - rect.left;
+        const y = eventPoint.clientY - rect.top;
+        const { ml, mt, cw, ch } = chartState.plot;
+
+        if (x < ml || x > ml + cw || y < mt || y > mt + ch) {
+          hideChartTooltip();
+          return;
+        }
+
+        const monthFloat = ((x - ml) / cw) * chartState.totalMonths;
+        const month = Math.round(clamp(monthFloat, 0, chartState.totalMonths));
+        const point = chartState.sampled[month];
+        if (!point) {
+          hideChartTooltip();
+          return;
+        }
+
+        const label =
+          point.month === 0
+            ? "Inicio"
+            : point.month % 12 === 0
+              ? `Año ${point.month / 12}`
+              : `Mes ${point.month}`;
+
+        chartTooltip.innerHTML = `
+          <div class="font-semibold text-purple-300">${label}</div>
+          <div>Total: ${fmt(point.total)}</div>
+          <div>Aportado: ${fmt(point.contributed)}</div>
+          <div>Retirado: ${fmt(point.withdrawn)}</div>
+          <div>R. variable: ${fmt(point.rv)}</div>
+          <div>R. fija: ${fmt(point.rf)}</div>
+          <div>Ganancia: ${fmt(point.gain)}</div>
+        `;
+
+        chartTooltip.classList.remove("hidden");
+
+        const ttW = chartTooltip.offsetWidth || 220;
+        const ttH = chartTooltip.offsetHeight || 120;
+        let left = x + 12;
+        let top = y + 12;
+
+        if (left + ttW > rect.width - 4) {
+          left = x - ttW - 12;
+        }
+        if (top + ttH > rect.height - 4) {
+          top = y - ttH - 12;
+        }
+
+        chartTooltip.style.left = `${Math.max(4, left)}px`;
+        chartTooltip.style.top = `${Math.max(4, top)}px`;
+      };
+
+      canvas.addEventListener("mousemove", (e) => showChartTooltip(e));
+      canvas.addEventListener("mouseleave", hideChartTooltip);
+      canvas.addEventListener(
+        "touchstart",
+        (e) => {
+          if (e.touches?.[0]) showChartTooltip(e.touches[0]);
+        },
+        { passive: true },
+      );
+      canvas.addEventListener(
+        "touchmove",
+        (e) => {
+          if (e.touches?.[0]) showChartTooltip(e.touches[0]);
+        },
+        { passive: true },
+      );
+      canvas.addEventListener("touchend", hideChartTooltip);
 
       const fmt = (v) => numberFormatter.format(v);
       const fmtPct = (v) => percentFormatter.format(v);
@@ -3024,9 +3326,12 @@ const defaultAssets = [
         rvPctInput,
         rvTaeInput,
         rfTaeInput,
+        investYearsInput,
+        withdrawalInput,
       ].forEach((el) => {
         el.addEventListener("input", recalc);
       });
+      withdrawalPeriodInput.addEventListener("change", recalc);
 
       // Save / restore horizon state
       const saveHzState = () => {
@@ -3040,6 +3345,9 @@ const defaultAssets = [
           rvMode: rvMode,
           rvTae: rvTaeInput.value,
           rfTae: rfTaeInput.value,
+          investYears: investYearsInput.value,
+          withdrawal: withdrawalInput.value,
+          withdrawalPeriod: withdrawalPeriodInput.value,
           open: panelOpen,
         };
         localStorage.setItem("horizonCalcState", JSON.stringify(state));
@@ -3065,12 +3373,97 @@ const defaultAssets = [
           }
           if (s.rvTae !== undefined) rvTaeInput.value = s.rvTae;
           if (s.rfTae !== undefined) rfTaeInput.value = s.rfTae;
+          if (s.investYears !== undefined) investYearsInput.value = s.investYears;
+          if (s.withdrawal !== undefined) withdrawalInput.value = s.withdrawal;
+          if (s.withdrawalPeriod) {
+            withdrawalPeriodInput.value = s.withdrawalPeriod;
+          }
           if (s.open) {
             panelOpen = true;
             panel.classList.remove("hidden");
             chevron.style.transform = "rotate(180deg)";
           }
         } catch (_) {}
+      };
+
+      const resolveInvestMonths = (totalMonths, investYearsValue) => {
+        if (totalMonths <= 0) return 0;
+        if (typeof investYearsValue !== "number" || Number.isNaN(investYearsValue)) {
+          return totalMonths;
+        }
+
+        // Compatibilidad UX: si el valor es mayor que el horizonte en años,
+        // se interpreta como meses (ej. 240 con horizonte 360 = 240 meses = 20 años).
+        if (investYearsValue > totalMonths / 12) {
+          return clamp(Math.round(investYearsValue), 0, totalMonths);
+        }
+
+        return clamp(Math.round(investYearsValue * 12), 0, totalMonths);
+      };
+
+      const getMonthlyWithdrawal = (
+        month,
+        investMonths,
+        withdrawalAmount,
+        withdrawalPeriod,
+      ) => {
+        if (withdrawalAmount <= 0) return 0;
+        if (month <= investMonths) return 0;
+
+        if (withdrawalPeriod === "yearly") {
+          const monthsAfterStop = month - investMonths;
+          return monthsAfterStop % 12 === 0 ? withdrawalAmount : 0;
+        }
+
+        return withdrawalAmount;
+      };
+
+      const estimateBreakevenWithdrawal = (
+        initial,
+        monthly,
+        investMonths,
+        totalMonths,
+        withdrawalPeriod,
+        rvPct,
+        rfPct,
+        rvMonthly,
+        rfMonthly,
+      ) => {
+        if (totalMonths <= investMonths) return 0;
+
+        // Capital al inicio de la fase de retiradas.
+        const phaseStart = simulateForward(
+          initial,
+          monthly,
+          investMonths,
+          investMonths,
+          0,
+          "monthly",
+          rvPct,
+          rfPct,
+          rvMonthly,
+          rfMonthly,
+        );
+
+        const startTotal = phaseStart.total;
+        if (startTotal <= 0) return 0;
+
+        // "Ni ganar ni perder" interpretado como mantener estable el capital
+        // durante la fase de retiradas (retirar solo la rentabilidad esperada).
+        if (withdrawalPeriod === "yearly") {
+          let rvYear = phaseStart.rv;
+          let rfYear = phaseStart.rf;
+          for (let i = 0; i < 12; i++) {
+            rvYear *= 1 + rvMonthly;
+            rfYear *= 1 + rfMonthly;
+          }
+          return Math.max(0, rvYear + rfYear - startTotal);
+        }
+
+        return Math.max(
+          0,
+          phaseStart.rv * rvMonthly + phaseStart.rf * rfMonthly,
+        );
       };
 
       function recalc() {
@@ -3095,6 +3488,14 @@ const defaultAssets = [
         const rfTaeAnnual = (parseFloat(rfTaeInput.value) || 0) / 100;
         const rvMonthly = Math.pow(1 + rvTaeAnnual, 1 / 12) - 1;
         const rfMonthly = Math.pow(1 + rfTaeAnnual, 1 / 12) - 1;
+        const investYearsRaw = investYearsInput.value.trim();
+        const investYears =
+          investYearsRaw === ""
+            ? null
+            : Math.max(0, parseFloat(investYearsRaw) || 0);
+        const withdrawalAmount = Math.max(0, parseFloat(withdrawalInput.value) || 0);
+        const withdrawalPeriod =
+          withdrawalPeriodInput.value === "yearly" ? "yearly" : "monthly";
 
         // Determine which 2 of 3 are filled
         const hasMonthly = monthlyInput.value !== "" && monthly > 0;
@@ -3122,10 +3523,14 @@ const defaultAssets = [
         if (hasMonthly && hasMonths && !hasTarget) {
           // Calculate target amount
           mode = "target";
+          const calcInvestMonths = resolveInvestMonths(calcMonths, investYears);
           calcTarget = simulateForward(
             initial,
             calcMonthly,
             calcMonths,
+            calcInvestMonths,
+            withdrawalAmount,
+            withdrawalPeriod,
             rvPct,
             rfPct,
             rvMonthly,
@@ -3135,10 +3540,15 @@ const defaultAssets = [
         } else if (hasTarget && hasMonthly && !hasMonths) {
           // Calculate months needed
           mode = "months";
+          const investMonthsLimit =
+            investYears === null ? null : Math.max(0, Math.round(investYears * 12));
           calcMonths = solveForMonths(
             initial,
             calcMonthly,
             calcTarget,
+            investMonthsLimit,
+            withdrawalAmount,
+            withdrawalPeriod,
             rvPct,
             rfPct,
             rvMonthly,
@@ -3157,10 +3567,14 @@ const defaultAssets = [
         } else if (hasTarget && hasMonths && !hasMonthly) {
           // Calculate monthly investment needed
           mode = "monthly";
+          const calcInvestMonths = resolveInvestMonths(calcMonths, investYears);
           calcMonthly = solveForMonthly(
             initial,
             calcTarget,
             calcMonths,
+            calcInvestMonths,
+            withdrawalAmount,
+            withdrawalPeriod,
             rvPct,
             rfPct,
             rvMonthly,
@@ -3174,10 +3588,14 @@ const defaultAssets = [
         } else {
           // All 3 filled — use monthly + months to project, show comparison
           mode = "target";
+          const calcInvestMonths = resolveInvestMonths(calcMonths, investYears);
           calcTarget = simulateForward(
             initial,
             calcMonthly,
             calcMonths,
+            calcInvestMonths,
+            withdrawalAmount,
+            withdrawalPeriod,
             rvPct,
             rfPct,
             rvMonthly,
@@ -3185,21 +3603,59 @@ const defaultAssets = [
           ).total;
         }
 
-        // Now simulate the full progression month by month
-        const data = simulateFullProgression(
+        const calcInvestMonths = resolveInvestMonths(calcMonths, investYears);
+
+        const breakeven = estimateBreakevenWithdrawal(
           initial,
           calcMonthly,
+          calcInvestMonths,
           calcMonths,
+          withdrawalPeriod,
           rvPct,
           rfPct,
           rvMonthly,
           rfMonthly,
         );
 
+        if (withdrawalBreakevenEl) {
+          const periodLabel = withdrawalPeriod === "yearly" ? "año" : "mes";
+          const diffToBreakeven = withdrawalAmount - breakeven;
+          const absDiff = Math.abs(diffToBreakeven);
+          const tolerance = 0.01;
+          const relation =
+            absDiff <= tolerance
+              ? "(ajustada al equilibrio)"
+              : diffToBreakeven > 0
+                ? `(${fmt(absDiff)} por encima)`
+                : `(${fmt(absDiff)} por debajo)`;
+
+          withdrawalBreakevenEl.textContent = `Equilibrio (mantener capital estable durante retiradas): ~${fmt(breakeven)} por ${periodLabel} ${relation}.`;
+        }
+
+        // Now simulate the full progression month by month
+        const data = simulateFullProgression(
+          initial,
+          calcMonthly,
+          calcMonths,
+          calcInvestMonths,
+          withdrawalAmount,
+          withdrawalPeriod,
+          rvPct,
+          rfPct,
+          rvMonthly,
+          rfMonthly,
+        );
+
+        const investYearsLabel = (calcInvestMonths / 12).toFixed(1);
+        const withdrawalLabel =
+          withdrawalAmount > 0
+            ? `${fmt(withdrawalAmount)} ${withdrawalPeriod === "yearly" ? "al año" : "al mes"}`
+            : "sin retiradas";
+
         // Show indicator
         calcIndicator.classList.remove("hidden");
         if (mode === "target") {
-          calcIndicator.innerHTML = `📊 <strong>Calculado:</strong> Con ${fmt(calcMonthly)}/mes durante ${calcMonths} meses (${(calcMonths / 12).toFixed(1)} años), acumularás <strong>${fmt(data.total)}</strong>`;
+          calcIndicator.innerHTML = `📊 <strong>Calculado:</strong> Con ${fmt(calcMonthly)}/mes durante ${calcMonths} meses (${(calcMonths / 12).toFixed(1)} años), aportando ${investYearsLabel} años y retirando ${withdrawalLabel}, acumularás <strong>${fmt(data.total)}</strong>.`;
         } else if (mode === "months") {
           const years = (calcMonths / 12).toFixed(1);
           const targetDate = new Date();
@@ -3208,20 +3664,23 @@ const defaultAssets = [
             month: "long",
             year: "numeric",
           });
-          calcIndicator.innerHTML = `⏱️ <strong>Calculado:</strong> Necesitas <strong>${calcMonths} meses</strong> (${years} años, ~${dateStr}) para alcanzar ${fmt(calcTarget)}`;
+          calcIndicator.innerHTML = `⏱️ <strong>Calculado:</strong> Necesitas <strong>${calcMonths} meses</strong> (${years} años, ~${dateStr}) para alcanzar ${fmt(calcTarget)} aportando ${investYearsLabel} años y retirando ${withdrawalLabel}.`;
         } else if (mode === "monthly") {
-          calcIndicator.innerHTML = `💰 <strong>Calculado:</strong> Necesitas invertir <strong>${fmt(calcMonthly)}/mes</strong> para alcanzar ${fmt(calcTarget)} en ${calcMonths} meses (${(calcMonths / 12).toFixed(1)} años)`;
+          calcIndicator.innerHTML = `💰 <strong>Calculado:</strong> Necesitas invertir <strong>${fmt(calcMonthly)}/mes</strong> para alcanzar ${fmt(calcTarget)} en ${calcMonths} meses (${(calcMonths / 12).toFixed(1)} años), aportando ${investYearsLabel} años y retirando ${withdrawalLabel}.`;
         }
 
         renderHzResults(
           data,
           calcMonthly,
           calcMonths,
+          calcInvestMonths,
+          withdrawalAmount,
+          withdrawalPeriod,
           calcTarget,
           rvPct,
           rfPct,
-          rvTaeAnnual,
-          rfTaeAnnual,
+          rvMonthly,
+          rfMonthly,
         );
       }
 
@@ -3229,6 +3688,9 @@ const defaultAssets = [
         initial,
         monthly,
         months,
+        investMonths,
+        withdrawalAmount,
+        withdrawalPeriod,
         rvPct,
         rfPct,
         rvMonthly,
@@ -3237,8 +3699,28 @@ const defaultAssets = [
         let rv = initial * rvPct;
         let rf = initial * rfPct;
         for (let i = 0; i < months; i++) {
-          rv = rv * (1 + rvMonthly) + monthly * rvPct;
-          rf = rf * (1 + rfMonthly) + monthly * rfPct;
+          const month = i + 1;
+          const monthlyContribution = month <= investMonths ? monthly : 0;
+          const monthlyWithdrawal = getMonthlyWithdrawal(
+            month,
+            investMonths,
+            withdrawalAmount,
+            withdrawalPeriod,
+          );
+
+          rv = rv * (1 + rvMonthly) + monthlyContribution * rvPct;
+          rf = rf * (1 + rfMonthly) + monthlyContribution * rfPct;
+
+          if (monthlyWithdrawal > 0) {
+            const total = rv + rf;
+            const effectiveWithdrawal = Math.min(monthlyWithdrawal, total);
+            if (total > 0) {
+              const rvShare = rv / total;
+              const rfShare = rf / total;
+              rv = Math.max(0, rv - effectiveWithdrawal * rvShare);
+              rf = Math.max(0, rf - effectiveWithdrawal * rfShare);
+            }
+          }
         }
         return { rv, rf, total: rv + rf };
       }
@@ -3247,6 +3729,9 @@ const defaultAssets = [
         initial,
         monthly,
         months,
+        investMonths,
+        withdrawalAmount,
+        withdrawalPeriod,
         rvPct,
         rfPct,
         rvMonthly,
@@ -3255,26 +3740,66 @@ const defaultAssets = [
         const points = []; // one per month
         let rv = initial * rvPct;
         let rf = initial * rfPct;
-        let invested = initial;
+        let contributed = initial;
+        let withdrawn = 0;
+        let invested = contributed - withdrawn;
+        let gain = rv + rf - contributed;
+        let gainPct = contributed > 0 ? gain / contributed : 0;
 
         points.push({
           month: 0,
           invested,
+          contributed,
+          withdrawn,
           rv,
           rf,
           total: rv + rf,
-          gain: 0,
-          gainPct: 0,
+          gain,
+          gainPct,
         });
 
         for (let i = 1; i <= months; i++) {
-          rv = rv * (1 + rvMonthly) + monthly * rvPct;
-          rf = rf * (1 + rfMonthly) + monthly * rfPct;
-          invested += monthly;
+          const monthlyContribution = i <= investMonths ? monthly : 0;
+          const monthlyWithdrawal = getMonthlyWithdrawal(
+            i,
+            investMonths,
+            withdrawalAmount,
+            withdrawalPeriod,
+          );
+
+          rv = rv * (1 + rvMonthly) + monthlyContribution * rvPct;
+          rf = rf * (1 + rfMonthly) + monthlyContribution * rfPct;
+
+          const totalBeforeWithdrawal = rv + rf;
+          const effectiveWithdrawal = Math.min(
+            monthlyWithdrawal,
+            totalBeforeWithdrawal,
+          );
+
+          if (effectiveWithdrawal > 0 && totalBeforeWithdrawal > 0) {
+            const rvShare = rv / totalBeforeWithdrawal;
+            const rfShare = rf / totalBeforeWithdrawal;
+            rv = Math.max(0, rv - effectiveWithdrawal * rvShare);
+            rf = Math.max(0, rf - effectiveWithdrawal * rfShare);
+          }
+
+          contributed += monthlyContribution;
+          withdrawn += effectiveWithdrawal;
+          invested = contributed - withdrawn;
           const total = rv + rf;
-          const gain = total - invested;
-          const gainPct = invested > 0 ? gain / invested : 0;
-          points.push({ month: i, invested, rv, rf, total, gain, gainPct });
+          gain = total - contributed;
+          gainPct = contributed > 0 ? gain / contributed : 0;
+          points.push({
+            month: i,
+            invested,
+            contributed,
+            withdrawn,
+            rv,
+            rf,
+            total,
+            gain,
+            gainPct,
+          });
         }
 
         const last = points[points.length - 1];
@@ -3282,6 +3807,8 @@ const defaultAssets = [
           points,
           total: last.total,
           invested: last.invested,
+          contributed: last.contributed,
+          withdrawn: last.withdrawn,
           gain: last.gain,
           gainPct: last.gainPct,
           rv: last.rv,
@@ -3293,28 +3820,49 @@ const defaultAssets = [
         initial,
         monthly,
         target,
+        investMonthsLimit,
+        withdrawalAmount,
+        withdrawalPeriod,
         rvPct,
         rfPct,
         rvMonthly,
         rfMonthly,
       ) {
         // Iterative approach (compound interest with contributions has no clean closed form for mixed rates)
-        let rv = initial * rvPct;
-        let rf = initial * rfPct;
         let months = 0;
         const maxMonths = 1200; // 100 years max
-        while (rv + rf < target && months < maxMonths) {
-          rv = rv * (1 + rvMonthly) + monthly * rvPct;
-          rf = rf * (1 + rfMonthly) + monthly * rfPct;
+
+        while (months < maxMonths) {
           months++;
+          const investMonths =
+            investMonthsLimit === null ? months : Math.min(months, investMonthsLimit);
+          const result = simulateForward(
+            initial,
+            monthly,
+            months,
+            investMonths,
+            withdrawalAmount,
+            withdrawalPeriod,
+            rvPct,
+            rfPct,
+            rvMonthly,
+            rfMonthly,
+          );
+          if (result.total >= target) {
+            return months;
+          }
         }
-        return months >= maxMonths ? null : months;
+
+        return null;
       }
 
       function solveForMonthly(
         initial,
         target,
         months,
+        investMonths,
+        withdrawalAmount,
+        withdrawalPeriod,
         rvPct,
         rfPct,
         rvMonthly,
@@ -3329,6 +3877,9 @@ const defaultAssets = [
             initial,
             mid,
             months,
+            investMonths,
+            withdrawalAmount,
+            withdrawalPeriod,
             rvPct,
             rfPct,
             rvMonthly,
@@ -3352,13 +3903,37 @@ const defaultAssets = [
         data,
         monthly,
         months,
+        investMonths,
+        withdrawalAmount,
+        withdrawalPeriod,
         target,
         rvPct,
         rfPct,
-        rvTaeAnnual,
-        rfTaeAnnual,
+        rvMonthly,
+        rfMonthly,
       ) {
         resultsDiv.classList.remove("hidden");
+
+        const depletion = estimateDepletion(
+          data.points[0]?.contributed || 0,
+          monthly,
+          investMonths,
+          withdrawalAmount,
+          withdrawalPeriod,
+          rvPct,
+          rfPct,
+          rvMonthly,
+          rfMonthly,
+        );
+
+        let depletionLabel = "No aplica";
+        if (depletion.type === "depletes") {
+          const yearsPlan = (depletion.month / 12).toFixed(1);
+          const yearsWithdrawing = ((depletion.month - investMonths) / 12).toFixed(1);
+          depletionLabel = `Año ${yearsPlan} (${yearsWithdrawing} años retirando)`;
+        } else if (depletion.type === "not_depleted") {
+          depletionLabel = `No se agota (< ${depletion.maxYears} años)`;
+        }
 
         // Summary cards
         const cards = [
@@ -3368,7 +3943,17 @@ const defaultAssets = [
             color: "text-purple-300",
           },
           {
-            label: "Total invertido",
+            label: "Aportado bruto",
+            value: fmt(data.contributed),
+            color: "text-gray-300",
+          },
+          {
+            label: "Retirado acumulado",
+            value: fmt(data.withdrawn),
+            color: "text-amber-300",
+          },
+          {
+            label: "Aportado neto",
             value: fmt(data.invested),
             color: "text-gray-300",
           },
@@ -3388,6 +3973,24 @@ const defaultAssets = [
             color: "text-green-400",
           },
           { label: "Renta fija", value: fmt(data.rf), color: "text-blue-400" },
+          {
+            label: "Años aportando",
+            value: (investMonths / 12).toFixed(1),
+            color: "text-purple-300",
+          },
+          {
+            label: "Retirada",
+            value:
+              withdrawalAmount > 0
+                ? `${fmt(withdrawalAmount)} ${withdrawalPeriod === "yearly" ? "año" : "mes"}`
+                : "Sin retirada",
+            color: "text-amber-300",
+          },
+          {
+            label: "Retiradas posibles hasta",
+            value: depletionLabel,
+            color: "text-cyan-300",
+          },
         ];
         summaryDiv.innerHTML = cards
           .map(
@@ -3401,21 +4004,16 @@ const defaultAssets = [
 
         // Yearly table
         tableBody.innerHTML = "";
-        const yearlyPoints = data.points.filter(
-          (p) => p.month % 12 === 0 || p.month === months,
-        );
-        // Always include final month
-        const seen = new Set();
-        const displayPoints = [];
-        for (const p of yearlyPoints) {
-          if (!seen.has(p.month)) {
-            seen.add(p.month);
-            displayPoints.push(p);
-          }
-        }
-        // Include final if not already
         const last = data.points[data.points.length - 1];
-        if (!seen.has(last.month)) displayPoints.push(last);
+        const displayPoints = data.points.filter((p) => p.month % 12 === 0);
+        if (
+          last &&
+          last.month % 12 !== 0 &&
+          (displayPoints.length === 0 ||
+            displayPoints[displayPoints.length - 1].month !== last.month)
+        ) {
+          displayPoints.push(last);
+        }
 
         for (const p of displayPoints) {
           const yearLabel =
@@ -3425,23 +4023,102 @@ const defaultAssets = [
                 ? `Año ${p.month / 12}`
                 : `Mes ${p.month}`;
           const gainClass = p.gain >= 0 ? "text-emerald-400" : "text-red-400";
+          const prevYearPoint = p.month >= 12 ? data.points[p.month - 12] : null;
+          const yearGainPct = prevYearPoint
+            ? prevYearPoint.total > 0
+              ? (p.total - prevYearPoint.total) / prevYearPoint.total
+              : 0
+            : null;
+          const yearGainEur = prevYearPoint
+            ? p.total - prevYearPoint.total
+            : null;
+          const yearGainClass =
+            yearGainPct === null
+              ? "text-gray-400"
+              : yearGainPct >= 0
+                ? "text-cyan-300"
+                : "text-red-400";
+          const yearGainEurLabel =
+            yearGainEur === null
+              ? "-"
+              : `${yearGainEur >= 0 ? "+" : ""}${fmt(yearGainEur)}`;
           const row = document.createElement("tr");
           row.className =
             p.month === last.month ? "bg-purple-950/20 font-semibold" : "";
           row.innerHTML = `
 						<td class="px-3 py-2 text-gray-300">${yearLabel}</td>
-						<td class="px-3 py-2 text-right text-gray-300">${fmt(p.invested)}</td>
+						<td class="px-3 py-2 text-right text-gray-300">${fmt(p.contributed)}</td>
+						<td class="px-3 py-2 text-right text-amber-300">${fmt(p.withdrawn)}</td>
 						<td class="px-3 py-2 text-right text-green-400">${fmt(p.rv)}</td>
 						<td class="px-3 py-2 text-right text-blue-400">${fmt(p.rf)}</td>
 						<td class="px-3 py-2 text-right text-gray-100">${fmt(p.total)}</td>
 						<td class="px-3 py-2 text-right ${gainClass}">${fmt(p.gain)}</td>
-						<td class="px-3 py-2 text-right ${gainClass}">${p.invested > 0 ? fmtPct(p.gainPct) : "-"}</td>
+						<td class="px-3 py-2 text-right ${gainClass}">${p.contributed > 0 ? fmtPct(p.gainPct) : "-"}</td>
+						<td class="px-3 py-2 text-right ${yearGainClass}">${yearGainPct === null ? "-" : fmtPct(yearGainPct)}</td>
+						<td class="px-3 py-2 text-right ${yearGainClass}">${yearGainEurLabel}</td>
 					`;
           tableBody.appendChild(row);
         }
 
+        if (!monthsInput.value && months > 0) {
+          monthsInput.value = String(months);
+        }
+
         // Draw chart
         drawChart(data.points, months);
+      }
+
+      function estimateDepletion(
+        initial,
+        monthly,
+        investMonths,
+        withdrawalAmount,
+        withdrawalPeriod,
+        rvPct,
+        rfPct,
+        rvMonthly,
+        rfMonthly,
+      ) {
+        if (withdrawalAmount <= 0) {
+          return { type: "none" };
+        }
+
+        let rv = initial * rvPct;
+        let rf = initial * rfPct;
+        const maxMonths = 2400; // 200 años
+
+        for (let month = 1; month <= maxMonths; month++) {
+          const monthlyContribution = month <= investMonths ? monthly : 0;
+          const monthlyWithdrawal = getMonthlyWithdrawal(
+            month,
+            investMonths,
+            withdrawalAmount,
+            withdrawalPeriod,
+          );
+
+          rv = rv * (1 + rvMonthly) + monthlyContribution * rvPct;
+          rf = rf * (1 + rfMonthly) + monthlyContribution * rfPct;
+
+          const totalBeforeWithdrawal = rv + rf;
+          const effectiveWithdrawal = Math.min(
+            monthlyWithdrawal,
+            totalBeforeWithdrawal,
+          );
+
+          if (effectiveWithdrawal > 0 && totalBeforeWithdrawal > 0) {
+            const rvShare = rv / totalBeforeWithdrawal;
+            const rfShare = rf / totalBeforeWithdrawal;
+            rv = Math.max(0, rv - effectiveWithdrawal * rvShare);
+            rf = Math.max(0, rf - effectiveWithdrawal * rfShare);
+          }
+
+          const totalAfter = rv + rf;
+          if (month > investMonths && monthlyWithdrawal > 0 && totalAfter <= 0.01) {
+            return { type: "depletes", month, maxYears: maxMonths / 12 };
+          }
+        }
+
+        return { type: "not_depleted", maxYears: maxMonths / 12 };
       }
 
       function drawChart(points, totalMonths) {
@@ -3469,18 +4146,26 @@ const defaultAssets = [
 
         // Max value
         const maxVal = Math.max(
-          ...points.map((p) => Math.max(p.total, p.invested, p.rv, p.rf)),
+          ...points.map((p) =>
+            Math.max(p.total, p.invested, p.contributed, p.withdrawn, p.rv, p.rf),
+          ),
         );
         const yMax = maxVal * 1.1 || 100;
+        const safeTotalMonths = Math.max(1, totalMonths);
+
+        chartState.totalMonths = safeTotalMonths;
+        chartState.yMax = yMax;
+        chartState.plot = { ml, mt, cw, ch };
+        chartState.sampled = points;
 
         // Helpers
-        const xPos = (month) => ml + (month / totalMonths) * cw;
+        const xPos = (month) => ml + (month / safeTotalMonths) * cw;
         const yPos = (val) => mt + ch - (val / yMax) * ch;
 
         // Grid lines
         ctx.strokeStyle = "#374151";
-        ctx.lineWidth = 0.5;
-        const gridLines = 5;
+        ctx.lineWidth = 0.6;
+        const gridLines = 8;
         ctx.font = "11px system-ui, sans-serif";
         ctx.fillStyle = "#9CA3AF";
         ctx.textAlign = "right";
@@ -3504,26 +4189,30 @@ const defaultAssets = [
         // X-axis labels
         ctx.textAlign = "center";
         ctx.fillStyle = "#9CA3AF";
-        const xLabels = Math.min(10, totalMonths / 12);
-        const step = Math.max(1, Math.floor(totalMonths / 12 / xLabels));
-        for (let yr = 0; yr <= totalMonths / 12; yr += step) {
+        const yearsOnAxis = Math.floor(safeTotalMonths / 12);
+        for (let yr = 0; yr <= yearsOnAxis; yr++) {
           const m = yr * 12;
-          if (m > totalMonths) break;
+          if (m > safeTotalMonths) break;
+          const x = xPos(m);
+          ctx.beginPath();
+          ctx.moveTo(x, mt);
+          ctx.lineTo(x, mt + ch);
+          ctx.strokeStyle = yr % 5 === 0 ? "#4B5563" : "#374151";
+          ctx.lineWidth = yr % 5 === 0 ? 0.8 : 0.4;
+          ctx.stroke();
+
+          ctx.fillStyle = yr % 5 === 0 ? "#D1D5DB" : "#9CA3AF";
           ctx.fillText(yr === 0 ? "Inicio" : `Año ${yr}`, xPos(m), H - mb + 20);
         }
 
-        // Sample points for drawing (limit to ~200 points for performance)
-        const sampleStep = Math.max(1, Math.floor(points.length / 200));
-        const sampled = points.filter(
-          (_, i) => i % sampleStep === 0 || i === points.length - 1,
-        );
+        const sampled = points;
 
         // Draw filled areas (stacked: invested at bottom, then rf, then rv on top)
         // Area: Total (rv + rf)
         drawArea(
           ctx,
           sampled,
-          totalMonths,
+          safeTotalMonths,
           yMax,
           ml,
           mt,
@@ -3536,25 +4225,37 @@ const defaultAssets = [
         drawArea(
           ctx,
           sampled,
-          totalMonths,
+          safeTotalMonths,
           yMax,
           ml,
           mt,
           cw,
           ch,
-          (p) => p.invested,
+          (p) => p.contributed,
           "rgba(156, 163, 175, 0.12)",
         );
 
         // Lines
         const series = [
-          { key: (p) => p.invested, color: "#9CA3AF", label: "Invertido" },
+          { key: (p) => p.contributed, color: "#9CA3AF", label: "Aportado" },
+          {
+            key: (p) => p.withdrawn,
+            color: "#FBBF24",
+            label: "Retirado",
+            dashed: true,
+          },
+          {
+            key: (p) => p.total,
+            color: "#A855F7",
+            strokeColor: "rgba(168, 85, 247, 0.55)",
+            lineWidth: 4,
+            label: "Total",
+          },
           { key: (p) => p.rf, color: "#60A5FA", label: "Renta fija" },
           { key: (p) => p.rv, color: "#4ADE80", label: "Renta variable" },
-          { key: (p) => p.total, color: "#A855F7", label: "Total" },
           {
             key: (p) => p.gain,
-            color: "#34D399",
+            color: "#14B8A6",
             label: "Ganancia",
             dashed: true,
           },
@@ -3562,8 +4263,8 @@ const defaultAssets = [
 
         for (const s of series) {
           ctx.beginPath();
-          ctx.strokeStyle = s.color;
-          ctx.lineWidth = s.dashed ? 1.5 : 2;
+          ctx.strokeStyle = s.strokeColor || s.color;
+          ctx.lineWidth = s.lineWidth || (s.dashed ? 1.5 : 2);
           if (s.dashed) ctx.setLineDash([6, 3]);
           else ctx.setLineDash([]);
           for (let i = 0; i < sampled.length; i++) {
@@ -3586,6 +4287,8 @@ const defaultAssets = [
 					</span>`,
           )
           .join("");
+
+        hideChartTooltip();
       }
 
       function drawArea(
