@@ -1,44 +1,7 @@
 ---
 import BasicLayout from "@/layouts/BasicLayout.astro";
 
-const defaultAssets = [
-  {
-    id: "msci",
-    name: "MSCI World",
-    current: null,
-    price: null,
-    isin: null,
-    target: 60,
-    wholeUnits: false,
-  },
-  {
-    id: "emergentes",
-    name: "Mercados emergentes",
-    current: null,
-    price: null,
-    isin: null,
-    target: 10,
-    wholeUnits: false,
-  },
-  {
-    id: "btc",
-    name: "BTC",
-    current: null,
-    price: null,
-    isin: null,
-    target: 15,
-    wholeUnits: true,
-  },
-  {
-    id: "oro",
-    name: "Oro",
-    current: null,
-    price: null,
-    isin: null,
-    target: 15,
-    wholeUnits: true,
-  },
-];
+const defaultAssets = [];
 ---
 
 <BasicLayout title="Calculadora de Inversión | Adrian Palomo">
@@ -509,150 +472,7 @@ const defaultAssets = [
             </ul>
           </div>
 
-          <div class="mb-4 space-y-3 sm:mb-6 sm:space-y-4" id="rows-container">
-            {
-              defaultAssets.map((asset) => (
-                <div
-                  class="relative rounded-lg border border-gray-700 bg-gray-800 p-3 shadow-md sm:p-4"
-                  data-row
-                >
-                  <button
-                    type="button"
-                    data-action="delete-row"
-                    class="absolute top-2 right-2 rounded-md p-1.5 text-gray-400 transition-colors hover:bg-red-600/20 hover:text-red-400 focus:ring-2 focus:ring-red-500 focus:outline-none"
-                    title="Eliminar activo"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-5 w-5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                  </button>
-                  <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-8">
-                    <div class="flex flex-col gap-2">
-                      <label class="text-sm font-medium text-gray-300">
-                        ISIN
-                      </label>
-                      <input
-                        data-field="isin"
-                        type="text"
-                        value={asset.isin || ""}
-                        placeholder="ES0123456789"
-                        class="rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-sm text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                      />
-                    </div>
-
-                    <div class="flex flex-col gap-2 lg:col-span-2">
-                      <label class="text-sm font-medium text-gray-300">
-                        Activo
-                      </label>
-                      <input
-                        data-field="name"
-                        type="text"
-                        required
-                        value={asset.name}
-                        class="rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-sm text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                      />
-                    </div>
-
-                    <div class="flex flex-col gap-2">
-                      <label class="text-sm font-medium text-gray-300">
-                        Valor actual (&euro;)
-                      </label>
-                      <input
-                        data-field="current"
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        required
-                        value={asset.current}
-                        class="rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-sm text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                      />
-                    </div>
-
-                    <div class="flex flex-col gap-2" data-price-wrapper>
-                      <label class="text-sm font-medium text-gray-300">
-                        Precio unidad (&euro;)
-                      </label>
-                      <input
-                        data-field="price"
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        value={asset.price || ""}
-                        disabled={!asset.wholeUnits}
-                        class="rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-sm text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                      />
-                    </div>
-
-                    <div class="flex flex-col gap-2">
-                      <label class="text-sm font-medium text-gray-300">
-                        ¿Solo unidades completas?
-                      </label>
-                      <button
-                        type="button"
-                        role="switch"
-                        data-field="whole"
-                        aria-checked={asset.wholeUnits ? "true" : "false"}
-                        aria-label={`Activar unidades completas para ${asset.name}`}
-                        class={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-none ${asset.wholeUnits ? "bg-blue-600" : "bg-gray-600"}`}
-                      >
-                        <span
-                          class={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${asset.wholeUnits ? "translate-x-7" : "translate-x-1"}`}
-                        />
-                      </button>
-                    </div>
-
-                    <div class="flex flex-col gap-2">
-                      <label class="text-sm font-medium text-gray-300">
-                        Objetivo (%)
-                      </label>
-                      <input
-                        data-field="target"
-                        type="number"
-                        min="0"
-                        max="100"
-                        step="0.1"
-                        required
-                        value={asset.target}
-                        class="rounded-md border border-gray-600 bg-gray-700 px-3 py-2 text-sm text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                      />
-                    </div>
-
-                    <div class="flex flex-col gap-2">
-                      <label class="text-sm font-medium text-gray-300">
-                        Incluir en cálculo
-                      </label>
-                      <button
-                        type="button"
-                        role="switch"
-                        data-field="included"
-                        aria-checked={
-                          typeof (asset as any).includedInCalculation ===
-                            "undefined" || (asset as any).includedInCalculation
-                            ? "true"
-                            : "false"
-                        }
-                        aria-label={`Incluir ${asset.name} en el cálculo`}
-                        class={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-none ${typeof (asset as any).includedInCalculation === "undefined" || (asset as any).includedInCalculation ? "bg-blue-600" : "bg-gray-600"}`}
-                      >
-                        <span
-                          class={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${typeof (asset as any).includedInCalculation === "undefined" || (asset as any).includedInCalculation ? "translate-x-7" : "translate-x-1"}`}
-                        />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))
-            }
-          </div>
+          <div class="mb-4 space-y-3 sm:mb-6 sm:space-y-4" id="rows-container"></div>
 
           <button
             type="button"
@@ -689,6 +509,13 @@ const defaultAssets = [
               class="rounded-md border border-green-600 bg-green-700 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-green-600 sm:px-8 sm:py-3"
             >
               Importar
+            </button>
+            <button
+              id="share-btn"
+              type="button"
+              class="rounded-md border border-purple-600 bg-purple-700 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-purple-600 sm:px-8 sm:py-3"
+            >
+              Compartir URL
             </button>
             <input type="file" id="import-file" accept=".json" class="hidden" />
           </div>
@@ -893,6 +720,19 @@ const defaultAssets = [
             >
             </ol>
           </div>
+
+          <div class="rounded-lg border border-emerald-500/30 bg-emerald-950/20 p-4">
+            <p class="mb-3 text-sm text-emerald-300">
+              Una vez hayas realizado las operaciones, pulsa el botón para actualizar los saldos actuales con los valores resultantes.
+            </p>
+            <button
+              id="apply-btn"
+              type="button"
+              class="rounded-md border border-emerald-500 bg-emerald-700 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-600 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-none"
+            >
+              Aplicar inversión → actualizar saldos
+            </button>
+          </div>
         </div>
 
         <p
@@ -907,6 +747,68 @@ const defaultAssets = [
   </div>
 
   <script type="module" define:vars={{ defaultAssets }}>
+    // IndexedDB wrapper with localStorage fallback
+    const db = await new Promise((resolve) => {
+      const req = indexedDB.open("investmentCalculator", 1);
+      req.onupgradeneeded = () => {
+        const idb = req.result;
+        if (!idb.objectStoreNames.contains("state")) {
+          idb.createObjectStore("state");
+        }
+      };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => resolve(null);
+    });
+
+    // Request persistent storage so the browser won't auto-evict
+    if (navigator.storage?.persist) {
+      navigator.storage.persist();
+    }
+
+    const store = {
+      async get(key) {
+        if (!db) return localStorage.getItem(key);
+        return new Promise((resolve) => {
+          const tx = db.transaction("state", "readonly");
+          const req = tx.objectStore("state").get(key);
+          req.onsuccess = () => resolve(req.result ?? null);
+          req.onerror = () => resolve(localStorage.getItem(key));
+        });
+      },
+      async set(key, value) {
+        if (!db) { localStorage.setItem(key, value); return; }
+        return new Promise((resolve) => {
+          const tx = db.transaction("state", "readwrite");
+          tx.objectStore("state").put(value, key);
+          tx.oncomplete = () => resolve();
+          tx.onerror = () => { localStorage.setItem(key, value); resolve(); };
+        });
+      },
+      async remove(key) {
+        if (!db) { localStorage.removeItem(key); return; }
+        return new Promise((resolve) => {
+          const tx = db.transaction("state", "readwrite");
+          tx.objectStore("state").delete(key);
+          tx.oncomplete = () => resolve();
+          tx.onerror = () => { localStorage.removeItem(key); resolve(); };
+        });
+      },
+    };
+
+    // URL hash encode/decode for sharing
+    const encodeStateToHash = (stateJson) => {
+      const bytes = new TextEncoder().encode(stateJson);
+      const compressed = new Uint8Array(bytes);
+      return btoa(String.fromCharCode(...compressed));
+    };
+
+    const decodeStateFromHash = (hash) => {
+      const binary = atob(hash);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      return new TextDecoder().decode(bytes);
+    };
+
     const initialAssets = defaultAssets;
     const form = document.querySelector("#allocation-form");
     const rowsContainer = document.querySelector("#rows-container");
@@ -2707,34 +2609,38 @@ const defaultAssets = [
     // Guardar estado en localStorage
     const saveFormState = () => {
       try {
-        const rows = getRows({ strict: false });
+        const domRows = rowsContainer.querySelectorAll("[data-row]");
+        const assets = [...domRows].map((row) => {
+          const wholeToggle = row.querySelector('[data-field="whole"]');
+          const includedToggle = row.querySelector('[data-field="included"]');
+          const wholeUnits = wholeToggle?.getAttribute("aria-checked") === "true";
+          return {
+            name: row.querySelector('[data-field="name"]')?.value ?? "",
+            isin: row.querySelector('[data-field="isin"]')?.value?.trim().toUpperCase() || null,
+            current: sanitize(row.querySelector('[data-field="current"]')?.value),
+            price: sanitize(row.querySelector('[data-field="price"]')?.value) || null,
+            target: sanitize(row.querySelector('[data-field="target"]')?.value),
+            wholeUnits,
+            includedInCalculation: includedToggle?.getAttribute("aria-checked") !== "false",
+          };
+        });
         const state = {
           budget: budgetInput.value,
           margin: marginInput.value,
           allowTransfers: transfersEnabled(),
-          assets: rows.map((row) => ({
-            name: row.name,
-            isin: row.isin,
-            current: row.current,
-            price: row.price,
-            target: row.target,
-            wholeUnits: row.wholeUnits,
-            includedInCalculation: row.includedInCalculation,
-          })),
+          assets,
         };
-        localStorage.setItem(
-          "investmentCalculatorState",
-          JSON.stringify(state),
-        );
+        store.set("investmentCalculatorState", JSON.stringify(state));
       } catch (e) {
         console.warn("No se pudo guardar el estado:", e);
       }
     };
 
-    // Cargar estado desde localStorage
-    const loadFormState = () => {
+    // Cargar estado desde IndexedDB (con fallback a localStorage)
+    const loadFormState = async () => {
       try {
-        const saved = localStorage.getItem("investmentCalculatorState");
+        const saved = await store.get("investmentCalculatorState")
+          ?? localStorage.getItem("investmentCalculatorState");
         if (saved) {
           const state = JSON.parse(saved);
 
@@ -2763,6 +2669,8 @@ const defaultAssets = [
         console.warn("No se pudo cargar el estado:", e);
       }
     };
+
+    let lastComputedResult = null;
 
     // Auto-calcular
     let autoCalculateTimeout;
@@ -2827,6 +2735,16 @@ const defaultAssets = [
           resultsSection.hidden = false;
           renderResults(appliedMain.breakdown, totals, appliedBest);
 
+          // Guardar el último resultado para el botón "Aplicar inversión"
+          const includedIndexes = [];
+          allRows.forEach((row, i) => {
+            if (row.includedInCalculation) includedIndexes.push(i);
+          });
+          const activeBreakdown = appliedBest
+            ? appliedBest.breakdown
+            : appliedMain.breakdown;
+          lastComputedResult = { breakdown: activeBreakdown, includedIndexes };
+
           // Mostrar warning si existe
           if (result.warning) {
             showWarning(result.warning);
@@ -2855,59 +2773,46 @@ const defaultAssets = [
       event.preventDefault();
     });
 
+    const getFullState = () => {
+      const rows = getRows({ strict: false });
+      const hzPanel = document.getElementById("horizon-panel");
+      const hzRvLabel = document.getElementById("hz-rv-label");
+      return {
+        version: "1.1",
+        budget: budgetInput.value || "",
+        margin: marginInput.value || "",
+        allowTransfers: transfersEnabled(),
+        horizon: {
+          monthly: document.getElementById("hz-monthly")?.value || "",
+          target: document.getElementById("hz-target")?.value || "",
+          months: document.getElementById("hz-months")?.value || "",
+          date: document.getElementById("hz-date")?.value || "",
+          initial: document.getElementById("hz-initial")?.value || "",
+          rvPct: document.getElementById("hz-rv-pct")?.value || "",
+          rvMode: hzRvLabel?.textContent?.includes("€") ? "eur" : "pct",
+          rvTae: document.getElementById("hz-rv-tae")?.value || "",
+          rfTae: document.getElementById("hz-rf-tae")?.value || "",
+          investYears: document.getElementById("hz-invest-years")?.value || "",
+          withdrawal: document.getElementById("hz-withdrawal")?.value || "",
+          withdrawalPeriod: document.getElementById("hz-withdrawal-period")?.value || "monthly",
+          open: hzPanel ? !hzPanel.classList.contains("hidden") : false,
+        },
+        assets: rows.map((row) => ({
+          name: row.name,
+          isin: row.isin || "",
+          current: row.current,
+          price: row.price || "",
+          target: row.target,
+          wholeUnits: row.wholeUnits,
+          includedInCalculation: row.includedInCalculation,
+        })),
+      };
+    };
+
     // Exportar datos a JSON
     const exportData = () => {
       try {
-        const rows = getRows({ strict: false });
-        const hzMonthlyInput = document.getElementById("hz-monthly");
-        const hzTargetInput = document.getElementById("hz-target");
-        const hzMonthsInput = document.getElementById("hz-months");
-        const hzDateInput = document.getElementById("hz-date");
-        const hzInitialInput = document.getElementById("hz-initial");
-        const hzRvPctInput = document.getElementById("hz-rv-pct");
-        const hzRvTaeInput = document.getElementById("hz-rv-tae");
-        const hzRfTaeInput = document.getElementById("hz-rf-tae");
-        const hzInvestYearsInput = document.getElementById("hz-invest-years");
-        const hzWithdrawalInput = document.getElementById("hz-withdrawal");
-        const hzWithdrawalPeriodInput = document.getElementById(
-          "hz-withdrawal-period",
-        );
-        const hzPanel = document.getElementById("horizon-panel");
-        const hzRvLabel = document.getElementById("hz-rv-label");
-
-        const horizonState = {
-          monthly: hzMonthlyInput?.value || "",
-          target: hzTargetInput?.value || "",
-          months: hzMonthsInput?.value || "",
-          date: hzDateInput?.value || "",
-          initial: hzInitialInput?.value || "",
-          rvPct: hzRvPctInput?.value || "",
-          rvMode: hzRvLabel?.textContent?.includes("€") ? "eur" : "pct",
-          rvTae: hzRvTaeInput?.value || "",
-          rfTae: hzRfTaeInput?.value || "",
-          investYears: hzInvestYearsInput?.value || "",
-          withdrawal: hzWithdrawalInput?.value || "",
-          withdrawalPeriod: hzWithdrawalPeriodInput?.value || "monthly",
-          open: hzPanel ? !hzPanel.classList.contains("hidden") : false,
-        };
-
-        const data = {
-          version: "1.1",
-          budget: budgetInput.value || "",
-          margin: marginInput.value || "",
-          allowTransfers: transfersEnabled(),
-          horizon: horizonState,
-          assets: rows.map((row) => ({
-            name: row.name,
-            isin: row.isin || "",
-            current: row.current,
-            price: row.price || "",
-            target: row.target,
-            wholeUnits: row.wholeUnits,
-            includedInCalculation: row.includedInCalculation,
-          })),
-        };
-
+        const data = getFullState();
         const jsonStr = JSON.stringify(data, null, 2);
         const blob = new Blob([jsonStr], { type: "application/json" });
         const url = URL.createObjectURL(blob);
@@ -2923,159 +2828,105 @@ const defaultAssets = [
       }
     };
 
+    const applyStateData = (data) => {
+      if (!data.assets || !Array.isArray(data.assets)) {
+        throw new Error("Formato de datos inválido");
+      }
+
+      if (data.budget !== undefined) budgetInput.value = data.budget || "";
+      if (data.margin !== undefined) marginInput.value = data.margin || "";
+      if (typeof data.allowTransfers !== "undefined") {
+        setTransfersToggle(Boolean(data.allowTransfers));
+      }
+
+      if (data.horizon && typeof data.horizon === "object") {
+        const hzState = data.horizon;
+        const hzMonthlyInput = document.getElementById("hz-monthly");
+        const hzTargetInput = document.getElementById("hz-target");
+        const hzMonthsInput = document.getElementById("hz-months");
+        const hzDateInput = document.getElementById("hz-date");
+        const hzInitialInput = document.getElementById("hz-initial");
+        const hzRvPctInput = document.getElementById("hz-rv-pct");
+        const hzRvTaeInput = document.getElementById("hz-rv-tae");
+        const hzRfTaeInput = document.getElementById("hz-rf-tae");
+        const hzInvestYearsInput = document.getElementById("hz-invest-years");
+        const hzWithdrawalInput = document.getElementById("hz-withdrawal");
+        const hzWithdrawalPeriodInput = document.getElementById("hz-withdrawal-period");
+        const hzPanel = document.getElementById("horizon-panel");
+        const hzToggle = document.getElementById("horizon-toggle");
+        const hzRvLabel = document.getElementById("hz-rv-label");
+        const hzModeToggle = document.getElementById("hz-rv-mode-toggle");
+
+        const currentMode = hzRvLabel?.textContent?.includes("€") ? "eur" : "pct";
+        const targetMode = hzState.rvMode === "eur" ? "eur" : "pct";
+        if (hzModeToggle && currentMode !== targetMode) {
+          hzModeToggle.click();
+        }
+
+        if (hzMonthlyInput && hzState.monthly !== undefined) hzMonthlyInput.value = hzState.monthly;
+        if (hzTargetInput && hzState.target !== undefined) hzTargetInput.value = hzState.target;
+        if (hzMonthsInput && hzState.months !== undefined) hzMonthsInput.value = hzState.months;
+        if (hzDateInput && hzState.date !== undefined) hzDateInput.value = hzState.date;
+        if (hzInitialInput && hzState.initial !== undefined) hzInitialInput.value = hzState.initial;
+        if (hzRvPctInput && hzState.rvPct !== undefined) hzRvPctInput.value = hzState.rvPct;
+        if (hzRvTaeInput && hzState.rvTae !== undefined) hzRvTaeInput.value = hzState.rvTae;
+        if (hzRfTaeInput && hzState.rfTae !== undefined) hzRfTaeInput.value = hzState.rfTae;
+        if (hzInvestYearsInput && hzState.investYears !== undefined) hzInvestYearsInput.value = hzState.investYears;
+        if (hzWithdrawalInput && hzState.withdrawal !== undefined) hzWithdrawalInput.value = hzState.withdrawal;
+        if (hzWithdrawalPeriodInput && (hzState.withdrawalPeriod === "monthly" || hzState.withdrawalPeriod === "yearly")) {
+          hzWithdrawalPeriodInput.value = hzState.withdrawalPeriod;
+        }
+
+        if (typeof hzState.open === "boolean" && hzPanel && hzToggle && hzState.open === hzPanel.classList.contains("hidden")) {
+          hzToggle.click();
+        }
+
+        store.set("horizonCalcState", JSON.stringify({
+          monthly: hzMonthlyInput?.value || "", target: hzTargetInput?.value || "",
+          months: hzMonthsInput?.value || "", date: hzDateInput?.value || "",
+          initial: hzInitialInput?.value || "", rvPct: hzRvPctInput?.value || "",
+          rvMode: targetMode, rvTae: hzRvTaeInput?.value || "", rfTae: hzRfTaeInput?.value || "",
+          investYears: hzInvestYearsInput?.value || "", withdrawal: hzWithdrawalInput?.value || "",
+          withdrawalPeriod: hzWithdrawalPeriodInput?.value || "monthly",
+          open: hzPanel ? !hzPanel.classList.contains("hidden") : false,
+        }));
+
+        hzMonthlyInput?.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+
+      rowsContainer.innerHTML = "";
+      data.assets.forEach((asset) => {
+        const fragment = rowTemplate.content.cloneNode(true);
+        const row = fragment.querySelector("[data-row]");
+        rowsContainer.appendChild(fragment);
+        initializeRow(row, {
+          name: asset.name || "",
+          isin: asset.isin || null,
+          current: asset.current || null,
+          price: asset.price || null,
+          target: asset.target || 0,
+          wholeUnits: Boolean(asset.wholeUnits),
+          includedInCalculation: typeof asset.includedInCalculation === "undefined" ? true : Boolean(asset.includedInCalculation),
+        });
+      });
+
+      if (data.assets.length === 0) {
+        createRow();
+      }
+
+      updateCurrentDistribution();
+      saveFormState();
+      autoCalculate();
+      clearError();
+      setTimeout(() => refreshAllPrices(), 500);
+    };
+
     // Importar datos desde JSON
     const importData = (file) => {
       const reader = new FileReader();
       reader.onload = (e) => {
         try {
-          const data = JSON.parse(e.target.result);
-
-          if (!data.assets || !Array.isArray(data.assets)) {
-            throw new Error("Formato de archivo inválido");
-          }
-
-          // Cargar presupuesto y margen
-          if (data.budget !== undefined) budgetInput.value = data.budget || "";
-          if (data.margin !== undefined) marginInput.value = data.margin || "";
-          if (typeof data.allowTransfers !== "undefined") {
-            setTransfersToggle(Boolean(data.allowTransfers));
-          }
-
-          // Cargar calculadora de horizontes
-          if (data.horizon && typeof data.horizon === "object") {
-            const hzState = data.horizon;
-            const hzMonthlyInput = document.getElementById("hz-monthly");
-            const hzTargetInput = document.getElementById("hz-target");
-            const hzMonthsInput = document.getElementById("hz-months");
-            const hzDateInput = document.getElementById("hz-date");
-            const hzInitialInput = document.getElementById("hz-initial");
-            const hzRvPctInput = document.getElementById("hz-rv-pct");
-            const hzRvTaeInput = document.getElementById("hz-rv-tae");
-            const hzRfTaeInput = document.getElementById("hz-rf-tae");
-            const hzInvestYearsInput = document.getElementById("hz-invest-years");
-            const hzWithdrawalInput = document.getElementById("hz-withdrawal");
-            const hzWithdrawalPeriodInput = document.getElementById(
-              "hz-withdrawal-period",
-            );
-            const hzPanel = document.getElementById("horizon-panel");
-            const hzToggle = document.getElementById("horizon-toggle");
-            const hzRvLabel = document.getElementById("hz-rv-label");
-            const hzModeToggle = document.getElementById("hz-rv-mode-toggle");
-
-            // Ajustar modo RV (% o €) para que el cálculo use la misma configuración importada
-            const currentMode = hzRvLabel?.textContent?.includes("€")
-              ? "eur"
-              : "pct";
-            const targetMode = hzState.rvMode === "eur" ? "eur" : "pct";
-            if (hzModeToggle && currentMode !== targetMode) {
-              hzModeToggle.click();
-            }
-
-            if (hzMonthlyInput && hzState.monthly !== undefined) {
-              hzMonthlyInput.value = hzState.monthly;
-            }
-            if (hzTargetInput && hzState.target !== undefined) {
-              hzTargetInput.value = hzState.target;
-            }
-            if (hzMonthsInput && hzState.months !== undefined) {
-              hzMonthsInput.value = hzState.months;
-            }
-            if (hzDateInput && hzState.date !== undefined) {
-              hzDateInput.value = hzState.date;
-            }
-            if (hzInitialInput && hzState.initial !== undefined) {
-              hzInitialInput.value = hzState.initial;
-            }
-            if (hzRvPctInput && hzState.rvPct !== undefined) {
-              hzRvPctInput.value = hzState.rvPct;
-            }
-            if (hzRvTaeInput && hzState.rvTae !== undefined) {
-              hzRvTaeInput.value = hzState.rvTae;
-            }
-            if (hzRfTaeInput && hzState.rfTae !== undefined) {
-              hzRfTaeInput.value = hzState.rfTae;
-            }
-            if (hzInvestYearsInput && hzState.investYears !== undefined) {
-              hzInvestYearsInput.value = hzState.investYears;
-            }
-            if (hzWithdrawalInput && hzState.withdrawal !== undefined) {
-              hzWithdrawalInput.value = hzState.withdrawal;
-            }
-            if (
-              hzWithdrawalPeriodInput &&
-              (hzState.withdrawalPeriod === "monthly" ||
-                hzState.withdrawalPeriod === "yearly")
-            ) {
-              hzWithdrawalPeriodInput.value = hzState.withdrawalPeriod;
-            }
-
-            if (
-              typeof hzState.open === "boolean" &&
-              hzPanel &&
-              hzToggle &&
-              hzState.open === hzPanel.classList.contains("hidden")
-            ) {
-              hzToggle.click();
-            }
-
-            localStorage.setItem(
-              "horizonCalcState",
-              JSON.stringify({
-                monthly: hzMonthlyInput?.value || "",
-                target: hzTargetInput?.value || "",
-                months: hzMonthsInput?.value || "",
-                date: hzDateInput?.value || "",
-                initial: hzInitialInput?.value || "",
-                rvPct: hzRvPctInput?.value || "",
-                rvMode: targetMode,
-                rvTae: hzRvTaeInput?.value || "",
-                rfTae: hzRfTaeInput?.value || "",
-                investYears: hzInvestYearsInput?.value || "",
-                withdrawal: hzWithdrawalInput?.value || "",
-                withdrawalPeriod: hzWithdrawalPeriodInput?.value || "monthly",
-                open: hzPanel ? !hzPanel.classList.contains("hidden") : false,
-              }),
-            );
-
-            // Fuerza recálculo de la sección de horizontes con los valores importados
-            hzMonthlyInput?.dispatchEvent(new Event("input", { bubbles: true }));
-          }
-
-          // Limpiar y recrear filas
-          rowsContainer.innerHTML = "";
-          data.assets.forEach((asset) => {
-            const fragment = rowTemplate.content.cloneNode(true);
-            const row = fragment.querySelector("[data-row]");
-            rowsContainer.appendChild(fragment);
-            initializeRow(row, {
-              name: asset.name || "",
-              isin: asset.isin || null,
-              current: asset.current || null,
-              price: asset.price || null,
-              target: asset.target || 0,
-              wholeUnits: Boolean(asset.wholeUnits),
-              includedInCalculation:
-                typeof asset.includedInCalculation === "undefined"
-                  ? true
-                  : Boolean(asset.includedInCalculation),
-            });
-          });
-
-          // Si no hay activos, crear uno vacío
-          if (data.assets.length === 0) {
-            const fragment = rowTemplate.content.cloneNode(true);
-            const row = fragment.querySelector("[data-row]");
-            rowsContainer.appendChild(fragment);
-            initializeRow(row);
-          }
-
-          updateCurrentDistribution();
-          saveFormState();
-          autoCalculate();
-          clearError();
-
-          // Refrescar precios de todos los ISINs
-          setTimeout(() => refreshAllPrices(), 500);
+          applyStateData(JSON.parse(e.target.result));
         } catch (error) {
           showError("Error al importar los datos: " + error.message);
         }
@@ -3087,6 +2938,23 @@ const defaultAssets = [
     };
 
     exportBtn.addEventListener("click", exportData);
+
+    const shareBtn = document.querySelector("#share-btn");
+    shareBtn.addEventListener("click", () => {
+      try {
+        const data = getFullState();
+        const json = JSON.stringify(data);
+        const hash = encodeStateToHash(json);
+        const shareUrl = `${location.origin}${location.pathname}#d=${hash}`;
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          const original = shareBtn.textContent;
+          shareBtn.textContent = "URL copiada";
+          setTimeout(() => { shareBtn.textContent = original; }, 2000);
+        });
+      } catch (error) {
+        showError("Error al generar la URL: " + error.message);
+      }
+    });
 
     importBtn.addEventListener("click", () => {
       importFileInput.click();
@@ -3106,18 +2974,12 @@ const defaultAssets = [
     });
 
     resetBtn.addEventListener("click", () => {
-      // Limpiar localStorage
-      localStorage.removeItem("investmentCalculatorState");
+      store.remove("investmentCalculatorState");
 
       form.reset();
       setTransfersToggle(false);
       rowsContainer.innerHTML = "";
-      initialAssets.forEach((asset) => {
-        const fragment = rowTemplate.content.cloneNode(true);
-        const row = fragment.querySelector("[data-row]");
-        rowsContainer.appendChild(fragment);
-        initializeRow(row, asset);
-      });
+      createRow();
       resultsSection.hidden = true;
       clearError();
       updateCurrentDistribution();
@@ -3125,8 +2987,51 @@ const defaultAssets = [
       autoCalculate();
     });
 
-    // Cargar estado inicial al cargar la página
-    loadFormState();
+    const applyBtn = document.querySelector("#apply-btn");
+
+    const applyInvestment = () => {
+      if (!lastComputedResult) return;
+      const domRows = rowsContainer.querySelectorAll("[data-row]");
+      lastComputedResult.breakdown.forEach((asset, i) => {
+        const domIndex = lastComputedResult.includedIndexes[i];
+        const row = domRows[domIndex];
+        if (!row) return;
+        const currentInput = row.querySelector('[data-field="current"]');
+        if (currentInput) {
+          const newValue = asset.current + asset.addition;
+          currentInput.value = Math.max(0, newValue).toFixed(2);
+        }
+      });
+      budgetInput.value = "";
+      updateCurrentDistribution();
+      saveFormState();
+      autoCalculate();
+    };
+
+    applyBtn.addEventListener("click", applyInvestment);
+
+    // Cargar estado: hash en URL tiene prioridad
+    let loadedFromHash = false;
+    if (location.hash.startsWith("#d=")) {
+      try {
+        const hash = location.hash.slice(3);
+        const json = decodeStateFromHash(hash);
+        applyStateData(JSON.parse(json));
+        loadedFromHash = true;
+        history.replaceState(null, "", location.pathname);
+      } catch (e) {
+        console.warn("No se pudo cargar el estado desde la URL:", e);
+      }
+    }
+
+    if (!loadedFromHash) {
+      await loadFormState();
+    }
+
+    // Si no hay filas (sin estado guardado ni activos por defecto), crear una vacía
+    if (rowsContainer.querySelectorAll("[data-row]").length === 0) {
+      createRow();
+    }
 
     // Refrescar precios de todos los ISINs después de cargar
     setTimeout(() => refreshAllPrices(), 1000);
@@ -3134,7 +3039,7 @@ const defaultAssets = [
     // ==========================================
     // HORIZON CALCULATOR
     // ==========================================
-    (() => {
+    (async () => {
       const toggle = document.getElementById("horizon-toggle");
       const panel = document.getElementById("horizon-panel");
       const chevron = document.getElementById("horizon-chevron");
@@ -3350,12 +3255,13 @@ const defaultAssets = [
           withdrawalPeriod: withdrawalPeriodInput.value,
           open: panelOpen,
         };
-        localStorage.setItem("horizonCalcState", JSON.stringify(state));
+        store.set("horizonCalcState", JSON.stringify(state));
       };
 
-      const loadHzState = () => {
+      const loadHzState = async () => {
         try {
-          const raw = localStorage.getItem("horizonCalcState");
+          const raw = await store.get("horizonCalcState")
+            ?? localStorage.getItem("horizonCalcState");
           if (!raw) return;
           const s = JSON.parse(raw);
           if (s.monthly) monthlyInput.value = s.monthly;
@@ -4317,7 +4223,7 @@ const defaultAssets = [
       }
 
       // Init
-      loadHzState();
+      await loadHzState();
       recalc();
     })();
   </script>

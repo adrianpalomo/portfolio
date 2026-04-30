@@ -551,8 +551,12 @@ import Redo from '@/components/icons/Redo.astro';
 
 		try {
 			const parsed = JSON.parse(text);
+			const cursor = codeMirrorEditor.getCursor();
+			const scroll = codeMirrorEditor.getScrollInfo();
 			saveToUndoStack();
 			setEditorContent(JSON.stringify(parsed, null, 2));
+			codeMirrorEditor.setCursor(cursor);
+			codeMirrorEditor.scrollTo(scroll.left, scroll.top);
 			showStatus('JSON formatted successfully', 'valid');
 			addToHistory(getEditorContent());
 		} catch (e) {

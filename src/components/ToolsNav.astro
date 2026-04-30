@@ -1,0 +1,74 @@
+---
+const currentPath = Astro.url.pathname;
+
+const tools = [
+	{ href: '/tools/jsonFormatter', label: 'JSON Formatter' },
+	{ href: '/tools/soqlGeneratorByIds', label: 'Formateador IDs' },
+	{ href: '/tools/linesRemover', label: 'Eliminar líneas' },
+	{ href: '/tools/investmentCalculator', label: 'Calculadora inversión' },
+	{ href: '/tools/packageMerger', label: 'Package Merger' },
+];
+---
+
+<div id="tools-nav" class="fixed top-4 right-4 z-50">
+	<button
+		id="tools-nav-toggle"
+		aria-label="Otras tools"
+		class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-800 border border-gray-700 text-gray-400 hover:text-white hover:bg-gray-700 transition-colors shadow-lg"
+	>
+		<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<rect x="3" y="3" width="7" height="7" rx="1"/>
+			<rect x="14" y="3" width="7" height="7" rx="1"/>
+			<rect x="3" y="14" width="7" height="7" rx="1"/>
+			<rect x="14" y="14" width="7" height="7" rx="1"/>
+		</svg>
+	</button>
+
+	<div
+		id="tools-nav-dropdown"
+		class="hidden absolute top-12 right-0 w-52 rounded-lg border border-gray-700 bg-gray-800 shadow-xl overflow-hidden"
+	>
+		{tools.map((tool) => {
+			const isCurrent = currentPath === tool.href || currentPath === tool.href + '/';
+			return (
+				<a
+					href={tool.href}
+					class={`flex items-center gap-3 px-4 py-3 text-sm transition-colors ${
+						isCurrent
+							? 'bg-blue-600 text-white cursor-default'
+							: 'text-gray-300 hover:bg-gray-700 hover:text-white'
+					}`}
+					aria-current={isCurrent ? 'page' : undefined}
+				>
+					{isCurrent && (
+						<span class="w-1.5 h-1.5 rounded-full bg-white flex-shrink-0"></span>
+					)}
+					{!isCurrent && (
+						<span class="w-1.5 h-1.5 rounded-full bg-gray-600 flex-shrink-0"></span>
+					)}
+					{tool.label}
+				</a>
+			);
+		})}
+	</div>
+</div>
+
+<script is:inline>
+	(function () {
+		const toggle = document.getElementById('tools-nav-toggle');
+		const dropdown = document.getElementById('tools-nav-dropdown');
+
+		toggle.addEventListener('click', function (e) {
+			e.stopPropagation();
+			dropdown.classList.toggle('hidden');
+		});
+
+		document.addEventListener('click', function () {
+			dropdown.classList.add('hidden');
+		});
+
+		dropdown.addEventListener('click', function (e) {
+			e.stopPropagation();
+		});
+	})();
+</script>

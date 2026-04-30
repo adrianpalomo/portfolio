@@ -1,5 +1,6 @@
 ---
 import '/src/styles/global.css';
+import ToolsNav from '@/components/ToolsNav.astro';
 
 interface Props {
 	title: string;
@@ -30,6 +31,7 @@ const { title }: Props = Astro.props;
 		></script>
 	</head>
 	<body style="background-color: #111627;">
+		<ToolsNav />
 		<slot />
 	</body>
 </html>
