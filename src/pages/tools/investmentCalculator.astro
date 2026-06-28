@@ -2137,6 +2137,23 @@ const defaultAssets = [];
             }
             leftover -= delta;
           });
+
+        if (leftover > 0.01 && fractional.length > 0) {
+          const totalWeight = fractional.reduce((sum, a) => sum + (a.weight || a.target), 0);
+          if (totalWeight > 0) {
+            const pool = leftover;
+            fractional.forEach((asset) => {
+              if (leftover <= 0.01) return;
+              const share = ((asset.weight || asset.target) / totalWeight) * pool;
+              const delta = Math.min(share, leftover);
+              asset.addition += delta;
+              if (asset.price > 0 && !asset.wholeUnits) {
+                asset.units = asset.addition / asset.price;
+              }
+              leftover -= delta;
+            });
+          }
+        }
       }
 
       const finalSpent = adjusted.reduce(
