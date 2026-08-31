@@ -241,8 +241,7 @@ const defaultAssets = [];
                   />
                   <small
                     id="hz-withdrawal-breakeven"
-                    class="text-xs text-cyan-300"
-                  ></small>
+                    class="text-xs text-cyan-300"></small>
                 </div>
                 <div class="flex flex-col gap-2">
                   <label
@@ -426,7 +425,8 @@ const defaultAssets = [];
                     <div
                       id="hz-chart-tooltip"
                       class="pointer-events-none absolute hidden rounded-md border border-gray-600 bg-gray-900/95 px-2 py-1 text-xs text-gray-100 shadow-lg"
-                    ></div>
+                    >
+                    </div>
                   </div>
                   <div
                     id="hz-chart-legend"
@@ -472,7 +472,8 @@ const defaultAssets = [];
             </ul>
           </div>
 
-          <div class="mb-4 space-y-3 sm:mb-6 sm:space-y-4" id="rows-container"></div>
+          <div class="mb-4 space-y-3 sm:mb-6 sm:space-y-4" id="rows-container">
+          </div>
 
           <button
             type="button"
@@ -516,6 +517,13 @@ const defaultAssets = [];
               class="rounded-md border border-purple-600 bg-purple-700 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-purple-600 sm:px-8 sm:py-3"
             >
               Compartir URL
+            </button>
+            <button
+              id="copy-markdown-btn"
+              type="button"
+              class="rounded-md border border-cyan-600 bg-cyan-700 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-cyan-600 sm:px-8 sm:py-3"
+            >
+              Copiar Markdown
             </button>
             <input type="file" id="import-file" accept=".json" class="hidden" />
           </div>
@@ -721,9 +729,12 @@ const defaultAssets = [];
             </ol>
           </div>
 
-          <div class="rounded-lg border border-emerald-500/30 bg-emerald-950/20 p-4">
+          <div
+            class="rounded-lg border border-emerald-500/30 bg-emerald-950/20 p-4"
+          >
             <p class="mb-3 text-sm text-emerald-300">
-              Una vez hayas realizado las operaciones, pulsa el botón para actualizar los saldos actuales con los valores resultantes.
+              Una vez hayas realizado las operaciones, pulsa el botón para
+              actualizar los saldos actuales con los valores resultantes.
             </p>
             <button
               id="apply-btn"
@@ -776,21 +787,33 @@ const defaultAssets = [];
         });
       },
       async set(key, value) {
-        if (!db) { localStorage.setItem(key, value); return; }
+        if (!db) {
+          localStorage.setItem(key, value);
+          return;
+        }
         return new Promise((resolve) => {
           const tx = db.transaction("state", "readwrite");
           tx.objectStore("state").put(value, key);
           tx.oncomplete = () => resolve();
-          tx.onerror = () => { localStorage.setItem(key, value); resolve(); };
+          tx.onerror = () => {
+            localStorage.setItem(key, value);
+            resolve();
+          };
         });
       },
       async remove(key) {
-        if (!db) { localStorage.removeItem(key); return; }
+        if (!db) {
+          localStorage.removeItem(key);
+          return;
+        }
         return new Promise((resolve) => {
           const tx = db.transaction("state", "readwrite");
           tx.objectStore("state").delete(key);
           tx.oncomplete = () => resolve();
-          tx.onerror = () => { localStorage.removeItem(key); resolve(); };
+          tx.onerror = () => {
+            localStorage.removeItem(key);
+            resolve();
+          };
         });
       },
     };
@@ -830,6 +853,7 @@ const defaultAssets = [];
     const exportBtn = document.querySelector("#export-btn");
     const importBtn = document.querySelector("#import-btn");
     const importFileInput = document.querySelector("#import-file");
+    const copyMarkdownBtn = document.querySelector("#copy-markdown-btn");
 
     const numberFormatter = new Intl.NumberFormat("es-ES", {
       style: "currency",
@@ -2139,12 +2163,16 @@ const defaultAssets = [];
           });
 
         if (leftover > 0.01 && fractional.length > 0) {
-          const totalWeight = fractional.reduce((sum, a) => sum + (a.weight || a.target), 0);
+          const totalWeight = fractional.reduce(
+            (sum, a) => sum + (a.weight || a.target),
+            0,
+          );
           if (totalWeight > 0) {
             const pool = leftover;
             fractional.forEach((asset) => {
               if (leftover <= 0.01) return;
-              const share = ((asset.weight || asset.target) / totalWeight) * pool;
+              const share =
+                ((asset.weight || asset.target) / totalWeight) * pool;
               const delta = Math.min(share, leftover);
               asset.addition += delta;
               if (asset.price > 0 && !asset.wholeUnits) {
@@ -2630,15 +2658,25 @@ const defaultAssets = [];
         const assets = [...domRows].map((row) => {
           const wholeToggle = row.querySelector('[data-field="whole"]');
           const includedToggle = row.querySelector('[data-field="included"]');
-          const wholeUnits = wholeToggle?.getAttribute("aria-checked") === "true";
+          const wholeUnits =
+            wholeToggle?.getAttribute("aria-checked") === "true";
           return {
             name: row.querySelector('[data-field="name"]')?.value ?? "",
-            isin: row.querySelector('[data-field="isin"]')?.value?.trim().toUpperCase() || null,
-            current: sanitize(row.querySelector('[data-field="current"]')?.value),
-            price: sanitize(row.querySelector('[data-field="price"]')?.value) || null,
+            isin:
+              row
+                .querySelector('[data-field="isin"]')
+                ?.value?.trim()
+                .toUpperCase() || null,
+            current: sanitize(
+              row.querySelector('[data-field="current"]')?.value,
+            ),
+            price:
+              sanitize(row.querySelector('[data-field="price"]')?.value) ||
+              null,
             target: sanitize(row.querySelector('[data-field="target"]')?.value),
             wholeUnits,
-            includedInCalculation: includedToggle?.getAttribute("aria-checked") !== "false",
+            includedInCalculation:
+              includedToggle?.getAttribute("aria-checked") !== "false",
           };
         });
         const state = {
@@ -2656,8 +2694,9 @@ const defaultAssets = [];
     // Cargar estado desde IndexedDB (con fallback a localStorage)
     const loadFormState = async () => {
       try {
-        const saved = await store.get("investmentCalculatorState")
-          ?? localStorage.getItem("investmentCalculatorState");
+        const saved =
+          (await store.get("investmentCalculatorState")) ??
+          localStorage.getItem("investmentCalculatorState");
         if (saved) {
           const state = JSON.parse(saved);
 
@@ -2811,7 +2850,8 @@ const defaultAssets = [];
           rfTae: document.getElementById("hz-rf-tae")?.value || "",
           investYears: document.getElementById("hz-invest-years")?.value || "",
           withdrawal: document.getElementById("hz-withdrawal")?.value || "",
-          withdrawalPeriod: document.getElementById("hz-withdrawal-period")?.value || "monthly",
+          withdrawalPeriod:
+            document.getElementById("hz-withdrawal-period")?.value || "monthly",
           open: hzPanel ? !hzPanel.classList.contains("hidden") : false,
         },
         assets: rows.map((row) => ({
@@ -2845,6 +2885,168 @@ const defaultAssets = [];
       }
     };
 
+    const escapeMarkdownCell = (value) =>
+      String(value ?? "")
+        .replace(/\|/g, "\\|")
+        .replace(/\r?\n/g, " ")
+        .trim();
+
+    const markdownTable = (headers, rows) =>
+      [
+        `| ${headers.map(escapeMarkdownCell).join(" | ")} |`,
+        `| ${headers.map(() => "---").join(" | ")} |`,
+        ...rows.map((row) => `| ${row.map(escapeMarkdownCell).join(" | ")} |`),
+      ].join("\n");
+
+    const getMarkdownReport = () => {
+      const assets = getRows({ strict: false });
+      const totalAll = assets.reduce((sum, asset) => sum + asset.current, 0);
+      const totalIncluded = assets
+        .filter((asset) => asset.includedInCalculation)
+        .reduce((sum, asset) => sum + asset.current, 0);
+      const budget = budgetInput.value.trim();
+      const lines = [
+        "# Calculadora de inversión",
+        "",
+        "## Configuración",
+        "",
+        `- Dinero disponible: ${budget ? numberFormatter.format(sanitize(budget)) : "Sin límite (aportación mínima)"}`,
+        `- Permitir traspasos: ${transfersEnabled() ? "Sí" : "No"}`,
+        `- Margen de error: ±${marginNumberFormatter.format(getMarginValue())} %`,
+        "",
+        "## Reparto actual",
+        "",
+        `- Total: ${numberFormatter.format(totalAll)}`,
+      ];
+
+      if (totalIncluded !== totalAll) {
+        lines.push(
+          `- Total incluido en el cálculo: ${numberFormatter.format(totalIncluded)}`,
+        );
+      }
+
+      lines.push(
+        "",
+        markdownTable(
+          ["Activo", "Valor actual", "Reparto actual", "Incluido"],
+          assets.map((asset) => {
+            const percentageBase = asset.includedInCalculation
+              ? totalIncluded
+              : totalAll;
+            return [
+              asset.name,
+              numberFormatter.format(asset.current),
+              percentageBase > 0
+                ? percentFormatter.format(asset.current / percentageBase)
+                : "0,00 %",
+              asset.includedInCalculation ? "Sí" : "No",
+            ];
+          }),
+        ),
+        "",
+        "## Activos",
+        "",
+        markdownTable(
+          [
+            "ISIN",
+            "Activo",
+            "Valor actual",
+            "Precio unidad",
+            "Solo unidades completas",
+            "Objetivo",
+            "Incluir en cálculo",
+          ],
+          assets.map((asset) => [
+            asset.isin || "—",
+            asset.name,
+            numberFormatter.format(asset.current),
+            asset.price > 0 ? numberFormatter.format(asset.price) : "—",
+            asset.wholeUnits ? "Sí" : "No",
+            `${marginNumberFormatter.format(asset.target)} %`,
+            asset.includedInCalculation ? "Sí" : "No",
+          ]),
+        ),
+      );
+
+      if (!resultsSection.hidden) {
+        const summaryRows = [...summaryEl.children].map((card) => {
+          const parts = [...card.children].map((child) =>
+            child.textContent.trim(),
+          );
+          return [parts[0] || "", parts[1] || ""];
+        });
+        const resultHeaders = [
+          ...document.querySelectorAll("#results thead th"),
+        ].map((cell) => cell.textContent.trim());
+        const resultRows = [...tbody.querySelectorAll("tr")].map((row) =>
+          [...row.querySelectorAll("td")].map((cell) =>
+            cell.textContent.trim(),
+          ),
+        );
+        const steps = [...stepList.querySelectorAll("li")]
+          .map((step) => step.textContent.trim())
+          .filter(Boolean);
+
+        lines.push("", "## Resultado", "");
+        if (summaryRows.length) {
+          lines.push(markdownTable(["Concepto", "Valor"], summaryRows), "");
+        }
+        if (adviceEl.textContent.trim()) {
+          lines.push("### Recomendación", "", adviceEl.textContent.trim(), "");
+        }
+        if (resultHeaders.length && resultRows.length) {
+          lines.push("### Reparto tras la inversión", "");
+          lines.push(markdownTable(resultHeaders, resultRows), "");
+        }
+        if (steps.length) {
+          lines.push("### Paso a paso", "");
+          steps.forEach((step, index) => lines.push(`${index + 1}. ${step}`));
+        }
+      }
+
+      if (!errorBox.hidden && errorBox.textContent.trim()) {
+        lines.push("", "## Aviso", "", errorBox.textContent.trim());
+      }
+
+      return `${lines.join("\n").trim()}\n`;
+    };
+
+    const copyTextToClipboard = async (text) => {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        return;
+      }
+
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      const copied = document.execCommand("copy");
+      textarea.remove();
+      if (!copied) throw new Error("El navegador no permitió copiar el texto");
+    };
+
+    const copyMarkdownReport = async () => {
+      const originalText = copyMarkdownBtn.textContent;
+      copyMarkdownBtn.disabled = true;
+      try {
+        // Deja que termine el cálculo en tiempo real si acaba de cambiar un campo.
+        await new Promise((resolve) => setTimeout(resolve, 550));
+        await copyTextToClipboard(getMarkdownReport());
+        copyMarkdownBtn.textContent = "Markdown copiado";
+      } catch (error) {
+        copyMarkdownBtn.textContent = "Error al copiar";
+        showError("Error al copiar el Markdown: " + error.message);
+      } finally {
+        setTimeout(() => {
+          copyMarkdownBtn.textContent = originalText;
+          copyMarkdownBtn.disabled = false;
+        }, 2000);
+      }
+    };
+
     const applyStateData = (data) => {
       if (!data.assets || !Array.isArray(data.assets)) {
         throw new Error("Formato de datos inválido");
@@ -2868,45 +3070,77 @@ const defaultAssets = [];
         const hzRfTaeInput = document.getElementById("hz-rf-tae");
         const hzInvestYearsInput = document.getElementById("hz-invest-years");
         const hzWithdrawalInput = document.getElementById("hz-withdrawal");
-        const hzWithdrawalPeriodInput = document.getElementById("hz-withdrawal-period");
+        const hzWithdrawalPeriodInput = document.getElementById(
+          "hz-withdrawal-period",
+        );
         const hzPanel = document.getElementById("horizon-panel");
         const hzToggle = document.getElementById("horizon-toggle");
         const hzRvLabel = document.getElementById("hz-rv-label");
         const hzModeToggle = document.getElementById("hz-rv-mode-toggle");
 
-        const currentMode = hzRvLabel?.textContent?.includes("€") ? "eur" : "pct";
+        const currentMode = hzRvLabel?.textContent?.includes("€")
+          ? "eur"
+          : "pct";
         const targetMode = hzState.rvMode === "eur" ? "eur" : "pct";
         if (hzModeToggle && currentMode !== targetMode) {
           hzModeToggle.click();
         }
 
-        if (hzMonthlyInput && hzState.monthly !== undefined) hzMonthlyInput.value = hzState.monthly;
-        if (hzTargetInput && hzState.target !== undefined) hzTargetInput.value = hzState.target;
-        if (hzMonthsInput && hzState.months !== undefined) hzMonthsInput.value = hzState.months;
-        if (hzDateInput && hzState.date !== undefined) hzDateInput.value = hzState.date;
-        if (hzInitialInput && hzState.initial !== undefined) hzInitialInput.value = hzState.initial;
-        if (hzRvPctInput && hzState.rvPct !== undefined) hzRvPctInput.value = hzState.rvPct;
-        if (hzRvTaeInput && hzState.rvTae !== undefined) hzRvTaeInput.value = hzState.rvTae;
-        if (hzRfTaeInput && hzState.rfTae !== undefined) hzRfTaeInput.value = hzState.rfTae;
-        if (hzInvestYearsInput && hzState.investYears !== undefined) hzInvestYearsInput.value = hzState.investYears;
-        if (hzWithdrawalInput && hzState.withdrawal !== undefined) hzWithdrawalInput.value = hzState.withdrawal;
-        if (hzWithdrawalPeriodInput && (hzState.withdrawalPeriod === "monthly" || hzState.withdrawalPeriod === "yearly")) {
+        if (hzMonthlyInput && hzState.monthly !== undefined)
+          hzMonthlyInput.value = hzState.monthly;
+        if (hzTargetInput && hzState.target !== undefined)
+          hzTargetInput.value = hzState.target;
+        if (hzMonthsInput && hzState.months !== undefined)
+          hzMonthsInput.value = hzState.months;
+        if (hzDateInput && hzState.date !== undefined)
+          hzDateInput.value = hzState.date;
+        if (hzInitialInput && hzState.initial !== undefined)
+          hzInitialInput.value = hzState.initial;
+        if (hzRvPctInput && hzState.rvPct !== undefined)
+          hzRvPctInput.value = hzState.rvPct;
+        if (hzRvTaeInput && hzState.rvTae !== undefined)
+          hzRvTaeInput.value = hzState.rvTae;
+        if (hzRfTaeInput && hzState.rfTae !== undefined)
+          hzRfTaeInput.value = hzState.rfTae;
+        if (hzInvestYearsInput && hzState.investYears !== undefined)
+          hzInvestYearsInput.value = hzState.investYears;
+        if (hzWithdrawalInput && hzState.withdrawal !== undefined)
+          hzWithdrawalInput.value = hzState.withdrawal;
+        if (
+          hzWithdrawalPeriodInput &&
+          (hzState.withdrawalPeriod === "monthly" ||
+            hzState.withdrawalPeriod === "yearly")
+        ) {
           hzWithdrawalPeriodInput.value = hzState.withdrawalPeriod;
         }
 
-        if (typeof hzState.open === "boolean" && hzPanel && hzToggle && hzState.open === hzPanel.classList.contains("hidden")) {
+        if (
+          typeof hzState.open === "boolean" &&
+          hzPanel &&
+          hzToggle &&
+          hzState.open === hzPanel.classList.contains("hidden")
+        ) {
           hzToggle.click();
         }
 
-        store.set("horizonCalcState", JSON.stringify({
-          monthly: hzMonthlyInput?.value || "", target: hzTargetInput?.value || "",
-          months: hzMonthsInput?.value || "", date: hzDateInput?.value || "",
-          initial: hzInitialInput?.value || "", rvPct: hzRvPctInput?.value || "",
-          rvMode: targetMode, rvTae: hzRvTaeInput?.value || "", rfTae: hzRfTaeInput?.value || "",
-          investYears: hzInvestYearsInput?.value || "", withdrawal: hzWithdrawalInput?.value || "",
-          withdrawalPeriod: hzWithdrawalPeriodInput?.value || "monthly",
-          open: hzPanel ? !hzPanel.classList.contains("hidden") : false,
-        }));
+        store.set(
+          "horizonCalcState",
+          JSON.stringify({
+            monthly: hzMonthlyInput?.value || "",
+            target: hzTargetInput?.value || "",
+            months: hzMonthsInput?.value || "",
+            date: hzDateInput?.value || "",
+            initial: hzInitialInput?.value || "",
+            rvPct: hzRvPctInput?.value || "",
+            rvMode: targetMode,
+            rvTae: hzRvTaeInput?.value || "",
+            rfTae: hzRfTaeInput?.value || "",
+            investYears: hzInvestYearsInput?.value || "",
+            withdrawal: hzWithdrawalInput?.value || "",
+            withdrawalPeriod: hzWithdrawalPeriodInput?.value || "monthly",
+            open: hzPanel ? !hzPanel.classList.contains("hidden") : false,
+          }),
+        );
 
         hzMonthlyInput?.dispatchEvent(new Event("input", { bubbles: true }));
       }
@@ -2923,7 +3157,10 @@ const defaultAssets = [];
           price: asset.price || null,
           target: asset.target || 0,
           wholeUnits: Boolean(asset.wholeUnits),
-          includedInCalculation: typeof asset.includedInCalculation === "undefined" ? true : Boolean(asset.includedInCalculation),
+          includedInCalculation:
+            typeof asset.includedInCalculation === "undefined"
+              ? true
+              : Boolean(asset.includedInCalculation),
         });
       });
 
@@ -2955,6 +3192,7 @@ const defaultAssets = [];
     };
 
     exportBtn.addEventListener("click", exportData);
+    copyMarkdownBtn.addEventListener("click", copyMarkdownReport);
 
     const shareBtn = document.querySelector("#share-btn");
     shareBtn.addEventListener("click", () => {
@@ -2966,7 +3204,9 @@ const defaultAssets = [];
         navigator.clipboard.writeText(shareUrl).then(() => {
           const original = shareBtn.textContent;
           shareBtn.textContent = "URL copiada";
-          setTimeout(() => { shareBtn.textContent = original; }, 2000);
+          setTimeout(() => {
+            shareBtn.textContent = original;
+          }, 2000);
         });
       } catch (error) {
         showError("Error al generar la URL: " + error.message);
@@ -3277,8 +3517,9 @@ const defaultAssets = [];
 
       const loadHzState = async () => {
         try {
-          const raw = await store.get("horizonCalcState")
-            ?? localStorage.getItem("horizonCalcState");
+          const raw =
+            (await store.get("horizonCalcState")) ??
+            localStorage.getItem("horizonCalcState");
           if (!raw) return;
           const s = JSON.parse(raw);
           if (s.monthly) monthlyInput.value = s.monthly;
@@ -3296,7 +3537,8 @@ const defaultAssets = [];
           }
           if (s.rvTae !== undefined) rvTaeInput.value = s.rvTae;
           if (s.rfTae !== undefined) rfTaeInput.value = s.rfTae;
-          if (s.investYears !== undefined) investYearsInput.value = s.investYears;
+          if (s.investYears !== undefined)
+            investYearsInput.value = s.investYears;
           if (s.withdrawal !== undefined) withdrawalInput.value = s.withdrawal;
           if (s.withdrawalPeriod) {
             withdrawalPeriodInput.value = s.withdrawalPeriod;
@@ -3311,7 +3553,10 @@ const defaultAssets = [];
 
       const resolveInvestMonths = (totalMonths, investYearsValue) => {
         if (totalMonths <= 0) return 0;
-        if (typeof investYearsValue !== "number" || Number.isNaN(investYearsValue)) {
+        if (
+          typeof investYearsValue !== "number" ||
+          Number.isNaN(investYearsValue)
+        ) {
           return totalMonths;
         }
 
@@ -3416,7 +3661,10 @@ const defaultAssets = [];
           investYearsRaw === ""
             ? null
             : Math.max(0, parseFloat(investYearsRaw) || 0);
-        const withdrawalAmount = Math.max(0, parseFloat(withdrawalInput.value) || 0);
+        const withdrawalAmount = Math.max(
+          0,
+          parseFloat(withdrawalInput.value) || 0,
+        );
         const withdrawalPeriod =
           withdrawalPeriodInput.value === "yearly" ? "yearly" : "monthly";
 
@@ -3464,7 +3712,9 @@ const defaultAssets = [];
           // Calculate months needed
           mode = "months";
           const investMonthsLimit =
-            investYears === null ? null : Math.max(0, Math.round(investYears * 12));
+            investYears === null
+              ? null
+              : Math.max(0, Math.round(investYears * 12));
           calcMonths = solveForMonths(
             initial,
             calcMonthly,
@@ -3758,7 +4008,9 @@ const defaultAssets = [];
         while (months < maxMonths) {
           months++;
           const investMonths =
-            investMonthsLimit === null ? months : Math.min(months, investMonthsLimit);
+            investMonthsLimit === null
+              ? months
+              : Math.min(months, investMonthsLimit);
           const result = simulateForward(
             initial,
             monthly,
@@ -3852,7 +4104,10 @@ const defaultAssets = [];
         let depletionLabel = "No aplica";
         if (depletion.type === "depletes") {
           const yearsPlan = (depletion.month / 12).toFixed(1);
-          const yearsWithdrawing = ((depletion.month - investMonths) / 12).toFixed(1);
+          const yearsWithdrawing = (
+            (depletion.month - investMonths) /
+            12
+          ).toFixed(1);
           depletionLabel = `Año ${yearsPlan} (${yearsWithdrawing} años retirando)`;
         } else if (depletion.type === "not_depleted") {
           depletionLabel = `No se agota (< ${depletion.maxYears} años)`;
@@ -3946,7 +4201,8 @@ const defaultAssets = [];
                 ? `Año ${p.month / 12}`
                 : `Mes ${p.month}`;
           const gainClass = p.gain >= 0 ? "text-emerald-400" : "text-red-400";
-          const prevYearPoint = p.month >= 12 ? data.points[p.month - 12] : null;
+          const prevYearPoint =
+            p.month >= 12 ? data.points[p.month - 12] : null;
           const yearGainPct = prevYearPoint
             ? prevYearPoint.total > 0
               ? (p.total - prevYearPoint.total) / prevYearPoint.total
@@ -4036,7 +4292,11 @@ const defaultAssets = [];
           }
 
           const totalAfter = rv + rf;
-          if (month > investMonths && monthlyWithdrawal > 0 && totalAfter <= 0.01) {
+          if (
+            month > investMonths &&
+            monthlyWithdrawal > 0 &&
+            totalAfter <= 0.01
+          ) {
             return { type: "depletes", month, maxYears: maxMonths / 12 };
           }
         }
@@ -4070,7 +4330,14 @@ const defaultAssets = [];
         // Max value
         const maxVal = Math.max(
           ...points.map((p) =>
-            Math.max(p.total, p.invested, p.contributed, p.withdrawn, p.rv, p.rf),
+            Math.max(
+              p.total,
+              p.invested,
+              p.contributed,
+              p.withdrawn,
+              p.rv,
+              p.rf,
+            ),
           ),
         );
         const yMax = maxVal * 1.1 || 100;
